@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Python 内存管理Python内存管理是理解Python运行机制的重要一环.">
+  <meta name="description" content="Python内存管理是理解Python运行机制的重要一环,也是面试的高频问题,特整理相关信息如下:">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python内存管理">
 <meta property="og:url" content="https://guardingdog.github.io/2021/01/11/python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
 <meta property="og:site_name" content="QinfZhi&#39;s Blog">
-<meta property="og:description" content="Python 内存管理Python内存管理是理解Python运行机制的重要一环.">
+<meta property="og:description" content="Python内存管理是理解Python运行机制的重要一环,也是面试的高频问题,特整理相关信息如下:">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/pSmqUE57vVdYGcx.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/qsDZ8Kr2tPHFUkV.png">
@@ -36,8 +36,9 @@
 <meta property="og:image" content="https://andrewpqc.github.io/images/marksweep5.png">
 <meta property="og:image" content="https://i.loli.net/2021/01/11/weVvjoAi7s2FENz.png">
 <meta property="article:published_time" content="2021-01-11T13:10:23.000Z">
-<meta property="article:modified_time" content="2021-01-11T13:10:23.055Z">
+<meta property="article:modified_time" content="2021-01-11T13:20:49.337Z">
 <meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="memory">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://i.loli.net/2021/01/11/pSmqUE57vVdYGcx.png">
 
@@ -227,8 +228,18 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">Posted on</span>
+              
 
-              <time title="Created: 2021-01-11 21:10:23" itemprop="dateCreated datePublished" datetime="2021-01-11T21:10:23+08:00">2021-01-11</time>
+              <time title="Created: 2021-01-11 21:10:23 / Modified: 21:20:49" itemprop="dateCreated datePublished" datetime="2021-01-11T21:10:23+08:00">2021-01-11</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/technology-Python/" itemprop="url" rel="index"><span itemprop="name">technology , Python</span></a>
+                </span>
             </span>
 
           
@@ -263,32 +274,32 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Python-内存管理"><a href="#Python-内存管理" class="headerlink" title="Python 内存管理"></a>Python 内存管理</h1><p>Python内存管理是理解Python运行机制的重要一环.</p>
+        <p>Python内存管理是理解Python运行机制的重要一环,也是面试的高频问题,特整理相关信息如下:</p>
 <a id="more"></a>
 
 <blockquote>
 <p>参考地址：<a target="_blank" rel="noopener" href="https://www.cnblogs.com/geaozhang/p/7111961.html">博客一</a> ， <a target="_blank" rel="noopener" href="https://andrewpqc.github.io/2018/10/08/python-memory-management/">博客二</a> ，<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1670455">博客三</a></p>
 </blockquote>
 <p>Python内存管理是理解Python运行机制的重要一环，故整理下相关内容如下：</p>
-<h2 id="1-前置知识：Python变量与对象"><a href="#1-前置知识：Python变量与对象" class="headerlink" title="1.前置知识：Python变量与对象"></a>1.前置知识：Python变量与对象</h2><p>我们在编程过程中，不可避免的使用变量指代对象，其关系为变量通过指针指向了对象；对象有自己的类型，而变量的类型则跟随者对象的类型而变化。关系如图：</p>
+<h2 id="前置知识：Python变量与对象"><a href="#前置知识：Python变量与对象" class="headerlink" title="前置知识：Python变量与对象"></a>前置知识：Python变量与对象</h2><p>我们在编程过程中，不可避免的使用变量指代对象，其关系为变量通过指针指向了对象；对象有自己的类型，而变量的类型则跟随者对象的类型而变化。关系如图：</p>
 <p><img src="https://i.loli.net/2021/01/11/pSmqUE57vVdYGcx.png"></p>
 <p><strong>变量：</strong>通过变量指针引用对象。而变量指针指向具体对象的<strong>内存空间</strong>；变量类型是<strong>动态</strong>的，与对象类型一致</p>
 <p><strong>对象：</strong>类型是<strong>已知</strong>的，每个对象都包含有头部信息，其中为<strong>类型标识</strong>符与<strong>引用计数</strong>器</p>
-<h3 id="1-1-多变量指向同一对象情况"><a href="#1-1-多变量指向同一对象情况" class="headerlink" title="1.1 多变量指向同一对象情况"></a>1.1 多变量指向同一对象情况</h3><p>示例代码：</p>
+<h3 id="多变量指向同一对象情况"><a href="#多变量指向同一对象情况" class="headerlink" title="多变量指向同一对象情况"></a>多变量指向同一对象情况</h3><p>示例代码：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">var_1 = <span class="number">123</span></span><br><span class="line">var_2 = var_1</span><br><span class="line">print(<span class="built_in">id</span>(var_1)) <span class="comment"># 140711337393728</span></span><br><span class="line">print(<span class="built_in">id</span>(var_2)) <span class="comment"># 140711337393728</span></span><br><span class="line">print(<span class="built_in">id</span>(<span class="number">123</span>)) <span class="comment"># 140711337393728</span></span><br><span class="line"></span><br><span class="line">print(<span class="built_in">type</span>(var_1)) <span class="comment"># &lt;class &#x27;int&#x27;&gt;</span></span><br><span class="line">print(<span class="built_in">type</span>(var_2)) <span class="comment"># &lt;class &#x27;int&#x27;&gt;</span></span><br><span class="line">print(<span class="built_in">type</span>(<span class="number">123</span>)) <span class="comment"># &lt;class &#x27;int&#x27;&gt;</span></span><br></pre></td></tr></table></figure>
 <p>通过对象被引用的方式(var_2 = var_1)，两个变量指向了同一地址，并且变量的类别与被引用对象的类别一致。简单示意图：</p>
 <p><img src="https://i.loli.net/2021/01/11/qsDZ8Kr2tPHFUkV.png"></p>
-<h3 id="1-2-多变量引用所指的判断"><a href="#1-2-多变量引用所指的判断" class="headerlink" title="1.2 多变量引用所指的判断"></a>1.2 多变量引用所指的判断</h3><p>在Python中判断多个变量的引用地址是否一致采用了内置函数is。先看一段代码再去讲。</p>
+<h3 id="多变量引用所指的判断"><a href="#多变量引用所指的判断" class="headerlink" title="多变量引用所指的判断"></a>多变量引用所指的判断</h3><p>在Python中判断多个变量的引用地址是否一致采用了内置函数is。先看一段代码再去讲。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 小于等于256的整数</span></span><br><span class="line">intA = <span class="number">256</span></span><br><span class="line">intB = <span class="number">256</span></span><br><span class="line">print(<span class="built_in">id</span>(intA)) <span class="comment"># 140711337397984</span></span><br><span class="line">print(<span class="built_in">id</span>(intB)) <span class="comment"># 140711337397984</span></span><br><span class="line">intA <span class="keyword">is</span> intB <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 大于256的整数</span></span><br><span class="line">intA = <span class="number">257</span> <span class="comment"># 3037955041360</span></span><br><span class="line">intB = <span class="number">257</span> <span class="comment"># 3037955041424</span></span><br><span class="line">print(<span class="built_in">id</span>(intA))</span><br><span class="line">print(<span class="built_in">id</span>(intB))</span><br><span class="line">intA <span class="keyword">is</span> intB <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 短字符串</span></span><br><span class="line">charA = <span class="string">&quot;aaaaaaaaaaa&quot;</span></span><br><span class="line">charB = <span class="string">&quot;aaaaaaaaaaa&quot;</span></span><br><span class="line">charA <span class="keyword">is</span> charB <span class="comment"># True</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 长字符串</span></span><br><span class="line">charA = <span class="string">&quot;very Good&quot;</span></span><br><span class="line">charB = <span class="string">&quot;very Good&quot;</span></span><br><span class="line">charA <span class="keyword">is</span> charB <span class="comment"># False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器——列表</span></span><br><span class="line">listA = []</span><br><span class="line">listB = []</span><br><span class="line">listA <span class="keyword">is</span> listB <span class="comment"># False</span></span><br></pre></td></tr></table></figure>
 <p>我们发现不同的数据类型或者同一数据类型不同“长度”时，多次创建时，其内存地址情况并不一致。这是由于Python会选择缓存常用的对象，使得多次赋值对象时，不需要创建新的对象，例如1~256的数字，短字符串等。基本上都是不可修改的数据类型。</p>
 <ol>
 <li>Python缓存了整数（1~256，短字符串），每个变量进行为赋值操作时，不需要创建新的对象，大家引用对象一致。</li>
 <li>Python对于未缓存的对象，在进行赋值操作时，会直接生成新的对象，占用新的内存地址。</li>
 </ol>
-<h2 id="2-Python的垃圾回收机制"><a href="#2-Python的垃圾回收机制" class="headerlink" title="2.Python的垃圾回收机制"></a>2.Python的垃圾回收机制</h2><p>一句话描述就是：<strong>引用计数为主，标记清除与分代回收为辅</strong>；</p>
-<h3 id="2-1-引用计数"><a href="#2-1-引用计数" class="headerlink" title="2.1 引用计数"></a>2.1 引用计数</h3><p>Python中主要使用引用计数(Reference Counting)进行垃圾回收。每一个对象的核心就是一个结构体PyObject,其内部存在一个引用计数器(ob_refcnt)。当某对象的引用计数值为0时，其内存就可以被释放掉；</p>
+<h2 id="Python的垃圾回收机制"><a href="#Python的垃圾回收机制" class="headerlink" title="Python的垃圾回收机制"></a>Python的垃圾回收机制</h2><p>一句话描述就是：<strong>引用计数为主，标记清除与分代回收为辅</strong>；</p>
+<h3 id="引用计数"><a href="#引用计数" class="headerlink" title="引用计数"></a>引用计数</h3><p>Python中主要使用引用计数(Reference Counting)进行垃圾回收。每一个对象的核心就是一个结构体PyObject,其内部存在一个引用计数器(ob_refcnt)。当某对象的引用计数值为0时，其内存就可以被释放掉；</p>
 <figure class="highlight c#"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> typedef struct_object &#123;</span><br><span class="line">    <span class="built_in">int</span> ob_refcnt;</span><br><span class="line">    struct_typeobject *ob_type;</span><br><span class="line">&#125; PyObject;</span><br></pre></td></tr></table></figure>
-<h4 id="2-1-1-引起引用计数变化的情况"><a href="#2-1-1-引起引用计数变化的情况" class="headerlink" title="2.1.1 引起引用计数变化的情况"></a>2.1.1 引起引用计数变化的情况</h4><p><strong>引用计数增加的情况：</strong></p>
+<h4 id="引起引用计数变化的情况"><a href="#引起引用计数变化的情况" class="headerlink" title="引起引用计数变化的情况"></a>引起引用计数变化的情况</h4><p><strong>引用计数增加的情况：</strong></p>
 <ul>
 <li>对象被创建,a = 2</li>
 <li>对象被引用,b=a</li>
@@ -302,9 +313,9 @@
 <li>包含对象的函数运行结束,</li>
 <li>对象所在的容器被摧毁或者从容其中删除了对象,numList.remove(a)</li>
 </ul>
-<h4 id="2-1-2-获取引用数量的方式"><a href="#2-1-2-获取引用数量的方式" class="headerlink" title="2.1.2 获取引用数量的方式"></a>2.1.2 获取引用数量的方式</h4><p>通过sys包中的getrefcount()获取一个名称所引用的对象当前的引用计数，这个函数本身也会造成其引用+1.</p>
+<h4 id="获取引用数量的方式"><a href="#获取引用数量的方式" class="headerlink" title="获取引用数量的方式"></a>获取引用数量的方式</h4><p>通过sys包中的getrefcount()获取一个名称所引用的对象当前的引用计数，这个函数本身也会造成其引用+1.</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.getrefcount(a)</span><br></pre></td></tr></table></figure>
-<h4 id="2-1-3-引用计数的优缺点"><a href="#2-1-3-引用计数的优缺点" class="headerlink" title="2.1.3 引用计数的优缺点"></a>2.1.3 引用计数的优缺点</h4><p><strong>优点：</strong></p>
+<h4 id="引用计数的优缺点"><a href="#引用计数的优缺点" class="headerlink" title="引用计数的优缺点"></a>引用计数的优缺点</h4><p><strong>优点：</strong></p>
 <ul>
 <li>逻辑简单而高效，具备实时性；</li>
 <li>垃圾回收随机分配到运行阶段，处理回收时间分散有利于系统稳定；</li>
@@ -315,8 +326,8 @@
 <li>大对象释放缓慢：当需要释放大的对象时，比如字典，需要对引用的所有对象循环嵌套调用；</li>
 <li>循环引用问题：引用计数的致命问题。</li>
 </ul>
-<h3 id="2-2-标记清除"><a href="#2-2-标记清除" class="headerlink" title="2.2 标记清除"></a>2.2 标记清除</h3><p>标记清除(Mark and Sweep)算法，是为了解决对象可能产生的循环引用问题。(注意，只有<strong>容器</strong>对象才会产生循环引用的情况，比如列表、字典、用户自定义类的对象、元组等。而像数字，字符串这类简单类型不会出现循环引用。作为一种优化策略，对于只包含简单类型的元组也不在标记清除算法的考虑之列)。</p>
-<h4 id="2-2-1-算法"><a href="#2-2-1-算法" class="headerlink" title="2.2.1 算法"></a>2.2.1 算法</h4><ol>
+<h3 id="标记清除"><a href="#标记清除" class="headerlink" title="标记清除"></a>标记清除</h3><p>标记清除(Mark and Sweep)算法，是为了解决对象可能产生的循环引用问题。(注意，只有<strong>容器</strong>对象才会产生循环引用的情况，比如列表、字典、用户自定义类的对象、元组等。而像数字，字符串这类简单类型不会出现循环引用。作为一种优化策略，对于只包含简单类型的元组也不在标记清除算法的考虑之列)。</p>
+<h4 id="算法"><a href="#算法" class="headerlink" title="算法"></a>算法</h4><ol>
 <li>标记阶段，遍历所有对象，如果对象可达（表明存在对象引用它），则标记对象可达；</li>
 <li>清除阶段，再次遍历所有对象，对于不可达的对象，进行回收；</li>
 </ol>
@@ -326,20 +337,20 @@
 <p>如果对象的<code>gc_ref</code>不为0，那么这个对象就会被标记为<code>GC_REACHABLE</code>。同时当gc发现有一个节点是可达的，那么他会递归式的将从该节点出发可以到达的所有节点标记为<code>GC_REACHABLE</code>,这就是下图中link2和link3所碰到的情形。<br><a target="_blank" rel="noopener" href="https://andrewpqc.github.io/images/marksweep4.png"><img src="https://andrewpqc.github.io/images/marksweep4.png" alt="img"></a></p>
 <p>除了将所有可达节点标记为<code>GC_REACHABLE</code>之外，如果该节点当前在”Unreachable”链表中的话，还需要将其移回到”Object to Scan”链表中，下图就是link3移回之后的情形。<br><a target="_blank" rel="noopener" href="https://andrewpqc.github.io/images/marksweep5.png"><img src="https://andrewpqc.github.io/images/marksweep5.png" alt="img"></a><br>第二次遍历的所有对象都遍历完成之后，存在于”Unreachable”链表中的对象就是真正需要被释放的对象。如上图所示，此时link4存在于Unreachable链表中，gc随即释放之。</p>
 <p><strong>上面描述的垃圾回收的阶段，会暂停整个应用程序，等待标记清除结束后才会恢复应用程序的运行。</strong></p>
-<h3 id="2-3-分代回收"><a href="#2-3-分代回收" class="headerlink" title="2.3 分代回收"></a>2.3 分代回收</h3><p>Python通过“分代回收”（Generational Collection）以<strong>空间换时间</strong>的方法提高<strong>垃圾回收效率</strong>。</p>
-<h4 id="2-3-1-分代回收的依据"><a href="#2-3-1-分代回收的依据" class="headerlink" title="2.3.1 分代回收的依据"></a>2.3.1 分代回收的依据</h4><p><strong>对于程序，存在一定比例的内存块的生存周期比较短；而剩下的内存块，生存周期会比较长，甚至会从程序开始一直持续到程序结束。生存期较短对象的比例通常在 80%～90% 之间，这种思想简单点说就是：对象存在时间越长，越可能不是垃圾，应该越少去收集。这样在执行标记-清除算法时可以有效减小遍历的对象数，从而提高垃圾回收的速度。</strong></p>
+<h3 id="分代回收"><a href="#分代回收" class="headerlink" title="分代回收"></a>分代回收</h3><p>Python通过“分代回收”（Generational Collection）以<strong>空间换时间</strong>的方法提高<strong>垃圾回收效率</strong>。</p>
+<h4 id="分代回收的依据"><a href="#分代回收的依据" class="headerlink" title="分代回收的依据"></a>分代回收的依据</h4><p><strong>对于程序，存在一定比例的内存块的生存周期比较短；而剩下的内存块，生存周期会比较长，甚至会从程序开始一直持续到程序结束。生存期较短对象的比例通常在 80%～90% 之间，这种思想简单点说就是：对象存在时间越长，越可能不是垃圾，应该越少去收集。这样在执行标记-清除算法时可以有效减小遍历的对象数，从而提高垃圾回收的速度。</strong></p>
 <p>python gc给对象定义了三种世代(0,1,2),每一个新生对象在generation zero中，如果它在一轮gc扫描中活了下来，那么它将被移至generation one,在那里他将较少的被扫描，如果它又活过了一轮gc,它又将被移至generation two，在那里它被扫描的次数将会更少。</p>
 <p>gc的扫描在什么时候会被触发呢?答案是<strong>当某一世代中被分配的对象与被释放的对象之差达到某一阈值的时候，就会触发gc对某一世代的扫描。</strong>值得注意的是<strong>当某一世代的扫描被触发的时候，比该世代年轻的世代也会被扫描。</strong>也就是说如果世代2的gc扫描被触发了，那么世代0,世代1也将被扫描，如果世代1的gc扫描被触发，世代0也会被扫描。</p>
 <p>该阈值可以通过下面两个函数查看和调整:</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">gc.get_threshold() <span class="comment"># (threshold0, threshold1, threshold2).</span></span><br><span class="line">gc.set_threshold(threshold0[, threshold1[, threshold2]])</span><br></pre></td></tr></table></figure>
 <p>下面对set_threshold()中的三个参数threshold0, threshold1, threshold2进行介绍。gc会记录自从上次收集以来新分配的对象数量与释放的对象数量，当两者之差超过threshold0的值时，gc的扫描就会启动，初始的时候只有世代0被检查。如果自从世代1最近一次被检查以来，世代0被检查超过threshold1次，那么对世代1的检查将被触发。相同的，如果自从世代2最近一次被检查以来，世代1被检查超过threshold2次，那么对世代2的检查将被触发。get_threshold()是获取三者的值，默认值为(700,10,10).</p>
-<h3 id="2-4-总结"><a href="#2-4-总结" class="headerlink" title="2.4 总结"></a>2.4 总结</h3><p><strong>总体来说，在Python中，主要通过引用计数进行垃圾回收；通过 “标记-清除” 解决容器对象可能产生的循环引用问题；通过 “分代回收” 以空间换时间的方法提高垃圾回收效率。</strong></p>
-<h2 id="3-内存池机制"><a href="#3-内存池机制" class="headerlink" title="3.内存池机制"></a>3.内存池机制</h2><p>Python中对于大内存（&gt; 256 字节）与小内存（1 ~ 256字节）的分配机制是不同的。</p>
-<h4 id="3-0-为什么引入内存池"><a href="#3-0-为什么引入内存池" class="headerlink" title="3.0 为什么引入内存池"></a>3.0 为什么引入内存池</h4><p>解决多次调用malloc导致大量内存碎片的问题。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p><strong>总体来说，在Python中，主要通过引用计数进行垃圾回收；通过 “标记-清除” 解决容器对象可能产生的循环引用问题；通过 “分代回收” 以空间换时间的方法提高垃圾回收效率。</strong></p>
+<h2 id="内存池机制"><a href="#内存池机制" class="headerlink" title="内存池机制"></a>内存池机制</h2><p>Python中对于大内存（&gt; 256 字节）与小内存（1 ~ 256字节）的分配机制是不同的。</p>
+<h4 id="为什么引入内存池"><a href="#为什么引入内存池" class="headerlink" title="为什么引入内存池"></a>为什么引入内存池</h4><p>解决多次调用malloc导致大量内存碎片的问题。</p>
 <p>内存池就是预先申请一定数量的，大小相同的内存块，当出现新的内存需求，可以选择从内存池分配内存；</p>
-<h4 id="3-1-大内存的分配机制：malloc"><a href="#3-1-大内存的分配机制：malloc" class="headerlink" title="3.1 大内存的分配机制：malloc"></a>3.1 大内存的分配机制：malloc</h4><p>大内存—–若请求分配的内存大于256K，malloc函数分配内存，free函数释放内存。</p>
-<h4 id="3-2-小内存的分配机制：内存池"><a href="#3-2-小内存的分配机制：内存池" class="headerlink" title="3.2 小内存的分配机制：内存池"></a>3.2 小内存的分配机制：内存池</h4><p>内存池，有Python的接口函数PyMem_Malloc实现—–若请求分配的内存在1~256字节之间就使用内存池管理系统进行分配，调用malloc函数分配内存，但是每次只会分配一块大小为256K的大块内存，不会调用free函数释放内存，将该内存块留在内存池中以便下次使用。</p>
-<h4 id="3-3-Python解释器的解释"><a href="#3-3-Python解释器的解释" class="headerlink" title="3.3 Python解释器的解释"></a>3.3 Python解释器的解释</h4><p><img src="https://i.loli.net/2021/01/11/weVvjoAi7s2FENz.png"></p>
+<h4 id="大内存的分配机制：malloc"><a href="#大内存的分配机制：malloc" class="headerlink" title="大内存的分配机制：malloc"></a>大内存的分配机制：malloc</h4><p>大内存—–若请求分配的内存大于256K，malloc函数分配内存，free函数释放内存。</p>
+<h4 id="小内存的分配机制：内存池"><a href="#小内存的分配机制：内存池" class="headerlink" title="小内存的分配机制：内存池"></a>小内存的分配机制：内存池</h4><p>内存池，有Python的接口函数PyMem_Malloc实现—–若请求分配的内存在1~256字节之间就使用内存池管理系统进行分配，调用malloc函数分配内存，但是每次只会分配一块大小为256K的大块内存，不会调用free函数释放内存，将该内存块留在内存池中以便下次使用。</p>
+<h4 id="Python解释器的解释"><a href="#Python解释器的解释" class="headerlink" title="Python解释器的解释"></a>Python解释器的解释</h4><p><img src="https://i.loli.net/2021/01/11/weVvjoAi7s2FENz.png"></p>
 <ul>
 <li>python的对象管理主要位于Level+1~Level+3层</li>
 <li>Level+3层：对于python内置的对象（比如int,dict等）都有独立的私有内存池，对象之间的内存池不共享，即int释放的内存，不会被分配给float使用</li>
@@ -377,6 +388,10 @@
 
 
       <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/memory/" rel="tag"><i class="fa fa-tag"></i> memory</a>
+          </div>
 
         
 
@@ -384,8 +399,8 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2021/01/09/hello-world/" rel="prev" title="Hello World">
-      <i class="fa fa-chevron-left"></i> Hello World
+    <a href="/2020/05/03/%E5%A0%86%E6%8E%92%E5%BA%8F%E7%AE%80%E4%BB%8B/" rel="prev" title="堆排序简介">
+      <i class="fa fa-chevron-left"></i> 堆排序简介
     </a></div>
       <div class="post-nav-item"></div>
     </div>
@@ -447,7 +462,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Python 内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%9APython%E5%8F%98%E9%87%8F%E4%B8%8E%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.1.</span> <span class="nav-text">1.前置知识：Python变量与对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E5%A4%9A%E5%8F%98%E9%87%8F%E6%8C%87%E5%90%91%E5%90%8C%E4%B8%80%E5%AF%B9%E8%B1%A1%E6%83%85%E5%86%B5"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 多变量指向同一对象情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%A4%9A%E5%8F%98%E9%87%8F%E5%BC%95%E7%94%A8%E6%89%80%E6%8C%87%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">1.1.2.</span> <span class="nav-text">1.2 多变量引用所指的判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Python%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">1.2.</span> <span class="nav-text">2.Python的垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 引用计数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-1-%E5%BC%95%E8%B5%B7%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E5%8F%98%E5%8C%96%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">2.1.1 引起引用计数变化的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-2-%E8%8E%B7%E5%8F%96%E5%BC%95%E7%94%A8%E6%95%B0%E9%87%8F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">2.1.2 获取引用数量的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-3-%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">2.1.3 引用计数的优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2 标记清除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-%E7%AE%97%E6%B3%95"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%88%86%E4%BB%A3%E5%9B%9E%E6%94%B6"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.3 分代回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-%E5%88%86%E4%BB%A3%E5%9B%9E%E6%94%B6%E7%9A%84%E4%BE%9D%E6%8D%AE"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">2.3.1 分代回收的依据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%80%BB%E7%BB%93"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.4 总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%86%85%E5%AD%98%E6%B1%A0%E6%9C%BA%E5%88%B6"><span class="nav-number">1.3.</span> <span class="nav-text">3.内存池机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-0-%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%95%E5%85%A5%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">1.3.0.1.</span> <span class="nav-text">3.0 为什么引入内存池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-1-%E5%A4%A7%E5%86%85%E5%AD%98%E7%9A%84%E5%88%86%E9%85%8D%E6%9C%BA%E5%88%B6%EF%BC%9Amalloc"><span class="nav-number">1.3.0.2.</span> <span class="nav-text">3.1 大内存的分配机制：malloc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-%E5%B0%8F%E5%86%85%E5%AD%98%E7%9A%84%E5%88%86%E9%85%8D%E6%9C%BA%E5%88%B6%EF%BC%9A%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">1.3.0.3.</span> <span class="nav-text">3.2 小内存的分配机制：内存池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-3-Python%E8%A7%A3%E9%87%8A%E5%99%A8%E7%9A%84%E8%A7%A3%E9%87%8A"><span class="nav-number">1.3.0.4.</span> <span class="nav-text">3.3 Python解释器的解释</span></a></li></ol></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%89%8D%E7%BD%AE%E7%9F%A5%E8%AF%86%EF%BC%9APython%E5%8F%98%E9%87%8F%E4%B8%8E%E5%AF%B9%E8%B1%A1"><span class="nav-number">1.</span> <span class="nav-text">前置知识：Python变量与对象</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%8F%98%E9%87%8F%E6%8C%87%E5%90%91%E5%90%8C%E4%B8%80%E5%AF%B9%E8%B1%A1%E6%83%85%E5%86%B5"><span class="nav-number">1.1.</span> <span class="nav-text">多变量指向同一对象情况</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E5%8F%98%E9%87%8F%E5%BC%95%E7%94%A8%E6%89%80%E6%8C%87%E7%9A%84%E5%88%A4%E6%96%AD"><span class="nav-number">1.2.</span> <span class="nav-text">多变量引用所指的判断</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Python%E7%9A%84%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E6%9C%BA%E5%88%B6"><span class="nav-number">2.</span> <span class="nav-text">Python的垃圾回收机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0"><span class="nav-number">2.1.</span> <span class="nav-text">引用计数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E8%B5%B7%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E5%8F%98%E5%8C%96%E7%9A%84%E6%83%85%E5%86%B5"><span class="nav-number">2.1.1.</span> <span class="nav-text">引起引用计数变化的情况</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%BC%95%E7%94%A8%E6%95%B0%E9%87%8F%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.2.</span> <span class="nav-text">获取引用数量的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%BC%95%E7%94%A8%E8%AE%A1%E6%95%B0%E7%9A%84%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">2.1.3.</span> <span class="nav-text">引用计数的优缺点</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%87%E8%AE%B0%E6%B8%85%E9%99%A4"><span class="nav-number">2.2.</span> <span class="nav-text">标记清除</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%AE%97%E6%B3%95"><span class="nav-number">2.2.1.</span> <span class="nav-text">算法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E5%9B%9E%E6%94%B6"><span class="nav-number">2.3.</span> <span class="nav-text">分代回收</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%86%E4%BB%A3%E5%9B%9E%E6%94%B6%E7%9A%84%E4%BE%9D%E6%8D%AE"><span class="nav-number">2.3.1.</span> <span class="nav-text">分代回收的依据</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">2.4.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E6%B1%A0%E6%9C%BA%E5%88%B6"><span class="nav-number">3.</span> <span class="nav-text">内存池机制</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E5%BC%95%E5%85%A5%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">3.0.1.</span> <span class="nav-text">为什么引入内存池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%A4%A7%E5%86%85%E5%AD%98%E7%9A%84%E5%88%86%E9%85%8D%E6%9C%BA%E5%88%B6%EF%BC%9Amalloc"><span class="nav-number">3.0.2.</span> <span class="nav-text">大内存的分配机制：malloc</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%B0%8F%E5%86%85%E5%AD%98%E7%9A%84%E5%88%86%E9%85%8D%E6%9C%BA%E5%88%B6%EF%BC%9A%E5%86%85%E5%AD%98%E6%B1%A0"><span class="nav-number">3.0.3.</span> <span class="nav-text">小内存的分配机制：内存池</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Python%E8%A7%A3%E9%87%8A%E5%99%A8%E7%9A%84%E8%A7%A3%E9%87%8A"><span class="nav-number">3.0.4.</span> <span class="nav-text">Python解释器的解释</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -463,7 +478,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">18</span>
+          <span class="site-state-item-count">17</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -476,7 +491,7 @@
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-count">6</span>
         <span class="site-state-item-name">tags</span></a>
       </div>
   </nav>

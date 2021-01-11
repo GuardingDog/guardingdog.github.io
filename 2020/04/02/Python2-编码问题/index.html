@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="python2编码问题 [Github相关解释][https:&#x2F;&#x2F;github.com&#x2F;solomonxie&#x2F;solomonxie.github.io&#x2F;issues&#x2F;24] [知乎相关解释][https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;39210353] [简书相关解释][https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;19c74e76ee0a]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python2—_编码问题">
+<meta property="og:url" content="https://guardingdog.github.io/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="QinfZhi&#39;s Blog">
+<meta property="og:description" content="python2编码问题 [Github相关解释][https:&#x2F;&#x2F;github.com&#x2F;solomonxie&#x2F;solomonxie.github.io&#x2F;issues&#x2F;24] [知乎相关解释][https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;39210353] [简书相关解释][https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;19c74e76ee0a]">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-04-02T10:45:42.000Z">
+<meta property="article:modified_time" content="2020-04-05T16:47:34.156Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Python2—_编码问题 | QinfZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QinfZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QinfZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python2—_编码问题
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-02 18:45:42" itemprop="dateCreated datePublished" datetime="2020-04-02T18:45:42+08:00">2020-04-02</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2020-04-06 00:47:34" itemprop="dateModified" datetime="2020-04-06T00:47:34+08:00">2020-04-06</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/technology-Python/" itemprop="url" rel="index"><span itemprop="name">technology , Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="Python2—_编码问题" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="python2编码问题"><a href="#python2编码问题" class="headerlink" title="python2编码问题"></a>python2编码问题</h2><blockquote>
+<p>[Github相关解释][<a target="_blank" rel="noopener" href="https://github.com/solomonxie/solomonxie.github.io/issues/24]">https://github.com/solomonxie/solomonxie.github.io/issues/24]</a></p>
+<p>[知乎相关解释][<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/39210353]">https://zhuanlan.zhihu.com/p/39210353]</a></p>
+<p>[简书相关解释][<a target="_blank" rel="noopener" href="https://www.jianshu.com/p/19c74e76ee0a]">https://www.jianshu.com/p/19c74e76ee0a]</a></p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>最近在调试python2过程中经常出现编码的问题，尤其是将python3程序重构为python2程序过程中出现的问题。</p>
+<p>问题一：编码本身有什么不同</p>
+<ul>
+<li>这在字符编码.md文件中已经有了清晰的解释</li>
+</ul>
+<p>问题二：python2处理中文时为什么总是会出现乱码</p>
+<ul>
+<li>encode与decode两者需要明确区分</li>
+<li>对应的字符与字节也需要区分</li>
+</ul>
+<p>带着以上两个问题看到了相关的解释，特记录如下：</p>
+</blockquote>
+<!-- more -->
+
+<h2 id="1-字符与字节问题"><a href="#1-字符与字节问题" class="headerlink" title="1.字符与字节问题"></a>1.字符与字节问题</h2><blockquote>
+<p>字符与字节之间并不是同等地位。</p>
+<p><strong>字符串：</strong>由字符组成的序列</p>
+<p><strong>字符：</strong>字符是<strong>人</strong>使用的符号，是一种人所认知的单位。例如：“中” ， “1” ，“￥”等等</p>
+<blockquote>
+<ul>
+<li><p>在python3中，str对象中获取的元素是<strong>Unicode字符</strong> </p>
+</li>
+<li><p>在python2中，str对象中获取的原始<strong>字节序列</strong></p>
+</li>
+</ul>
+<p>可以看到同样是str对象，python2中其实是字节，python3中是字符</p>
+</blockquote>
+<p><strong>字节：</strong>字节是<strong>计算机</strong>所使用的符号，是8位的二进制数字。例如 0x01,01010101,0b45</p>
+</blockquote>
+<p><strong>不同编码体制中，字符与字节拥有着不同的对应关系：</strong></p>
+<ol>
+<li><p><strong>ASCII码：</strong>  一个英文字母（不分大小写）占一个字节的空间，<strong>一个中文汉字占两个字节</strong>的空间。一个<a href="https://link.zhihu.com/?target=https://www.baidu.com/s?wd=%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E5%AD%97&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1YLPANWnW01uH6suhf3nWmk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EPjRYPjnvPH63nHmLnWRvPHcd">二进制数字</a>序列，在计算机中作为一个数字单元，一般为8位二进制数，换算为十进制。最小值0，最大值255。</p>
+</li>
+<li><p><strong>UTF-8：</strong>一个英文字符=一个字节，一个中文（含繁体）=三个字节。</p>
+<blockquote>
+<p>已知UTF-8编码是UNICODE编码的实现形式的一种，Unicode规定了世界上所有的符号与二进制的对应关系，但是其实现形式多种多样，比如UTF-8,UTF-16等等。</p>
+<p><strong>Unicode才是真正的（人）字符串，而用ASCII、UTF-8、GBK等字符编码表示的是字节串。</strong></p>
+<blockquote>
+<p>从这个角度理解unicode就是CAMEO，utf-8就是VerbDic.</p>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<h2 id="2-encode与decode"><a href="#2-encode与decode" class="headerlink" title="2.encode与decode"></a>2.encode与decode</h2><blockquote>
+<p>encode与decode分别对应</p>
+<p><strong>encode:</strong> 将人类可识别的字符转换为机器可识别的字节码，<strong>字符到字节的过程</strong>。</p>
+<p><strong>decode:**就是将机器可识别的字节码转换成人类可识别的字符，</strong>字节到字符的过程**。</p>
+</blockquote>
+<h2 id="3-python中的默认编码"><a href="#3-python中的默认编码" class="headerlink" title="3.python中的默认编码"></a>3.python中的默认编码</h2><h3 id="3-1-Python源代码的执行过程"><a href="#3-1-Python源代码的执行过程" class="headerlink" title="3.1 Python源代码的执行过程"></a>3.1 Python源代码的执行过程</h3><blockquote>
+<p>我们都知道，磁盘上的文件都是以二进制格式存放的，其中文本文件都是以某种特定编码的字节形式存放的。对于程序源代码文件的字符编码是由编辑器指定的，比如我们使用Pycharm来编写Python程序时会指定工程编码和文件编码为UTF-8，那么Python代码被<strong>保存到磁盘</strong>时就会被转换为UTF-8编码对应的字节（<strong>encode过程</strong>）后写入磁盘。</p>
+<p>当执行Python代码文件中的代码时，Python解释器在读取Python代码文件中的字节串之后，需要将其转换为Unicode字符串（decode过程）之后才执行后续操作。</p>
+
+</blockquote>
+<h3 id="3-2默认编码"><a href="#3-2默认编码" class="headerlink" title="3.2默认编码"></a>3.2默认编码</h3><blockquote>
+<p>如果我们没有在代码文件指定字符编码，Python解释器会使用哪种字符编码把从代码文件中读取到的字节转换为Unicode字符串呢？就像我们配置某些软件时，有很多默认选项一样，需要在Python解释器内部设置默认的字符编码来解决这个问题，这就是“默认编码”。</p>
+<p>Python2和Python3的解释器使用的默认编码是不一样的，我们可以通过sys.getdefaultencoding()来获取默认编码：</p>
+<ul>
+<li><strong>Python2:ascii</strong></li>
+<li><strong>Python3:utf-8</strong></li>
+</ul>
+</blockquote>
+<h3 id="3-3-python2与python3处理文件"><a href="#3-3-python2与python3处理文件" class="headerlink" title="3.3 python2与python3处理文件"></a>3.3 python2与python3处理文件</h3><blockquote>
+<p>对于Python2来讲，Python解释器在读取到中文字符的字节码时，会先查看当前代码文件头部是否指明字符编码是什么。如果没有指定，则使用默认字符编码”ASCII”进行解码，导致中文字符解码失败，出现如下错误</p>
+<blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError:Non-ASCII character <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xxx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encoding declared;</span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>对于Python3来讲，执行过程是一样的，只是Python3的解释器以”UTF-8”作为默认编码，但是这并不表示可以完全兼容中文问题。比如我们在Windows上进行开发时，Python工程及代码文件都使用的是默认的GBK编码，也就是说Python代码文件是被转换成GBK格式的字节码保存到磁盘中的。Python3的解释器执行该代码文件时，试图用UTF-8进行解码操作时，同样会解码失败，出现如下错误：</p>
+<blockquote>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError:Non-UTF<span class="number">-8</span> code starting <span class="keyword">with</span> <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encodingdeclared; </span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<h2 id="4-Python2-Python3对字符串的支持"><a href="#4-Python2-Python3对字符串的支持" class="headerlink" title="4. Python2 Python3对字符串的支持"></a>4. Python2 Python3对字符串的支持</h2><h3 id="4-1-Python2"><a href="#4-1-Python2" class="headerlink" title="4.1 Python2"></a>4.1 Python2</h3><blockquote>
+<p>Python2中对字符串的支持由以下三个类别提供：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">basestring</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(basestring)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">unicode</span></span>(basestring)</span><br></pre></td></tr></table></figure>
+
+<p>其中basestring类是str类与unicode类的父类。</p>
+<ul>
+<li><p><strong>str其实是字节串</strong>，它是unicode经过编码后的字节组成的序列。</p>
+<blockquote>
+<p>对UTF-8编码的str’汉’使用len()函数时，结果是3，因为UTF-8编码的’汉’==’\xE6\xB1\x89’。</p>
+</blockquote>
+</li>
+<li><p><strong>unicode才是真正意义上的字符串</strong>，对字节串str使用正确的字符编码进行解码后获得，并且len(u’汉’)==1。</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="4-2-Python3"><a href="#4-2-Python3" class="headerlink" title="4.2 Python3"></a>4.2 Python3</h3><blockquote>
+<p>Python3中对字符串的支持进行了实现类层次的上简化，去掉了unicode类，添加了一个bytes类。从表面上来看，可认为Python3中的str和unicode合二为一了。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bytes</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(<span class="keyword">object</span>)</span><br></pre></td></tr></table></figure>
+
+<p>实际上，<strong>Python3中已经意识到之前的错误，开始明确区分字符串与字节</strong>。</p>
+<p><strong>因此Python3中的str已经是真正的字符串，而字节是用单独的bytes类来表示。</strong></p>
+<p>也就是说，Python3默认定义的就是字符串，实现了对Unicode的内置支持，减轻了程序员对字符串处理的负担。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">a = <span class="string">&#x27;你好&#x27;</span></span><br><span class="line">b = <span class="string">u&#x27;你好&#x27;</span></span><br><span class="line">c = <span class="string">&#x27;你好&#x27;</span>.encode(<span class="string">&#x27;gbk&#x27;</span>) </span><br><span class="line">print(<span class="built_in">type</span>(a),<span class="built_in">len</span>(a))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(b),<span class="built_in">len</span>(b))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(c),<span class="built_in">len</span>(c))         <span class="comment"># output:&lt;class&#x27;bytes&#x27;&gt; 4</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="4-3-字符与字节转换"><a href="#4-3-字符与字节转换" class="headerlink" title="4.3 字符与字节转换"></a>4.3 字符与字节转换</h3><blockquote>
+<p>4.3的名称我自己起的，合不合适的我们再看</p>
+</blockquote>
+<ul>
+<li><p><strong>单个字符的encode：</strong></p>
+<blockquote>
+<p>Python提供了ord()函数获取字符的整数表示，chr()函数把编码转换为对应的字符：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;A&#x27;</span>)</span><br><span class="line"><span class="number">65</span></span><br><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;中&#x27;</span>)</span><br><span class="line"><span class="number">20013</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">97</span>)</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">20013</span>)</span><br><span class="line"><span class="string">&#x27;中&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果知道字符的整数编码，还可以用十六进制这么写字符：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;\u4e2d\u6587&#x27;</span></span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p><strong>字符.encode() = 字节</strong></p>
+<blockquote>
+<p>Python3的字符串类型是str，在内存中以Unicode表示，一个字符对应若干个字节。如果要在网络上传输，或者保存到磁盘上，就需要把str变为以字节为单位的bytes。</p>
+<p>Python对bytes类型的数据用带b前缀的单引号或双引号表示：x = b’ABC’。</p>
+<p>要注意区分’ABC’和b’ABC’，前者是str，后者虽然内容显示得和前者一样，但bytes的每个字符都只占用一个字节。</p>
+<p>以Unicode表示的str通过encode()方法可以编码为指定的bytes，例如：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;ABC&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeEncodeError:</span> <span class="string">&#x27;ascii&#x27;</span> codec can<span class="string">&#x27;t encode characters in position 0-1: ordinal not in range(128)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>常见的中文报错问题愿意：</p>
+<p>纯英文的str可以用ASCII编码为bytes，内容是一样的，含有中文的str可以用UTF-8编码为bytes。<strong>中文的str无法用ASCII编码，因为中文编码的范围超过了ASCII编码的范围，Python会报错。</strong></p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>字节.decode() = 字符：</strong></p>
+<blockquote>
+<p>反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把bytes变为str，就需要用decode()方法：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;ABC&#x27;</span>.decode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>要计算str包含多少个字符，可以用len()函数：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>)</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>en()函数计算的是str的字符数，如果换成bytes，len()函数就计算字节数：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="5-Python2-Python3字符编码的转换"><a href="#5-Python2-Python3字符编码的转换" class="headerlink" title="5.Python2 Python3字符编码的转换"></a>5.Python2 Python3字符编码的转换</h2><p>Unicode字符串可以与任意字符编码的字节串进行相互转换：</p>
+
+
+</li>
+</ul>
+<blockquote>
+<p>从上图可以看出不同字节编码之间是可以通过Unicode来实现相互转换的。</p>
+<ul>
+<li><p>Python2中的字符串进行字符编码转换过程是：</p>
+<p><strong>字节串(Python2的str默认是字节串)–&gt;decode(‘原来的字符编码’)–&gt;Unicode字符串–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_a = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_a = utf_8_a.decode(<span class="string">&#x27;utf-8&#x27;</span>).encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_a.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Python3中定义的字符串默认就是unicode，因此不需要先解码，可以直接编码成新的字符编码：</p>
+<p><strong>字符串(str就是Unicode字符串)–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_b = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_b = utf_8_b.encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_b.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="6-Python2-中乱码问题的解决方案"><a href="#6-Python2-中乱码问题的解决方案" class="headerlink" title="6.Python2 中乱码问题的解决方案"></a>6.Python2 中乱码问题的解决方案</h2><h3 id="6-1-不要相信Print-结果"><a href="#6-1-不要相信Print-结果" class="headerlink" title="6.1 不要相信Print()结果"></a>6.1 不要相信Print()结果</h3><blockquote>
+<p>print()函数本身是加工后给<strong>人</strong>看的,不管给它什么样子的编码格式文件，都可以打印出来。</p>
+<p><strong>这也就意味着print()，并没有展示变量的本质。</strong></p>
+<p>可以选择 jupyter中</p>
+<blockquote>
+<p>这里是<strong>Python2</strong></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese = <span class="string">&#x27;中文&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese </span><br><span class="line"><span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="6-2-Python2中“字符串”两大阵容"><a href="#6-2-Python2中“字符串”两大阵容" class="headerlink" title="6.2 Python2中“字符串”两大阵容"></a>6.2 Python2中“字符串”两大阵容</h3><blockquote>
+<p>unicode和str</p>
+<p>如果<code>type(字符串)</code>显示结果是<code>str</code>，其实指的是<code>bytes</code>字节码。</p>
+<blockquote>
+<p>由上面的内容我们已经理解当前python2中str对象与unicode对象分别代表：字节与字符</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><p>encoding与decoding</p>
+<p>从<code>unicode</code>转换到<code>str</code>，这个叫<code>encoding</code>，编码。<br>从<code>str</code>转换到<code>unicode</code>，这个叫<code>decoding</code>，解码。</p>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>案例</p>
+<blockquote>
+<p>Python2</p>
+</blockquote>
+  
+
+
+
+
+</li>
+</ul>
+<h3 id="6-3-具体统一方案"><a href="#6-3-具体统一方案" class="headerlink" title="6.3 具体统一方案"></a>6.3 具体统一方案</h3><blockquote>
+<p>见[剩余内容][<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000013202801]">https://segmentfault.com/a/1190000013202801]</a></p>
+<p>这里的统一方案无非就是按照字符处理文件还是按照字节处理文件，何时进行decode何时encode的问题。</p>
+<p>做个给出了一个方案，但我目前并没有采用，这里不详细写</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/02/Pyhton-%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/" rel="prev" title="Pyhton_字符编码">
+      <i class="fa fa-chevron-left"></i> Pyhton_字符编码
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/" rel="next" title="Python2包管理工具对比">
+      Python2包管理工具对比 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#python2%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">python2编码问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%AD%97%E7%AC%A6%E4%B8%8E%E5%AD%97%E8%8A%82%E9%97%AE%E9%A2%98"><span class="nav-number">2.</span> <span class="nav-text">1.字符与字节问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-encode%E4%B8%8Edecode"><span class="nav-number">3.</span> <span class="nav-text">2.encode与decode</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-python%E4%B8%AD%E7%9A%84%E9%BB%98%E8%AE%A4%E7%BC%96%E7%A0%81"><span class="nav-number">4.</span> <span class="nav-text">3.python中的默认编码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Python%E6%BA%90%E4%BB%A3%E7%A0%81%E7%9A%84%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B"><span class="nav-number">4.1.</span> <span class="nav-text">3.1 Python源代码的执行过程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2%E9%BB%98%E8%AE%A4%E7%BC%96%E7%A0%81"><span class="nav-number">4.2.</span> <span class="nav-text">3.2默认编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-python2%E4%B8%8Epython3%E5%A4%84%E7%90%86%E6%96%87%E4%BB%B6"><span class="nav-number">4.3.</span> <span class="nav-text">3.3 python2与python3处理文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Python2-Python3%E5%AF%B9%E5%AD%97%E7%AC%A6%E4%B8%B2%E7%9A%84%E6%94%AF%E6%8C%81"><span class="nav-number">5.</span> <span class="nav-text">4. Python2 Python3对字符串的支持</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-Python2"><span class="nav-number">5.1.</span> <span class="nav-text">4.1 Python2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-Python3"><span class="nav-number">5.2.</span> <span class="nav-text">4.2 Python3</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%AD%97%E7%AC%A6%E4%B8%8E%E5%AD%97%E8%8A%82%E8%BD%AC%E6%8D%A2"><span class="nav-number">5.3.</span> <span class="nav-text">4.3 字符与字节转换</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Python2-Python3%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="nav-number">6.</span> <span class="nav-text">5.Python2 Python3字符编码的转换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-Python2-%E4%B8%AD%E4%B9%B1%E7%A0%81%E9%97%AE%E9%A2%98%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">7.</span> <span class="nav-text">6.Python2 中乱码问题的解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E4%B8%8D%E8%A6%81%E7%9B%B8%E4%BF%A1Print-%E7%BB%93%E6%9E%9C"><span class="nav-number">7.1.</span> <span class="nav-text">6.1 不要相信Print()结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-Python2%E4%B8%AD%E2%80%9C%E5%AD%97%E7%AC%A6%E4%B8%B2%E2%80%9D%E4%B8%A4%E5%A4%A7%E9%98%B5%E5%AE%B9"><span class="nav-number">7.2.</span> <span class="nav-text">6.2 Python2中“字符串”两大阵容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E5%85%B7%E4%BD%93%E7%BB%9F%E4%B8%80%E6%96%B9%E6%A1%88"><span class="nav-number">7.3.</span> <span class="nav-text">6.3 具体统一方案</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
