@@ -1,0 +1,2070 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>Pyhton_字符编码</title>
+    <url>/2020/04/02/2020-04-02-Pyhton-%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</url>
+    <content><![CDATA[<h1 id="字符编码"><a href="#字符编码" class="headerlink" title="字符编码"></a>字符编码</h1><blockquote>
+<p><a href="http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html">http://www.ruanyifeng.com/blog/2007/10/ascii_unicode_and_utf-8.html</a></p>
+</blockquote>
+<h2 id="1-ASCII编码"><a href="#1-ASCII编码" class="headerlink" title="1.ASCII编码"></a>1.ASCII编码</h2><blockquote>
+<p>我们知道，计算机内部，所有信息最终都是一个二进制值。每一个二进制位（bit）有<code>0</code>和<code>1</code>两种状态，因此八个二进制位就可以组合出256种状态，这被称为一个字节（byte）。也就是说，一个字节一共可以用来表示256种不同的状态，每一个状态对应一个符号，就是256个符号，从<code>00000000</code>到<code>11111111</code>。</p>
+<p>上个世纪60年代，美国制定了一套字符编码，对英语字符与二进制位之间的关系，做了统一规定。这被称为 ASCII 码，一直沿用至今。</p>
+<p>ASCII 码一共规定了128个字符的编码，比如空格<code>SPACE</code>是32（二进制<code>00100000</code>），大写的字母<code>A</code>是65（二进制<code>01000001</code>）。这128个符号（包括32个不能打印出来的控制符号），只占用了一个字节的后面7位，最前面的一位统一规定为<code>0</code>。</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="2-非ASCII编码"><a href="#2-非ASCII编码" class="headerlink" title="2.非ASCII编码"></a>2.非ASCII编码</h2><blockquote>
+<p>英语用128个符号编码就够了，但是用来表示其他语言，128个符号是不够的。比如，在法语中，字母上方有注音符号，它就无法用 ASCII 码表示。于是，一些欧洲国家就决定，利用字节中闲置的最高位编入新的符号。比如，法语中的<code>é</code>的编码为130（二进制<code>10000010</code>）。这样一来，这些欧洲国家使用的编码体系，可以表示最多256个符号。</p>
+<p>但是，这里又出现了新的问题。不同的国家有不同的字母，因此，哪怕它们都使用256个符号的编码方式，代表的字母却不一样。比如，130在法语编码中代表了<code>é</code>，在希伯来语编码中却代表了字母<code>Gimel</code> (<code>ג</code>)，在俄语编码中又会代表另一个符号。但是不管怎样，所有这些编码方式中，0–127表示的符号是一样的，不一样的只是128–255的这一段。</p>
+<p>至于亚洲国家的文字，使用的符号就更多了，汉字就多达10万左右。一个字节只能表示256种符号，肯定是不够的，就必须使用多个字节表达一个符号。比如，简体中文常见的编码方式是 GB2312，使用两个字节表示一个汉字，所以理论上最多可以表示 256 x 256 = 65536 个符号。</p>
+<p>中文编码的问题需要专文讨论，这篇笔记不涉及。这里只指出，虽然都是用多个字节表示一个符号，但是GB类的汉字编码与后文的 Unicode 和 UTF-8 是毫无关系的。</p>
+</blockquote>
+<h2 id="3-Unicode"><a href="#3-Unicode" class="headerlink" title="3.Unicode"></a>3.Unicode</h2><blockquote>
+<p>正如上一节所说，世界上存在着多种编码方式，同一个二进制数字可以被解释成不同的符号。因此，要想打开一个文本文件，就必须知道它的编码方式，否则用错误的编码方式解读，就会出现乱码。为什么电子邮件常常出现乱码？就是因为发信人和收信人使用的编码方式不一样。</p>
+<p>可以想象，如果有一种编码，将世界上所有的符号都纳入其中。每一个符号都给予一个独一无二的编码，那么乱码问题就会消失。这就是 Unicode，就像它的名字都表示的，这是一种所有符号的编码。</p>
+<p>Unicode 当然是一个很大的集合，现在的规模可以容纳100多万个符号。每个符号的编码都不一样，比如，<code>U+0639</code>表示阿拉伯字母<code>Ain</code>，<code>U+0041</code>表示英语的大写字母<code>A</code>，<code>U+4E25</code>表示汉字<code>严</code>。具体的符号对应表，可以查询<a href="http://www.unicode.org/">unicode.org</a>，或者专门的<a href="http://www.chi2ko.com/tool/CJK.htm">汉字对应表</a>。</p>
+</blockquote>
+<h2 id="4-Unicode-的问题"><a href="#4-Unicode-的问题" class="headerlink" title="4.Unicode 的问题"></a>4.<strong>Unicode 的问题</strong></h2><blockquote>
+<p>需要注意的是，Unicode 只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。</p>
+<p>比如，汉字<code>严</code>的 Unicode 是十六进制数<code>4E25</code>，转换成二进制数足足有15位（<code>100111000100101</code>），也就是说，这个符号的表示至少需要2个字节。表示其他更大的符号，可能需要3个字节或者4个字节，甚至更多。</p>
+<p>这里就有两个严重的问题，第一个问题是，如何才能区别 Unicode 和 ASCII ？计算机怎么知道三个字节表示一个符号，而不是分别表示三个符号呢？第二个问题是，我们已经知道，英文字母只用一个字节表示就够了，如果 Unicode 统一规定，每个符号用三个或四个字节表示，那么每个英文字母前都必然有二到三个字节是<code>0</code>，这对于存储来说是极大的浪费，文本文件的大小会因此大出二三倍，这是无法接受的。</p>
+<p>它们造成的结果是：1）出现了 Unicode 的多种存储方式，也就是说有许多种不同的二进制格式，可以用来表示 Unicode。2）Unicode 在很长一段时间内无法推广，直到互联网的出现。</p>
+</blockquote>
+<h2 id="5-UTF-8"><a href="#5-UTF-8" class="headerlink" title="5.UTF-8"></a>5.<strong>UTF-8</strong></h2><blockquote>
+<p>互联网的普及，强烈要求出现一种统一的编码方式。UTF-8 就是在互联网上使用最广的一种 Unicode 的实现方式。其他实现方式还包括 UTF-16（字符用两个字节或四个字节表示）和 UTF-32（字符用四个字节表示），不过在互联网上基本不用。<strong>重复一遍，这里的关系是，UTF-8 是 Unicode 的实现方式之一。</strong></p>
+<p>UTF-8 最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。</p>
+<p>UTF-8 的编码规则很简单，只有二条：</p>
+<p>1）对于单字节的符号，字节的第一位设为<code>0</code>，后面7位为这个符号的 Unicode 码。因此对于英语字母，UTF-8 编码和 ASCII 码是相同的。</p>
+<p>2）对于<code>n</code>字节的符号（<code>n &gt; 1</code>），第一个字节的前<code>n</code>位都设为<code>1</code>，第<code>n + 1</code>位设为<code>0</code>，后面字节的前两位一律设为<code>10</code>。剩下的没有提及的二进制位，全部为这个符号的 Unicode 码。</p>
+<p>下表总结了编码规则，字母<code>x</code>表示可用编码的位。</p>
+</blockquote>
+<blockquote>
+<figure class="highlight plain"><figcaption><span>|        UTF-8编码方式</span></figcaption><table><tr><td class="code"><pre><span class="line">Unicode符号范围     |        UTF-8编码方式</span><br><span class="line">(十六进制)        |              （二进制）</span><br><span class="line">----------------------+---------------------------------------------</span><br><span class="line">0000 0000-0000 007F | 0xxxxxxx</span><br><span class="line">0000 0080-0000 07FF | 110xxxxx 10xxxxxx</span><br><span class="line">0000 0800-0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx</span><br><span class="line">0001 0000-0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>跟据上表，解读 UTF-8 编码非常简单。如果一个字节的第一位是<code>0</code>，则这个字节单独就是一个字符；如果第一位是<code>1</code>，则连续有多少个<code>1</code>，就表示当前字符占用多少个字节。</p>
+<p>下面，还是以汉字<code>严</code>为例，演示如何实现 UTF-8 编码。</p>
+<p><code>严</code>的 Unicode 是<code>4E25</code>（<code>100111000100101</code>），根据上表，可以发现<code>4E25</code>处在第三行的范围内（<code>0000 0800 - 0000 FFFF</code>），因此<code>严</code>的 UTF-8 编码需要三个字节，即格式是<code>1110xxxx 10xxxxxx 10xxxxxx</code>。然后，从<code>严</code>的最后一个二进制位开始，依次从后向前填入格式中的<code>x</code>，多出的位补<code>0</code>。这样就得到了，<code>严</code>的 UTF-8 编码是<code>11100100 10111000 10100101</code>，转换成十六进制就是<code>E4B8A5</code>。</p>
+</blockquote>
+<h2 id="6-Little-endian-和-Big-endian"><a href="#6-Little-endian-和-Big-endian" class="headerlink" title="6.Little endian 和 Big endian"></a>6.<strong>Little endian 和 Big endian</strong></h2><blockquote>
+<p>上一节已经提到，UCS-2 格式可以存储 Unicode 码（码点不超过<code>0xFFFF</code>）。以汉字<code>严</code>为例，Unicode 码是<code>4E25</code>，需要用两个字节存储，一个字节是<code>4E</code>，另一个字节是<code>25</code>。存储的时候，<code>4E</code>在前，<code>25</code>在后，这就是 Big endian 方式；<code>25</code>在前，<code>4E</code>在后，这是 Little endian 方式。</p>
+<p>这两个古怪的名称来自英国作家斯威夫特的《格列佛游记》。在该书中，小人国里爆发了内战，战争起因是人们争论，吃鸡蛋时究竟是从大头(Big-endian)敲开还是从小头(Little-endian)敲开。为了这件事情，前后爆发了六次战争，一个皇帝送了命，另一个皇帝丢了王位。</p>
+<p>第一个字节在前，就是”大头方式”（Big endian），第二个字节在前就是”小头方式”（Little endian）。</p>
+<p>那么很自然的，就会出现一个问题：计算机怎么知道某一个文件到底采用哪一种方式编码？</p>
+<p>Unicode 规范定义，每一个文件的最前面分别加入一个表示编码顺序的字符，这个字符的名字叫做”零宽度非换行空格”（zero width no-break space），用<code>FEFF</code>表示。这正好是两个字节，而且<code>FF</code>比<code>FE</code>大<code>1</code>。</p>
+<p>如果一个文本文件的头两个字节是<code>FE FF</code>，就表示该文件采用大头方式；如果头两个字节是<code>FF FE</code>，就表示该文件采用小头方式。</p>
+</blockquote>
+<h2 id="7-延伸阅读"><a href="#7-延伸阅读" class="headerlink" title="7.延伸阅读"></a>7.延伸阅读</h2><blockquote>
+<p><a href="http://www.joelonsoftware.com/articles/Unicode.html">http://www.joelonsoftware.com/articles/Unicode.html</a></p>
+<p><a href="https://www.pconline.com.cn/pcedu/empolder/gj/other/0505/616631.html">https://www.pconline.com.cn/pcedu/empolder/gj/other/0505/616631.html</a></p>
+<p><a href="https://www.ietf.org/rfc/rfc3629.txt">https://www.ietf.org/rfc/rfc3629.txt</a></p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>technology , Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python2—_编码问题</title>
+    <url>/2020/04/02/2020-04-02-Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
+    <content><![CDATA[<h2 id="python2编码问题"><a href="#python2编码问题" class="headerlink" title="python2编码问题"></a>python2编码问题</h2><blockquote>
+<p>[Github相关解释][<a href="https://github.com/solomonxie/solomonxie.github.io/issues/24]">https://github.com/solomonxie/solomonxie.github.io/issues/24]</a></p>
+<p>[知乎相关解释][<a href="https://zhuanlan.zhihu.com/p/39210353]">https://zhuanlan.zhihu.com/p/39210353]</a></p>
+<p>[简书相关解释][<a href="https://www.jianshu.com/p/19c74e76ee0a]">https://www.jianshu.com/p/19c74e76ee0a]</a></p>
+</blockquote>
+<a id="more"></a>
+
+<blockquote>
+<p>最近在调试python2过程中经常出现编码的问题，尤其是将python3程序重构为python2程序过程中出现的问题。</p>
+<p>问题一：编码本身有什么不同</p>
+<ul>
+<li>这在字符编码.md文件中已经有了清晰的解释</li>
+</ul>
+<p>问题二：python2处理中文时为什么总是会出现乱码</p>
+<ul>
+<li>encode与decode两者需要明确区分</li>
+<li>对应的字符与字节也需要区分</li>
+</ul>
+<p>带着以上两个问题看到了相关的解释，特记录如下：</p>
+</blockquote>
+<!-- more -->
+
+<h2 id="1-字符与字节问题"><a href="#1-字符与字节问题" class="headerlink" title="1.字符与字节问题"></a>1.字符与字节问题</h2><blockquote>
+<p>字符与字节之间并不是同等地位。</p>
+<p><strong>字符串：</strong>由字符组成的序列</p>
+<p><strong>字符：</strong>字符是<strong>人</strong>使用的符号，是一种人所认知的单位。例如：“中” ， “1” ，“￥”等等</p>
+<blockquote>
+<ul>
+<li><p>在python3中，str对象中获取的元素是<strong>Unicode字符</strong> </p>
+</li>
+<li><p>在python2中，str对象中获取的原始<strong>字节序列</strong></p>
+</li>
+</ul>
+<p>可以看到同样是str对象，python2中其实是字节，python3中是字符</p>
+</blockquote>
+<p><strong>字节：</strong>字节是<strong>计算机</strong>所使用的符号，是8位的二进制数字。例如 0x01,01010101,0b45</p>
+</blockquote>
+<p><strong>不同编码体制中，字符与字节拥有着不同的对应关系：</strong></p>
+<ol>
+<li><p><strong>ASCII码：</strong>  一个英文字母（不分大小写）占一个字节的空间，<strong>一个中文汉字占两个字节</strong>的空间。一个<a href="https://link.zhihu.com/?target=https://www.baidu.com/s?wd=%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E5%AD%97&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1YLPANWnW01uH6suhf3nWmk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EPjRYPjnvPH63nHmLnWRvPHcd">二进制数字</a>序列，在计算机中作为一个数字单元，一般为8位二进制数，换算为十进制。最小值0，最大值255。</p>
+</li>
+<li><p><strong>UTF-8：</strong>一个英文字符=一个字节，一个中文（含繁体）=三个字节。</p>
+<blockquote>
+<p>已知UTF-8编码是UNICODE编码的实现形式的一种，Unicode规定了世界上所有的符号与二进制的对应关系，但是其实现形式多种多样，比如UTF-8,UTF-16等等。</p>
+<p><strong>Unicode才是真正的（人）字符串，而用ASCII、UTF-8、GBK等字符编码表示的是字节串。</strong></p>
+<blockquote>
+<p>从这个角度理解unicode就是CAMEO，utf-8就是VerbDic.</p>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<h2 id="2-encode与decode"><a href="#2-encode与decode" class="headerlink" title="2.encode与decode"></a>2.encode与decode</h2><blockquote>
+<p>encode与decode分别对应</p>
+<p><strong>encode:</strong> 将人类可识别的字符转换为机器可识别的字节码，<strong>字符到字节的过程</strong>。</p>
+<p><strong>decode:**就是将机器可识别的字节码转换成人类可识别的字符，</strong>字节到字符的过程**。</p>
+</blockquote>
+<h2 id="3-python中的默认编码"><a href="#3-python中的默认编码" class="headerlink" title="3.python中的默认编码"></a>3.python中的默认编码</h2><h3 id="3-1-Python源代码的执行过程"><a href="#3-1-Python源代码的执行过程" class="headerlink" title="3.1 Python源代码的执行过程"></a>3.1 Python源代码的执行过程</h3><blockquote>
+<p>我们都知道，磁盘上的文件都是以二进制格式存放的，其中文本文件都是以某种特定编码的字节形式存放的。对于程序源代码文件的字符编码是由编辑器指定的，比如我们使用Pycharm来编写Python程序时会指定工程编码和文件编码为UTF-8，那么Python代码被<strong>保存到磁盘</strong>时就会被转换为UTF-8编码对应的字节（<strong>encode过程</strong>）后写入磁盘。</p>
+<p>当执行Python代码文件中的代码时，Python解释器在读取Python代码文件中的字节串之后，需要将其转换为Unicode字符串（decode过程）之后才执行后续操作。</p>
+
+</blockquote>
+<h3 id="3-2默认编码"><a href="#3-2默认编码" class="headerlink" title="3.2默认编码"></a>3.2默认编码</h3><blockquote>
+<p>如果我们没有在代码文件指定字符编码，Python解释器会使用哪种字符编码把从代码文件中读取到的字节转换为Unicode字符串呢？就像我们配置某些软件时，有很多默认选项一样，需要在Python解释器内部设置默认的字符编码来解决这个问题，这就是“默认编码”。</p>
+<p>Python2和Python3的解释器使用的默认编码是不一样的，我们可以通过sys.getdefaultencoding()来获取默认编码：</p>
+<ul>
+<li><strong>Python2:ascii</strong></li>
+<li><strong>Python3:utf-8</strong></li>
+</ul>
+</blockquote>
+<h3 id="3-3-python2与python3处理文件"><a href="#3-3-python2与python3处理文件" class="headerlink" title="3.3 python2与python3处理文件"></a>3.3 python2与python3处理文件</h3><blockquote>
+<p>对于Python2来讲，Python解释器在读取到中文字符的字节码时，会先查看当前代码文件头部是否指明字符编码是什么。如果没有指定，则使用默认字符编码”ASCII”进行解码，导致中文字符解码失败，出现如下错误</p>
+<blockquote>
+<figure class="highlight csharp"><table><tr><td class="code"><pre><span class="line">SyntaxError:Non-ASCII character <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xxx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encoding declared;</span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>对于Python3来讲，执行过程是一样的，只是Python3的解释器以”UTF-8”作为默认编码，但是这并不表示可以完全兼容中文问题。比如我们在Windows上进行开发时，Python工程及代码文件都使用的是默认的GBK编码，也就是说Python代码文件是被转换成GBK格式的字节码保存到磁盘中的。Python3的解释器执行该代码文件时，试图用UTF-8进行解码操作时，同样会解码失败，出现如下错误：</p>
+<blockquote>
+<figure class="highlight dart"><table><tr><td class="code"><pre><span class="line">SyntaxError:Non-UTF<span class="number">-8</span> code starting <span class="keyword">with</span> <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encodingdeclared; </span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<h2 id="4-Python2-Python3对字符串的支持"><a href="#4-Python2-Python3对字符串的支持" class="headerlink" title="4. Python2 Python3对字符串的支持"></a>4. Python2 Python3对字符串的支持</h2><h3 id="4-1-Python2"><a href="#4-1-Python2" class="headerlink" title="4.1 Python2"></a>4.1 Python2</h3><blockquote>
+<p>Python2中对字符串的支持由以下三个类别提供：</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">basestring</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(basestring)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">unicode</span></span>(basestring)</span><br></pre></td></tr></table></figure>
+
+<p>其中basestring类是str类与unicode类的父类。</p>
+<ul>
+<li><p><strong>str其实是字节串</strong>，它是unicode经过编码后的字节组成的序列。</p>
+<blockquote>
+<p>对UTF-8编码的str’汉’使用len()函数时，结果是3，因为UTF-8编码的’汉’==’\xE6\xB1\x89’。</p>
+</blockquote>
+</li>
+<li><p><strong>unicode才是真正意义上的字符串</strong>，对字节串str使用正确的字符编码进行解码后获得，并且len(u’汉’)==1。</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="4-2-Python3"><a href="#4-2-Python3" class="headerlink" title="4.2 Python3"></a>4.2 Python3</h3><blockquote>
+<p>Python3中对字符串的支持进行了实现类层次的上简化，去掉了unicode类，添加了一个bytes类。从表面上来看，可认为Python3中的str和unicode合二为一了。</p>
+<figure class="highlight kotlin"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bytes</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(<span class="keyword">object</span>)</span><br></pre></td></tr></table></figure>
+
+<p>实际上，<strong>Python3中已经意识到之前的错误，开始明确区分字符串与字节</strong>。</p>
+<p><strong>因此Python3中的str已经是真正的字符串，而字节是用单独的bytes类来表示。</strong></p>
+<p>也就是说，Python3默认定义的就是字符串，实现了对Unicode的内置支持，减轻了程序员对字符串处理的负担。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">a = <span class="string">&#x27;你好&#x27;</span></span><br><span class="line">b = <span class="string">u&#x27;你好&#x27;</span></span><br><span class="line">c = <span class="string">&#x27;你好&#x27;</span>.encode(<span class="string">&#x27;gbk&#x27;</span>) </span><br><span class="line">print(<span class="built_in">type</span>(a),<span class="built_in">len</span>(a))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(b),<span class="built_in">len</span>(b))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(c),<span class="built_in">len</span>(c))         <span class="comment"># output:&lt;class&#x27;bytes&#x27;&gt; 4</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="4-3-字符与字节转换"><a href="#4-3-字符与字节转换" class="headerlink" title="4.3 字符与字节转换"></a>4.3 字符与字节转换</h3><blockquote>
+<p>4.3的名称我自己起的，合不合适的我们再看</p>
+</blockquote>
+<ul>
+<li><p><strong>单个字符的encode：</strong></p>
+<blockquote>
+<p>Python提供了ord()函数获取字符的整数表示，chr()函数把编码转换为对应的字符：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;A&#x27;</span>)</span><br><span class="line"><span class="number">65</span></span><br><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;中&#x27;</span>)</span><br><span class="line"><span class="number">20013</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">97</span>)</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">20013</span>)</span><br><span class="line"><span class="string">&#x27;中&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果知道字符的整数编码，还可以用十六进制这么写字符：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;\u4e2d\u6587&#x27;</span></span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p><strong>字符.encode() = 字节</strong></p>
+<blockquote>
+<p>Python3的字符串类型是str，在内存中以Unicode表示，一个字符对应若干个字节。如果要在网络上传输，或者保存到磁盘上，就需要把str变为以字节为单位的bytes。</p>
+<p>Python对bytes类型的数据用带b前缀的单引号或双引号表示：x = b’ABC’。</p>
+<p>要注意区分’ABC’和b’ABC’，前者是str，后者虽然内容显示得和前者一样，但bytes的每个字符都只占用一个字节。</p>
+<p>以Unicode表示的str通过encode()方法可以编码为指定的bytes，例如：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;ABC&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeEncodeError:</span> <span class="string">&#x27;ascii&#x27;</span> codec can<span class="string">&#x27;t encode characters in position 0-1: ordinal not in range(128)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>常见的中文报错问题愿意：</p>
+<p>纯英文的str可以用ASCII编码为bytes，内容是一样的，含有中文的str可以用UTF-8编码为bytes。<strong>中文的str无法用ASCII编码，因为中文编码的范围超过了ASCII编码的范围，Python会报错。</strong></p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>字节.decode() = 字符：</strong></p>
+<blockquote>
+<p>反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把bytes变为str，就需要用decode()方法：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;ABC&#x27;</span>.decode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>要计算str包含多少个字符，可以用len()函数：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>)</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>en()函数计算的是str的字符数，如果换成bytes，len()函数就计算字节数：</p>
+<figure class="highlight ruby"><table><tr><td class="code"><pre><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="5-Python2-Python3字符编码的转换"><a href="#5-Python2-Python3字符编码的转换" class="headerlink" title="5.Python2 Python3字符编码的转换"></a>5.Python2 Python3字符编码的转换</h2><p>Unicode字符串可以与任意字符编码的字节串进行相互转换：</p>
+
+
+</li>
+</ul>
+<blockquote>
+<p>从上图可以看出不同字节编码之间是可以通过Unicode来实现相互转换的。</p>
+<ul>
+<li><p>Python2中的字符串进行字符编码转换过程是：</p>
+<p><strong>字节串(Python2的str默认是字节串)–&gt;decode(‘原来的字符编码’)–&gt;Unicode字符串–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_a = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_a = utf_8_a.decode(<span class="string">&#x27;utf-8&#x27;</span>).encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_a.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Python3中定义的字符串默认就是unicode，因此不需要先解码，可以直接编码成新的字符编码：</p>
+<p><strong>字符串(str就是Unicode字符串)–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_b = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_b = utf_8_b.encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_b.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="6-Python2-中乱码问题的解决方案"><a href="#6-Python2-中乱码问题的解决方案" class="headerlink" title="6.Python2 中乱码问题的解决方案"></a>6.Python2 中乱码问题的解决方案</h2><h3 id="6-1-不要相信Print-结果"><a href="#6-1-不要相信Print-结果" class="headerlink" title="6.1 不要相信Print()结果"></a>6.1 不要相信Print()结果</h3><blockquote>
+<p>print()函数本身是加工后给<strong>人</strong>看的,不管给它什么样子的编码格式文件，都可以打印出来。</p>
+<p><strong>这也就意味着print()，并没有展示变量的本质。</strong></p>
+<p>可以选择 jupyter中</p>
+<blockquote>
+<p>这里是<strong>Python2</strong></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese = <span class="string">&#x27;中文&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese </span><br><span class="line"><span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="6-2-Python2中“字符串”两大阵容"><a href="#6-2-Python2中“字符串”两大阵容" class="headerlink" title="6.2 Python2中“字符串”两大阵容"></a>6.2 Python2中“字符串”两大阵容</h3><blockquote>
+<p>unicode和str</p>
+<p>如果<code>type(字符串)</code>显示结果是<code>str</code>，其实指的是<code>bytes</code>字节码。</p>
+<blockquote>
+<p>由上面的内容我们已经理解当前python2中str对象与unicode对象分别代表：字节与字符</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><p>encoding与decoding</p>
+<p>从<code>unicode</code>转换到<code>str</code>，这个叫<code>encoding</code>，编码。<br>从<code>str</code>转换到<code>unicode</code>，这个叫<code>decoding</code>，解码。</p>
+
+
+
+</li>
+</ul>
+<ul>
+<li><p>案例</p>
+<blockquote>
+<p>Python2</p>
+</blockquote>
+  
+
+
+
+
+</li>
+</ul>
+<h3 id="6-3-具体统一方案"><a href="#6-3-具体统一方案" class="headerlink" title="6.3 具体统一方案"></a>6.3 具体统一方案</h3><blockquote>
+<p>见[剩余内容][<a href="https://segmentfault.com/a/1190000013202801]">https://segmentfault.com/a/1190000013202801]</a></p>
+<p>这里的统一方案无非就是按照字符处理文件还是按照字节处理文件，何时进行decode何时encode的问题。</p>
+<p>做个给出了一个方案，但我目前并没有采用，这里不详细写</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>technology , Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python包管理之setup()函数详解</title>
+    <url>/2020/04/02/2020-04-02-Python%E5%8C%85%E7%AE%A1%E7%90%86-setup%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<h1 id="Python包管理-setup-详解"><a href="#Python包管理-setup-详解" class="headerlink" title="Python包管理.setup()详解"></a>Python包管理.setup()详解</h1><blockquote>
+<p>[PythonPackageGuide][<a href="https://packaging.python.org/guides/distributing-packages-using-setuptools/]">https://packaging.python.org/guides/distributing-packages-using-setuptools/]</a></p>
+<p>[Python包样例][<a href="https://github.com/pypa/sampleproject]">https://github.com/pypa/sampleproject]</a></p>
+<p>[子包、数据文件与依赖包参数情况][[<a href="http://www.wbh-doc.com.s3.amazonaws.com/Python-OpenSource-Project-Developer-Guide/appendix%20-%20setup%20script.html]">http://www.wbh-doc.com.s3.amazonaws.com/Python-OpenSource-Project-Developer-Guide/appendix%20-%20setup%20script.html]</a></p>
+</blockquote>
+<h2 id="1-Setup-Args"><a href="#1-Setup-Args" class="headerlink" title="1. Setup() Args"></a>1. Setup() Args</h2><blockquote>
+<p>参数详解</p>
+</blockquote>
+<h3 id="1-1-name"><a href="#1-1-name" class="headerlink" title="1.1 name"></a>1.1 name</h3><ul>
+<li><p>项目名称</p>
+<ul>
+<li><p>命名规范：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">Consist only of ASCII letters, digits, underscores (_), hyphens (-), and/or periods (.), and</span><br><span class="line"></span><br><span class="line">Start &amp; end with an ASCII letter or digit.</span><br></pre></td></tr></table></figure></li>
+<li><p>PS：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">Comparison of project names is case insensitive and treats arbitrarily-long runs of underscores, hyphens, and/or periods as equal.</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>大小写 不敏感</p>
+</li>
+<li><p>上述特殊符号（下划线、连字符、_、-、.）任意数量一致对待</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">#以下名称等价</span><br><span class="line">Cool-Stuff</span><br><span class="line">cool.stuff</span><br><span class="line">COOL_STUFF</span><br><span class="line">CoOl__-.-__sTuFF</span><br></pre></td></tr></table></figure>
+<a id="more"></a>
+<h3 id="1-2-version"><a href="#1-2-version" class="headerlink" title="1.2 version"></a>1.2 version</h3></li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>版本号，version = “1.1.0”</p>
+<p>[版本框架选择][<a href="https://packaging.python.org/guides/distributing-packages-using-setuptools/#choosing-a-versioning-scheme]">https://packaging.python.org/guides/distributing-packages-using-setuptools/#choosing-a-versioning-scheme]</a></p>
+</blockquote>
+<h3 id="1-3-description"><a href="#1-3-description" class="headerlink" title="1.3 description"></a>1.3 description</h3><blockquote>
+<p>具体包含三个参数</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">description=&#x27;A sample Python project&#x27;,</span><br><span class="line">long_description=long_description,</span><br><span class="line">long_description_content_type=&#x27;text/x-rst&#x27;,</span><br></pre></td></tr></table></figure>
+<ul>
+<li>描述信息会在PyPI相关位置显示</li>
+<li>long_description_content_type参数可选：<ol>
+<li>text/plain    没有格式</li>
+<li>text/x-rst    reST格式 </li>
+<li>text/markdown     markdown格式</li>
+</ol>
+</li>
+</ul>
+<h3 id="1-4-url"><a href="#1-4-url" class="headerlink" title="1.4 url"></a>1.4 url</h3><blockquote>
+<p>主页地址</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">url&#x3D;&#39;https:&#x2F;&#x2F;github.com&#x2F;pypa&#x2F;sampleproject&#39;,</span><br></pre></td></tr></table></figure>
+<h3 id="1-5-author"><a href="#1-5-author" class="headerlink" title="1.5 author"></a>1.5 author</h3><blockquote>
+<p>提供作者信息</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">author=&#x27;The Python Packaging Authority&#x27;,</span><br><span class="line">author_email=&#x27;pypa-dev@googlegroups.com&#x27;,</span><br></pre></td></tr></table></figure>
+<h3 id="1-6-license"><a href="#1-6-license" class="headerlink" title="1.6 license"></a>1.6 license</h3><blockquote>
+<p>表明发布遵循的协议</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">license=&#x27;MIT&#x27;,</span><br></pre></td></tr></table></figure>
+<ol>
+<li>此字段不需要表明发布的协议</li>
+<li>若采用标准协议则采用：classifiers字段</li>
+<li>license字段通常用于指定与常用协议差异的部分，故此字段不常用</li>
+</ol>
+<h3 id="1-7-classifier"><a href="#1-7-classifier" class="headerlink" title="1.7 classifier"></a>1.7 classifier</h3><blockquote>
+<p>按照内部成分对项目进行分类</p>
+<p>[分类详细文档][<a href="https://pypi.org/classifiers/]">https://pypi.org/classifiers/]</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">classifiers=[</span><br><span class="line">    <span class="comment"># How mature is this project? Common values are</span></span><br><span class="line">    <span class="comment">#   3 - Alpha</span></span><br><span class="line">    <span class="comment">#   4 - Beta</span></span><br><span class="line">    <span class="comment">#   5 - Production/Stable</span></span><br><span class="line">    <span class="string">&#x27;Development Status :: 3 - Alpha&#x27;</span>,</span><br><span class="line">    <span class="comment"># Indicate who your project is intended for</span></span><br><span class="line">    <span class="string">&#x27;Intended Audience :: Developers&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Topic :: Software Development :: Build Tools&#x27;</span>,</span><br><span class="line">    <span class="comment"># Pick your license as you wish (should match &quot;license&quot; above)</span></span><br><span class="line">     <span class="string">&#x27;License :: OSI Approved :: MIT License&#x27;</span>,</span><br><span class="line">    <span class="comment"># Specify the Python versions you support here. In particular, ensure</span></span><br><span class="line">    <span class="comment"># that you indicate whether you support Python 2, Python 3 or both.</span></span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 2.6&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 2.7&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 3.2&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 3.3&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Programming Language :: Python :: 3.4&#x27;</span>,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<ol>
+<li>上面内容可以看到，这里可以指定Python版本，但其并不能用于限制Python版本。只能用于在PyPI上面浏览时显示，版本限制需要用 python_requires 参数指定。</li>
+</ol>
+<h3 id="1-8-keywords"><a href="#1-8-keywords" class="headerlink" title="1.8 keywords"></a>1.8 keywords</h3><blockquote>
+<p>列出项目关键字</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">keywords=<span class="string">&#x27;sample setuptools development&#x27;</span>,</span><br></pre></td></tr></table></figure>
+<h3 id="1-9-project-urls"><a href="#1-9-project-urls" class="headerlink" title="1.9 project_urls"></a>1.9 project_urls</h3><blockquote>
+<p>列出相关url地址</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">project_urls=&#123;</span><br><span class="line">    <span class="string">&#x27;Documentation&#x27;</span>: <span class="string">&#x27;https://packaging.python.org/tutorials/distributing-packages/&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Funding&#x27;</span>: <span class="string">&#x27;https://donate.pypi.org&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Say Thanks!&#x27;</span>: <span class="string">&#x27;http://saythanks.io/to/example&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Source&#x27;</span>: <span class="string">&#x27;https://github.com/pypa/sampleproject/&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;Tracker&#x27;</span>: <span class="string">&#x27;https://github.com/pypa/sampleproject/issues&#x27;</span>,</span><br><span class="line">&#125;,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="1-10-packages"><a href="#1-10-packages" class="headerlink" title="1.10 packages"></a>1.10 packages</h3><blockquote>
+<p>设置项目中采用的所有包，包含其子包</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">packages=find_packages(include=[<span class="string">&#x27;sample&#x27;</span>, <span class="string">&#x27;sample.*&#x27;</span>]),</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>可手动指定</li>
+<li>可利用setuptools.find_packages()自动寻找<ul>
+<li>其方法可使用include字段找到指定的位置</li>
+<li>其方法可使用exclude字段排除指定的位置</li>
+</ul>
+</li>
+</ul>
+<h3 id="1-11-py-modules"><a href="#1-11-py-modules" class="headerlink" title="1.11 py_modules"></a>1.11 py_modules</h3><blockquote>
+<p>用于指定非包内的模块</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">py_modules=[<span class="string">&quot;six&quot;</span>],</span><br></pre></td></tr></table></figure>
+<h3 id="1-12-install-requires"><a href="#1-12-install-requires" class="headerlink" title="1.12 install_requires"></a>1.12 install_requires</h3><blockquote>
+<p>指定项目启动所需要的依赖</p>
+<p>[install_requiresVSrequirements files][<a href="https://packaging.python.org/discussions/install-requires-vs-requirements/#install-requires-vs-requirements-files]">https://packaging.python.org/discussions/install-requires-vs-requirements/#install-requires-vs-requirements-files]</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">install_requires=[<span class="string">&#x27;peppercorn&#x27;</span>],</span><br></pre></td></tr></table></figure>
+<h3 id="1-13-python-requires"><a href="#1-13-python-requires" class="headerlink" title="1.13 python_requires"></a>1.13 python_requires</h3><blockquote>
+<p>指定可运行Python的版本</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#if your package is for Python 3+ only, write:</span></span><br><span class="line">python_requires=<span class="string">&#x27;&gt;=3&#x27;</span>,</span><br><span class="line"><span class="comment">#If your package is for Python 3.3 and up but you’re not willing to commit to Python 4 support yet, write:</span></span><br><span class="line">python_requires=<span class="string">&#x27;~=3.3&#x27;</span>,</span><br><span class="line"><span class="comment">#If your package is for Python 2.6, 2.7, and all versions of Python 3 starting with 3.3, write:</span></span><br><span class="line">python_requires=<span class="string">&#x27;&gt;=2.6, !=3.0.*, !=3.1.*, !=3.2.*, &lt;4&#x27;</span>,</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="1-14-package-data"><a href="#1-14-package-data" class="headerlink" title="1.14 package_data"></a>1.14 package_data</h3><blockquote>
+<p>指定包数据文件，包数据文件指不在包内的与项目相关的数据文件。比如字典。</p>
+<p>[包文件详解][<a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#including-data-files]">https://setuptools.readthedocs.io/en/latest/setuptools.html#including-data-files]</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">package_data=&#123;</span><br><span class="line">    <span class="string">&#x27;sample&#x27;</span>: [<span class="string">&#x27;package_data.dat&#x27;</span>],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+<h3 id="1-15-data-files"><a href="#1-15-data-files" class="headerlink" title="1.15 data_files"></a>1.15 data_files</h3><blockquote>
+<p>data_files也用于指定文件，但是同package_data不同的是其用于指定<strong>不在包内</strong>的数据文件。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">data_files=[(<span class="string">&#x27;my_data&#x27;</span>, [<span class="string">&#x27;data/data_file&#x27;</span>])],</span><br></pre></td></tr></table></figure>
+<ul>
+<li>采用<code>(directory, files)</code>的形式指定文件。<ul>
+<li>directory 采用相对地址[详解][<a href="https://docs.python.org/3/distutils/setupscript.html#installing-additional-files]">https://docs.python.org/3/distutils/setupscript.html#installing-additional-files]</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="1-16-scripts"><a href="#1-16-scripts" class="headerlink" title="1.16 scripts"></a>1.16 scripts</h3><blockquote>
+<p>用于指定安装的脚本，但目前并不推荐使用</p>
+</blockquote>
+<h3 id="1-17-entry-points"><a href="#1-17-entry-points" class="headerlink" title="1.17 entry_points"></a>1.17 entry_points</h3><blockquote>
+<p>Use this keyword to specify any plugins that your project provides for any named entry points that may be defined by your project or others that you depend on..</p>
+<p>没看懂</p>
+<p>[文档详解][<a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins]">https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins]</a></p>
+<blockquote>
+<p>官方文档没看懂，可以看[博客][<a href="http://blog.luoyuanhang.com/2016/03/25/Python-%E5%88%86%E5%8F%91%E5%B7%A5%E5%85%B7%E5%88%9D%E6%8E%A2%E4%B9%8B-setuptools-%E8%BF%9B%E9%98%B6/">http://blog.luoyuanhang.com/2016/03/25/Python-%E5%88%86%E5%8F%91%E5%B7%A5%E5%85%B7%E5%88%9D%E6%8E%A2%E4%B9%8B-setuptools-%E8%BF%9B%E9%98%B6/</a></p>
+<p>entry_points 是一个字典，从entry point组名映射道一个表示entry point的字符串或字符串列表。Entry points是用来支持动态发现服务和插件的，也用来支持自动生成脚本。</p>
+</blockquote>
+</blockquote>
+<h3 id="1-18-console-scripts"><a href="#1-18-console-scripts" class="headerlink" title="1.18 console_scripts"></a>1.18 console_scripts</h3><blockquote>
+<p>entry_points内部参数，用于生成脚本文件<br>用于在系统路径下生成可执行脚本。</p>
+<p>[官方文档详解][<a href="https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation]">https://setuptools.readthedocs.io/en/latest/setuptools.html#automatic-script-creation]</a></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">entry_points=&#123;</span><br><span class="line">    <span class="string">&#x27;console_scripts&#x27;</span>: [</span><br><span class="line">        <span class="string">&#x27;sample=sample:main&#x27;</span>,</span><br><span class="line">    ],</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+
+]]></content>
+      <categories>
+        <category>technology , Python</category>
+      </categories>
+      <tags>
+        <tag>Python , package</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python2包管理工具对比</title>
+    <url>/2020/04/02/2020-04-02-Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/</url>
+    <content><![CDATA[<h1 id="Python包管理"><a href="#Python包管理" class="headerlink" title="Python包管理"></a>Python包管理</h1><blockquote>
+<p>参考地址：<a href="https://blog.zengrong.net/post/python_packaging/">Python 包管理工具解惑</a></p>
+<blockquote>
+<p>参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。</p>
+</blockquote>
+</blockquote>
+<h2 id="1-疑惑问题"><a href="#1-疑惑问题" class="headerlink" title="1.  疑惑问题"></a>1.  疑惑问题</h2><blockquote>
+<p>python 包管理我本身一直未曾仔细研究，处于混沌的状态。目前只知道pip,conda等包管理工具。</p>
+</blockquote>
+<p>目前存在的问题有：</p>
+<ol>
+<li><p>如何私有发布自己的模块</p>
+</li>
+<li><p>如何共有发布模块(发布到PyPI)</p>
+</li>
+<li><p>各种包管理工具的差异与用法</p>
+<ul>
+<li><p>distutils</p>
+</li>
+<li><p>setuptppls</p>
+</li>
+<li><p>distribute</p>
+</li>
+<li><p>disutils2</p>
+</li>
+<li><p>dislib</p>
+</li>
+<li><p>pip</p>
+</li>
+</ul>
+</li>
+<li><p>wheel与Egg的关系</p>
+<a id="more"></a>
+
+</li>
+</ol>
+<h2 id="2-Python包管理工具学习"><a href="#2-Python包管理工具学习" class="headerlink" title="2. Python包管理工具学习"></a>2. Python包管理工具学习</h2><blockquote>
+<p>在上述参考文章中对各包管理工具已经有了基本的侧重，故此学习也存在侧重。</p>
+</blockquote>
+<h3 id="2-1-distutils"><a href="#2-1-distutils" class="headerlink" title="2.1 distutils"></a>2.1 distutils</h3><blockquote>
+<p>setuptools是 distutils 的加强版，目前已经自动采用setuptools</p>
+</blockquote>
+<p><a href="https://docs.python.org/3/library/distutils.html">distutils</a>是python标准库的一部分，能够进行python模块的<a href="https://docs.python.org/3/install/index.html">安装</a>与<a href="https://docs.python.org/3/distutils/index.html">发布</a>。</p>
+<ul>
+<li><p>setup.py是利用distutils 的功能写成的，<a href="https://docs.python.org/3/distutils/introduction.html?highlight=distutils#a-simple-example">示例</a></p>
+<ul>
+<li>setup.py格式的详细描述：<a href="https://docs.python.org/3/distutils/setupscript.html">Writing the Setup Script</a></li>
+</ul>
+</li>
+<li><p>常用功能</p>
+<ol>
+<li><p>安装模块：到当前Python环境中,可以使用此模块提供的setup.py 文件：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure></li>
+<li><p>发布模块：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">#打包为tar.gz或者zip压缩包</span><br><span class="line">python setup.py sdist</span><br><span class="line">#打包为rpm</span><br><span class="line">python setip.py bdist_rpm</span><br><span class="line">#打包为exe</span><br><span class="line">python setup.py bdist_wininst</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-setuptools-和-distribute"><a href="#2-2-setuptools-和-distribute" class="headerlink" title="2.2  setuptools 和 distribute"></a>2.2  setuptools 和 distribute</h3></li>
+</ol>
+</li>
+</ul>
+<h4 id="2-2-1-setuptools"><a href="#2-2-1-setuptools" class="headerlink" title="2.2.1 setuptools"></a>2.2.1 setuptools</h4><blockquote>
+<p><a href="https://docs.python.org/3/distutils/setupscript.html">setuptools</a>包含了easy_install 这个工具。</p>
+</blockquote>
+<p>ez_setup.py 是 setuptools的安装工具。ez是easy的简写。</p>
+<blockquote>
+<p>简单的说，setuptools 是一个项目的名称，是基础组件。而 <code>easy_install</code> 是这个项目中提供的工具，它依赖基础组件工作。</p>
+</blockquote>
+<p>使用setuptools可以自动下载、构建、安装和管理python模块。</p>
+<h3 id="2-2-2-distribute"><a href="#2-2-2-distribute" class="headerlink" title="2.2.2 distribute"></a>2.2.2 distribute</h3><blockquote>
+<p>distribute 是setuptools的一个分支版本。</p>
+</blockquote>
+<h3 id="2-3-distutil2和dislib"><a href="#2-3-distutil2和dislib" class="headerlink" title="2.3 distutil2和dislib"></a>2.3 distutil2和dislib</h3><blockquote>
+<p>这两种工具目前并未进入python3的标准库中，不必了解</p>
+</blockquote>
+<h2 id="3-打包文件格式"><a href="#3-打包文件格式" class="headerlink" title="3.打包文件格式"></a>3.打包文件格式</h2><h3 id="3-1-Eggs"><a href="#3-1-Eggs" class="headerlink" title="3.1 Eggs"></a>3.1 Eggs</h3><blockquote>
+<p><a href="http://peak.telecommunity.com/DevCenter/PythonEggs">The Quick Guide to Python Eggs</a></p>
+<pre><code>    Eggs are to Pythons as Jars are to Java..</code></pre>
+</blockquote>
+<p>Eggs格式是setuptools引入的一种文件格式，使用.egg扩展名，用于python模块的安装。</p>
+<p>setuptools可以识别、解析并安装它。</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">easy_install /my_downloads/OtherPackage-3.2.1-py2.3.egg</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>缺点：</p>
+<p><strong>但是</strong>pip目前是python 包管理标准，而且pip 目前已经替代了 easy_install ，即是其很多功能建立在setuptools 组件之上。pip 本身并不希望使用Egg 格式，更希望采用“源码发行版（python setup.py sdist ）”,这样可充分利用 <a href="https://pip.pypa.io/en/latest/reference/pip_install/#requirements-file-format">Requirements File Format</a>提供的功能。</p>
+</li>
+</ul>
+<h3 id="3-2-Wheel"><a href="#3-2-Wheel" class="headerlink" title="3.2 Wheel"></a>3.2 Wheel</h3><p><a href="https://wheel.readthedocs.io/en/stable/">Wheel</a> 本质上是一个zip 包格式，其使用 .whl 扩展名，用于python 模块的安装，它的出现是为了替代 Egg.</p>
+<ul>
+<li><p>发布包</p>
+<p>wheel 还提供一个 bdist_wheel 作为setuptools 的扩展命令， 这个命令可以用来生成 wheel 包。</p>
+</li>
+<li><p>安装包</p>
+<p>pip 提供了一个wheel 子命令来安装wheel 包。</p>
+</li>
+<li><p>setup.cfg</p>
+<p><a href="https://wheel.readthedocs.io/en/latest/#defining-the-python-version">setup.cfg</a>可以用来定义wheel 打包的相关信息</p>
+</li>
+<li><p>与Egg 的区别</p>
+<p><a href="">wheel vs Egg</a></p>
+</li>
+</ul>
+<h2 id="4-发布模块"><a href="#4-发布模块" class="headerlink" title="4.发布模块"></a>4.发布模块</h2><blockquote>
+<p>这里纯抄</p>
+</blockquote>
+<p>对于 python3 程序员来说，当然应该先看这一篇：<a href="https://docs.python.org/3/distributing/index.html">Distributing Python Modules</a>。</p>
+<p>另外，<a href="https://packaging.python.org/en/latest/distributing.html">Tutorial on Packaging and Distributing Projects</a> 也足够详细和官方。</p>
+<p>而 Python2 程序员则应该看这篇 <a href="https://docs.python.org/2.7/distutils/index.html">Distributing Python Modules</a> 。</p>
+<p>当然，setuptools 的官方文档也是不错的教程：<a href="http://pythonhosted.org/setuptools/setuptools.html">Building and Distributing Packages with Setuptools</a> 。</p>
+<p>这篇教程可以用来入门：<a href="https://hynek.me/articles/sharing-your-labor-of-love-pypi-quick-and-dirty/">Sharing Your Labor of Love: PyPI Quick and Dirty</a></p>
+<p>至于如何发布自己的模块到 PyPI 或者搭建自己的私有包管理服务器，上面的文章已经讲得非常清楚了。</p>
+<h2 id="5-结论"><a href="#5-结论" class="headerlink" title="5.结论"></a>5.结论</h2><ul>
+<li>发布包采用的工具：setuptools</li>
+<li>发布包格式：wheel</li>
+</ul>
+]]></content>
+      <categories>
+        <category>technology , Python</category>
+      </categories>
+      <tags>
+        <tag>Python , package</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python包管理_实例操作</title>
+    <url>/2020/04/02/2020-04-02-Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9C/</url>
+    <content><![CDATA[<h1 id="Python包管理——简单案例"><a href="#Python包管理——简单案例" class="headerlink" title="Python包管理——简单案例"></a>Python包管理——简单案例</h1><blockquote>
+<p>[Python packaging User Guide][<a href="https://packaging.python.org/tutorials/packaging-projects/]">https://packaging.python.org/tutorials/packaging-projects/]</a></p>
+</blockquote>
+<h2 id="1-创建简单项目"><a href="#1-创建简单项目" class="headerlink" title="1. 创建简单项目"></a>1. 创建简单项目</h2><ul>
+<li><p>项目结构</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"># 可在D盘文件目录下查看</span><br><span class="line">packaging_tutorial/</span><br><span class="line">  example_pkg/</span><br><span class="line">    __init__.py</span><br></pre></td></tr></table></figure>
+<ol>
+<li>根目录：packaging_tutorial</li>
+<li>包：example_pkg</li>
+<li>包文件标识：__init__.py</li>
+</ol>
+<a id="more"></a> 
+
+</li>
+</ul>
+<h2 id="2-创建打包文件"><a href="#2-创建打包文件" class="headerlink" title="2. 创建打包文件"></a>2. 创建打包文件</h2><ul>
+<li><p>结果项目结构</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">packaging_tutorial&#x2F;</span><br><span class="line">  example_pkg&#x2F;</span><br><span class="line">    __init__.py</span><br><span class="line">  setup.py</span><br><span class="line">  LICENSE</span><br><span class="line">  README.md</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>新增文件</p>
+<blockquote>
+<p>均位于主目录下</p>
+</blockquote>
+<ol>
+<li><p>setup.py</p>
+</li>
+<li><p>LICENCE</p>
+</li>
+<li><p>README.MD</p>
+<blockquote>
+<p>非必须</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-1-setup-py-文件简单编写"><a href="#2-1-setup-py-文件简单编写" class="headerlink" title="2.1 setup.py 文件简单编写"></a>2.1 setup.py 文件简单编写</h3><blockquote>
+<p>此文件是打包的核心文件，用于告知setuptools包信息</p>
+</blockquote>
+<ul>
+<li><p>此文档的编写示例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> setuptools</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&quot;README.md&quot;</span>, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> fh:</span><br><span class="line">    long_description = fh.read()</span><br><span class="line"></span><br><span class="line">setuptools.setup(</span><br><span class="line">    name=<span class="string">&quot;example-pkg-HowardSun&quot;</span>, <span class="comment"># Replace with your own username</span></span><br><span class="line">    version=<span class="string">&quot;0.0.1&quot;</span>,</span><br><span class="line">    author=<span class="string">&quot;HowardSun&quot;</span>,</span><br><span class="line">    author_email=<span class="string">&quot;sun2387353@163.com&quot;</span>,</span><br><span class="line">    description=<span class="string">&quot;A small example package&quot;</span>,</span><br><span class="line">    long_description=long_description,</span><br><span class="line">    long_description_content_type=<span class="string">&quot;text/markdown&quot;</span>,</span><br><span class="line">    url=<span class="string">&quot;https://github.com/pypa/sampleproject&quot;</span>,</span><br><span class="line">    packages=setuptools.find_packages(),</span><br><span class="line">    classifiers=[</span><br><span class="line">        <span class="string">&quot;Programming Language :: Python :: 3&quot;</span>,</span><br><span class="line">        <span class="string">&quot;License :: OSI Approved :: MIT License&quot;</span>,</span><br><span class="line">        <span class="string">&quot;Operating System :: OS Independent&quot;</span>,</span><br><span class="line">    ],</span><br><span class="line">    python_requires=<span class="string">&#x27;&gt;=3.6&#x27;</span>,</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>name:发布的包名称，需要保证与他人发布包名无冲突。命名规则：字母、数字，-，_</p>
+</li>
+<li><p>version:版本号</p>
+</li>
+<li><p>author:作者</p>
+</li>
+<li><p>author_email：作者邮箱地址</p>
+</li>
+<li><p>long_description:发布包详细描述，可使用readme.md文件。</p>
+</li>
+<li><p>url:一般是github\gitlab地址</p>
+</li>
+<li><p>packages:项目所需要的包，可手动指定或使用find_packages()方式自动补充。</p>
+<blockquote>
+<p>此packages字段比较复杂，可以专门详解</p>
+</blockquote>
+</li>
+<li><p>classifiers:添加包相关元信息</p>
+<blockquote>
+<p>[官方详解][<a href="https://pypi.org/classifiers/]%EF%BC%8C%E8%99%BD%E7%84%B6%E5%B9%B6%E6%9C%AA%E7%A0%94%E7%A9%B6%EF%BC%8C%E4%BD%86%E7%9C%8B%E6%9D%A5%E6%AF%94%E8%BE%83%E9%87%8D%E8%A6%81">https://pypi.org/classifiers/]，虽然并未研究，但看来比较重要</a></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-README-md文件编写"><a href="#2-2-README-md文件编写" class="headerlink" title="2.2 README.md文件编写"></a>2.2 README.md文件编写</h3><blockquote>
+<p>不解释</p>
+</blockquote>
+<h3 id="2-3-创建LICENSE文件"><a href="#2-3-创建LICENSE文件" class="headerlink" title="2.3 创建LICENSE文件"></a>2.3 创建LICENSE文件</h3><blockquote>
+<p>用于告知用户相关的授权标准</p>
+<p>[License官网][<a href="https://choosealicense.com/]">https://choosealicense.com/]</a></p>
+</blockquote>
+<h2 id="3-创建发布压缩文件"><a href="#3-创建发布压缩文件" class="headerlink" title="3. 创建发布压缩文件"></a>3. 创建发布压缩文件</h2><h3 id="3-1-安装工具包"><a href="#3-1-安装工具包" class="headerlink" title="3.1 安装工具包"></a>3.1 安装工具包</h3><figure class="highlight cmd"><table><tr><td class="code"><pre><span class="line">python -m pip install --user --upgrade setuptools wheel</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="3-2-运行相关命令"><a href="#3-2-运行相关命令" class="headerlink" title="3.2 运行相关命令"></a>3.2 运行相关命令</h3><figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">python setup.py sdist bdist_wheel</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>结果</p>
+<ol>
+<li><p>创建了build文件夹</p>
+</li>
+<li><p>创建了dist文件夹</p>
+<ol>
+<li><p>example_pkg_HowardSun-0.0.1-py3-none-any.whl</p>
+<blockquote>
+<p>发布文件</p>
+</blockquote>
+</li>
+<li><p>example-pkg-HowardSun-0.0.1.tar.gz</p>
+<blockquote>
+<p>发布包的压缩文件</p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>创建了example_pkg_HowardSun.egg-info文件夹</p>
+</li>
+</ol>
+<h2 id="4-上传发布文件"><a href="#4-上传发布文件" class="headerlink" title="4.上传发布文件"></a>4.上传发布文件</h2></li>
+</ul>
+<h3 id="4-1-注册PyPI账号"><a href="#4-1-注册PyPI账号" class="headerlink" title="4.1 注册PyPI账号"></a>4.1 注册PyPI账号</h3><blockquote>
+<p>测试中使用的[Test PyPI][ <a href="https://test.pypi.org/account/register/],%E4%B8%8E%E6%AD%A3%E5%BC%8F%E5%8F%91%E5%B8%83%E4%B8%8D%E4%B8%80%E8%87%B4">https://test.pypi.org/account/register/],与正式发布不一致</a></p>
+</blockquote>
+<h3 id="4-2-安装发布工具包"><a href="#4-2-安装发布工具包" class="headerlink" title="4.2 安装发布工具包"></a>4.2 安装发布工具包</h3><blockquote>
+<p>使用twine发布</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">python -m pip install --user --upgrade twine</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="4-3-运行相关命令"><a href="#4-3-运行相关命令" class="headerlink" title="4.3 运行相关命令"></a>4.3 运行相关命令</h3><blockquote>
+<p>需要使用创建账户时创建的APITOKEN信息验证</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">python3 -m twine upload --repository-url https://test.pypi.org/legacy/ dist/*</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="5-安装新发布的包"><a href="#5-安装新发布的包" class="headerlink" title="5. 安装新发布的包"></a>5. 安装新发布的包</h2><blockquote>
+<p>pip安装即可</p>
+</blockquote>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">python -m pip install --index-url https://test.pypi.org/simple/ --no-deps example-pkg-HowardSun</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>正常发布到PyPI上并不需要指定url</p>
+</blockquote>
+]]></content>
+      <categories>
+        <category>technology , Python</category>
+      </categories>
+      <tags>
+        <tag>Python , package</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>神经网络基础</title>
+    <url>/2020/04/02/2020-04-02-%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<h1 id="神经网络和深度学习"><a href="#神经网络和深度学习" class="headerlink" title="神经网络和深度学习"></a>神经网络和深度学习</h1><blockquote>
+<p><a href="https://kyonhuang.top/Andrew-Ng-Deep-Learning-notes/#/Neural_Networks_and_Deep_Learning/">笔记来源</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="神经网络基础"><a href="#神经网络基础" class="headerlink" title="神经网络基础"></a>神经网络基础</h2><h3 id="训练集、验证集与测试集"><a href="#训练集、验证集与测试集" class="headerlink" title="训练集、验证集与测试集"></a>训练集、验证集与测试集</h3><blockquote>
+<p><a href="https://www.cnblogs.com/HuZihu/p/10538295.html">解释博客</a></p>
+</blockquote>
+<p>三种集合的关系一直是容易混淆的概念：</p>
+<p><strong>训练集（Training Set）</strong>：用于训练模型。</p>
+<p><strong>验证集（Validation Set）</strong>：用于调整和选择模型。</p>
+<p><strong>测试集（Test Set）</strong>：用于评估最终的模型。</p>
+<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
+<li>Logistic回归中损失函数建议采用</li>
+</ol>
+<p>$$<br>L(\hat{y},y) = -(y\log\hat{y})-(1-y)\log(1-\hat{y})<br>$$</p>
+<p>不建议采用平方差函数，存在局部解。<strong>可以去了解</strong></p>
+<ol start="2">
+<li>样本实例在矩阵中多采用<strong>列向量</strong>表示，也就是说m个由n维特征表示的样本矩阵为[n,m]</li>
+</ol>
+<ul>
+<li>实现一个神经网络时，如果需要遍历整个训练集，并不需要直接使用 for 循环。</li>
+<li>神经网络的计算过程中，通常有一个正向过程（forward pass）或者叫<strong>正向传播步骤（forward propagation step）</strong>，接着会有一个反向过程（backward pass）或者叫<strong>反向传播步骤（backward propagation step）</strong>。</li>
+</ul>
+<h3 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><blockquote>
+<p>逻辑回归最简总结：</p>
+<ul>
+<li>线性回归+sigmoid函数</li>
+</ul>
+<p>$$<br>z= (w^Tx+b)<br>$$</p>
+<p>$$<br>\hat y = \frac{1}{1+e^{-z}}<br>$$</p>
+</blockquote>
+<p>Logistic 回归是一个用于二分分类的算法。</p>
+<p>Logistic 回归中使用的参数如下：</p>
+<ul>
+<li><p>输入的特征向量：$ x \in R^{n_x}$ , 其中${n_x}$是特征数量；</p>
+</li>
+<li><p>用于训练的标签：$y \in 0,1$;</p>
+</li>
+<li><p>权重：$w \in R^{n_x}$</p>
+</li>
+<li><p>偏置：$b \in R$</p>
+</li>
+<li><p>输出：$\hat{y} = \sigma(w^Tx+b)$</p>
+</li>
+<li><p>Sigmoid 函数：</p>
+</li>
+</ul>
+<p>$$<br>  s = \sigma(w^Tx+b) = \sigma(z) = \frac{1}{1+e^{-z}}<br>$$</p>
+<p>为了将 $w^Tx+b$  约束在 [0, 1] 间，引入 Sigmoid 函数。从下图可看出，Sigmoid 函数的值域为 [0, 1]。</p>
+
+
+
+<p>Logistic 回归可以看作是一个非常小的神经网络。下图是一个典型例子：</p>
+<blockquote>
+<p>也就是一个普通的神经元</p>
+</blockquote>
+
+
+
+<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p><strong>损失函数（loss function）</strong>用于衡量预测结果与真实值之间的误差。</p>
+<p>最简单的损失函数定义方式为平方差损失：<br>$$<br>L(\hat{y},y) = \frac{1}{2}(\hat{y}-y)^2<br>$$<br>但 Logistic 回归中我们<strong>并不倾向</strong>于使用这样的损失函数，因为之后讨论的优化问题会变成非凸的，最后会得到很多个局部最优解，梯度下降法可能找不到全局最优值。</p>
+<p>一般使用<br>$$<br>L(\hat{y},y) = -(y\log\hat{y})-(1-y)\log(1-\hat{y})<br>$$<br>损失函数是在单个训练样本中定义的，它衡量了在<strong>单个</strong>训练样本上的表现。而<strong>代价函数（cost function，或者称作成本函数）</strong>衡量的是在<strong>全体</strong>训练样本上的表现，即衡量参数 w 和 b 的效果。<br>$$<br>J(w,b) = \frac{1}{m}\sum_{i=1}^mL(\hat{y}^{(i)},y^{(i)})<br>$$</p>
+<h3 id="梯度下降法（Gradient-Descent）"><a href="#梯度下降法（Gradient-Descent）" class="headerlink" title="梯度下降法（Gradient Descent）"></a>梯度下降法（Gradient Descent）</h3><blockquote>
+<p>最简总结：<br>$$<br>w := w - \alpha\frac{dJ(w, b)}{dw}<br>$$</p>
+</blockquote>
+<p>函数的<strong>梯度（gradient）</strong>指出了函数的最陡增长方向。即是说，按梯度的方向走，函数增长得就越快。那么按梯度的负方向走，函数值自然就降低得最快了。</p>
+<p>模型的训练目标即是寻找合适的 w 与 b 以最小化代价函数值。简单起见我们先假设 w 与 b 都是一维实数，那么可以得到如下的 J 关于 w 与 b 的图：</p>
+
+
+
+<p>可以看到，成本函数 J 是一个<strong>凸函数</strong>，与非凸函数的区别在于其不含有多个局部最低点；选择这样的代价函数就保证了无论我们初始化模型参数如何，都能够寻找到合适的最优解。</p>
+<p>参数 w 的更新公式为：<br>$$<br>w := w - \alpha\frac{dJ(w, b)}{dw}<br>$$<br>其中 α 表示学习速率，即每次更新的 w 的步伐长度。</p>
+<p>当 w 大于最优解 w′ 时，导数大于 0，那么 w 就会向更小的方向更新。反之当 w 小于最优解 w′ 时，导数小于 0，那么 w 就会向更大的方向更新。迭代直到收敛。</p>
+<p>在成本函数 J(w, b) 中还存在参数 b，因此也有：<br>$$<br>b := b - \alpha\frac{dJ(w, b)}{db}<br>$$</p>
+<h3 id="计算图（Computation-Graph）"><a href="#计算图（Computation-Graph）" class="headerlink" title="计算图（Computation Graph）"></a>计算图（Computation Graph）</h3><p>神经网络中的计算即是由多个计算网络输出的前向传播与计算梯度的后向传播构成。所谓的<strong>反向传播（Back Propagation）</strong>即是当我们需要计算最终值相对于某个特征变量的导数时，我们需要利用计算图中上一步的结点定义。</p>
+<h3 id="Logistic回归中的梯度下降法"><a href="#Logistic回归中的梯度下降法" class="headerlink" title="Logistic回归中的梯度下降法"></a>Logistic回归中的梯度下降法</h3><p>假设输入的特征向量维度为 2，即输入参数共有 x1, w1, x2, w2, b 这五个。可以推导出如下的计算图：</p>
+
+
+
+<p>首先反向求出 L 对于 a 的导数：<br>$$<br>da=\frac{dL(a,y)}{da}=\frac{1-y}{1-a}-\frac{y}{a}<br>$$<br>然后继续反向求出 L 对于 z 的导数：<br>$$<br>dz=\frac{dL}{dz}=\frac{dL(a,y)}{dz}=\frac{dL}{da}\frac{da}{dz}=a-y<br>$$<br>依此类推求出最终的损失函数相较于原始参数的导数之后，根据如下公式进行参数更新：<br>$$<br>w _1:=w _1-\alpha dw _1<br>$$</p>
+<p>$$<br>w _2:=w _2-\alpha dw _2<br>$$</p>
+<p>$$<br>b:=b-\alpha db<br>$$</p>
+<p>接下来我们需要将对于单个用例的损失函数扩展到整个训练集的代价函数：<br>$$<br>J(w,b)=\frac{1}{m}\sum^m_{i=1}L(a^{(i)},y^{(i)})<br>$$<br>其中:<br>$$<br>  a^{(i)}=\hat{y}^{(i)}=\sigma(z^{(i)})=\sigma(w^Tx^{(i)}+b)<br>$$<br>我们可以对于某个权重参数 $w_1$，其导数计算为：<br>$$<br>\frac{\partial J(w,b)}{\partial{w_1}}=\frac{1}{m}\sum^m_{i=1}\frac{\partial L(a^{(i)},y^{(i)})}{\partial{w_1}}<br>$$<br>完整的 Logistic 回归中某次训练的流程如下，这里仅假设特征向量的维度为 2：</p>
+
+
+
+<p>然后对 w1、w2、b 进行迭代。</p>
+<p>上述过程在计算时有一个缺点：你需要编写两个 for 循环。第一个 for 循环遍历 m 个样本，而第二个 for 循环遍历所有特征。如果有大量特征，在代码中显式使用 for 循环会使算法很低效。<strong>向量化</strong>可以用于解决显式使用 for 循环的问题。</p>
+<h3 id="向量化（Vectorization）"><a href="#向量化（Vectorization）" class="headerlink" title="向量化（Vectorization）"></a>向量化（Vectorization）</h3><p>在 Logistic 回归中，需要计算<br>$$<br>z=w^Tx+b<br>$$<br>如果是非向量化的循环方式操作，代码可能如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">z = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_x):</span><br><span class="line">    z += w[i] * x[i]</span><br><span class="line">z += b</span><br></pre></td></tr></table></figure>
+<p>而如果是向量化的操作，代码则会简洁很多，并带来近百倍的性能提升（并行指令）：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">z = np.dot(w, x) + b</span><br></pre></td></tr></table></figure>
+<p>不用显式 for 循环，实现 Logistic 回归的梯度下降一次迭代（对应之前蓝色代码的 for 循环部分。这里公式和 NumPy 的代码混杂，注意分辨）<br>$$<br>Z=w^TX+b=np.dot(w.T, x) + b<br>$$</p>
+<p>$$<br> A=\sigma(Z)<br>$$</p>
+<p>$$<br> dZ=A-Y<br>$$</p>
+<p>$$<br>dw=\frac{1}{m}XdZ^T<br>$$</p>
+<p>$$<br> db=\frac{1}{m}np.sum(dZ)<br>$$</p>
+<p>$$<br> w:=w-\sigma dw<br>$$</p>
+<p>$$<br> b:=b-\sigma db<br>$$</p>
+<p>正向和反向传播尽管如此，多次迭代的梯度下降依然需要 for 循环。</p>
+<h3 id="广播（broadcasting）"><a href="#广播（broadcasting）" class="headerlink" title="广播（broadcasting）"></a>广播（broadcasting）</h3><p>Numpy 的 Universal functions 中要求输入的数组 shape 是一致的。当数组的 shape 不相等的时候，则会使用广播机制，调整数组使得 shape 一样，满足规则，则可以运算，否则就出错。</p>
+<p>四条规则：</p>
+<ol>
+<li>让所有输入数组都向其中 shape 最长的数组看齐，shape 中不足的部分都通过在前面加 1 补齐；</li>
+<li>输出数组的 shape 是输入数组 shape 的各个轴上的最大值；</li>
+<li>如果输入数组的某个轴和输出数组的对应轴的长度相同或者其长度为 1 时，这个数组能够用来计算，否则出错；</li>
+<li>当输入数组的某个轴的长度为 1 时，沿着此轴运算时都用此轴上的第一组值。</li>
+</ol>
+<h3 id="Numpy-使用技巧"><a href="#Numpy-使用技巧" class="headerlink" title="Numpy 使用技巧"></a>Numpy 使用技巧</h3><p>转置对秩为 1 的数组无效。因此，应该避免使用秩为 1 的数组，用 n * 1 的矩阵代替。例如，用<code>np.random.randn(5,1)</code>代替<code>np.random.randn(5)</code>。</p>
+<p>如果得到了一个秩为 1 的数组，可以使用<code>reshape</code>进行转换。</p>
+]]></content>
+  </entry>
+  <entry>
+    <title>语言是窗</title>
+    <url>/2020/04/03/2020-04-03-%E8%AF%AD%E8%A8%80%E6%98%AF%E7%AA%97/</url>
+    <content><![CDATA[<p>难得看了一会儿书，这首诗写得很有代入感，故摘抄部分。</p>
+<!-- more -- >
+
+
+## 语言是窗
+
+听了你的话，我仿佛受到审判，
+
+无比委屈，又无从分辨，
+
+那离开前，我想问，
+
+那真的是你的意思吗？
+
+
+
+在自我辩护前，
+
+在带着痛苦或恐惧质问前，
+
+在我用言语筑起心灵之墙前，
+
+告诉我，我听明白了吗？
+
+...
+
+如果你以为我想羞辱你，
+
+如果你认定我不在乎你，
+
+请透过我的言语，
+
+倾听我们共有的情感。
+
+]]></content>
+      <categories>
+        <category>life</category>
+      </categories>
+  </entry>
+  <entry>
+    <title>python-爬虫</title>
+    <url>/2020/04/05/2020-04-05-python-%E7%88%AC%E8%99%AB/</url>
+    <content><![CDATA[<h1 id="Python-爬虫"><a href="#Python-爬虫" class="headerlink" title="Python_爬虫"></a>Python_爬虫</h1><p>爬虫对我来说一直是听说过没做过，今天一时兴起将爬虫的课程过了一遍，整理笔记如下。Python中是提供了爬虫库的，但学习中多采用requests库用于理解爬虫的过程。这里仅对老师讲解的部分进行了记录，还有很多未曾接触了，例如动态代理、header模拟浏览器等等针对反爬虫的策略。权当一份框架型笔记即可。</p>
+<a id="more"></a>
+
+<blockquote>
+<p>[慕课课程][<a href="https://www.icourse163.org/course/BIT-1001870001]">https://www.icourse163.org/course/BIT-1001870001]</a></p>
+</blockquote>
+<h2 id="爬虫的主要流程"><a href="#爬虫的主要流程" class="headerlink" title="爬虫的主要流程"></a>爬虫的主要流程</h2><ol>
+<li>请求获得对应网络信息</li>
+<li>解析网络信息</li>
+<li>存储需要的网络信息</li>
+</ol>
+<h2 id="Requests库介绍"><a href="#Requests库介绍" class="headerlink" title="Requests库介绍"></a>Requests库介绍</h2><p>用于爬虫第一步，发送HTTP请求获取对应网络信息。这里仅对Requests库做整体的介绍，具体方法的操作与技巧，可看[官方文档][<a href="https://requests.readthedocs.io/en/master/]%E6%88%96%E5%85%B6%E4%BB%96%E7%9B%B8%E5%85%B3%E8%B5%84%E6%96%99%E3%80%82">https://requests.readthedocs.io/en/master/]或其他相关资料。</a></p>
+<h4 id="requests主要方法"><a href="#requests主要方法" class="headerlink" title="requests主要方法"></a>requests主要方法</h4><table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+<th>与HTTP对应</th>
+<th>HTTP说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>requests.request()</td>
+<td>基础方法，构造一个请求</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>get()</td>
+<td>获取HTML网页内容</td>
+<td>GET</td>
+<td>获得网页<strong>全内容</strong></td>
+</tr>
+<tr>
+<td>head()</td>
+<td>获取HTML网页头信息</td>
+<td>HEAD</td>
+<td>仅获得网页<strong>头信息</strong></td>
+</tr>
+<tr>
+<td>post()</td>
+<td>向HTML网页提交POST请求</td>
+<td>POST</td>
+<td>在已有资源后<strong>添加</strong>POST资源</td>
+</tr>
+<tr>
+<td>put()</td>
+<td>向HTML网页提交PUT请求</td>
+<td>PUT</td>
+<td>利用PUT资源<strong>替换</strong>原有资源</td>
+</tr>
+<tr>
+<td>patch()</td>
+<td>向HTML网页提交PATCH请求</td>
+<td>PATCH</td>
+<td><strong>局部更新</strong>PATCH指定资源</td>
+</tr>
+<tr>
+<td>delete()</td>
+<td>向HTML网页提交DELETE请求</td>
+<td>DELETE</td>
+<td><strong>删除</strong>资源</td>
+</tr>
+</tbody></table>
+<p>我们可以看到其拥有七个主要方法，并且除基础方法外均一一对应与HTTP定义。除request() 方法外，六个方法均包装了request() 方法，所以上面七个方法本质上均为request() 方法，仅为方便用户使用。</p>
+<p>在爬虫应用中，常使用get()或head()方法，其他对于资源修改的方法，反而不常用。</p>
+<p>这里需要简单了解HTTP协议，以便更好的理解上述内容。</p>
+<h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h4><p>HTTP：Hypertext Transfer Protocol , 超文本传输协议，是一种基于”<strong>请求与响应</strong>“,无状态的应用层协议。</p>
+<p>理解此协议可以从定义出发：1.<strong>请求与响应</strong>：说明HTTP协议的工作方式为客户端向服务器发送请求，服务器向客户端响应。2.<strong>无状态</strong>：说明HTTP协议前后无关，没有记忆信息。3.<strong>应用层</strong>:高层协议，已经是面向用户的协议了。</p>
+<p>HTTP协议通过URL定位资源，通过对应请求（GET\HEAD\PUT…）进行相关操作。对于URL的格式这里不解释。对于请求，HTTP规定了6种请求方式，如图：</p>
+
+<p>各种方法解释，图上都有，这里不详细解释。我们发现与request的请求方法<strong>是一一对应</strong>的。前两种方法用于获取数据，后四种方法用于修改数据。</p>
+<h4 id="Request对象与Response对象"><a href="#Request对象与Response对象" class="headerlink" title="Request对象与Response对象"></a>Request对象与Response对象</h4><p>requests库主要包含两个对象，分别是Request与Response,分别对应<strong>发送对象</strong>，<strong>返回对象</strong>。</p>
+
+
+<h5 id="Response对象属性"><a href="#Response对象属性" class="headerlink" title="Response对象属性"></a>Response对象属性</h5><table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r.status_code</td>
+<td>HTTP请求的返回状态，<strong>200</strong>表示<strong>连接成功</strong>，<strong>404</strong>表示<strong>失败</strong></td>
+</tr>
+<tr>
+<td>r.text</td>
+<td>HTTP相应内容的字符串信息，即URL对应的网页内容</td>
+</tr>
+<tr>
+<td>r.encoding</td>
+<td>从HTTPheader中<strong>猜测</strong>的相应内容编码方式</td>
+</tr>
+<tr>
+<td>r.apparent_encoding</td>
+<td>从<strong>内容</strong>中<strong>分析</strong>出的响应内容编码方式</td>
+</tr>
+<tr>
+<td>r.content</td>
+<td>HTTP响应内容的<strong>二进制</strong>形式</td>
+</tr>
+</tbody></table>
+<p>注意点：</p>
+<ol>
+<li><p>encoding属性与apparent_encoding的区别</p>
+<p>encoding属性是根据HTTP头信息中是否存在charset字典来确定值，但并不是每一个网站设计都会包含此字段，默认为”ISO…”编码格式，其不一定准确。</p>
+<p>apparent_encoding属性，是根据文本内容分析得到的，通常具有较高的准确性。</p>
+</li>
+</ol>
+<h5 id="Request异常与通用代码框架"><a href="#Request异常与通用代码框架" class="headerlink" title="Request异常与通用代码框架"></a>Request异常与通用代码框架</h5><table>
+<thead>
+<tr>
+<th>异常</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>requests.ConnectionError</td>
+<td>连接错误异常，如DNS查询失败、拒绝连接</td>
+</tr>
+<tr>
+<td>requests.HTTPError</td>
+<td>HTTP错误异常</td>
+</tr>
+<tr>
+<td>request.URLRequired</td>
+<td>URL缺失异常</td>
+</tr>
+<tr>
+<td>request.ConnectTimeout</td>
+<td>连接远程服务器超时异常</td>
+</tr>
+<tr>
+<td>request.Timeout</td>
+<td>请求URL超时异常</td>
+</tr>
+</tbody></table>
+<p>请求异常可以分为以上几种，但并不需要记录，知道即可。</p>
+<table>
+<thead>
+<tr>
+<th>检测异常方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>r.raise_for_status()</td>
+<td>若果不是200，产生异常request.HTTPError</td>
+</tr>
+</tbody></table>
+<p>上述方法用于检测是否出现异常，常用。</p>
+<p>一下通用代码框架可用于常见爬虫框架。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span>(<span class="params">url</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url ,timeout = <span class="number">30</span>)</span><br><span class="line">        r.raise_for_status() <span class="comment"># 状态不是200则引发一场</span></span><br><span class="line">        r.enconding = r.apparent_encoding <span class="comment"># 替换编码格式</span></span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;产生异常&quot;</span></span><br><span class="line">    </span><br><span class="line">url = <span class="string">&quot;http://www.baidu.com&quot;</span></span><br><span class="line">print(getHTMLText(url))</span><br></pre></td></tr></table></figure>
+<h2 id="Robots协议"><a href="#Robots协议" class="headerlink" title="Robots协议"></a>Robots协议</h2><p>此协议是针对爬虫所指定的规范，哪些可以爬，哪些不能爬。通常直接放置在根目录下。例如百度”<a href="https://www.baidu.com/robots.txt&quot;.%E5%B9%B6%E6%88%AA%E5%8F%96%E5%A6%82%E4%B8%8B%E5%B1%95%E7%A4%BA%EF%BC%9A">https://www.baidu.com/robots.txt&quot;.并截取如下展示：</a></p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">User-agent: Baiduspider</span><br><span class="line">Disallow: /baidu</span><br><span class="line">Disallow: /s?</span><br><span class="line">Disallow: /ulink?</span><br><span class="line">Disallow: /link?</span><br><span class="line">Disallow: /home/news/data/</span><br><span class="line">Disallow: /bh</span><br><span class="line"></span><br><span class="line">User-agent: Googlebot</span><br><span class="line">Disallow: /baidu</span><br><span class="line">Disallow: /s?</span><br><span class="line">Disallow: /shifen/</span><br><span class="line">Disallow: /homepage/</span><br><span class="line">Disallow: /cpro</span><br><span class="line">Disallow: /ulink?</span><br><span class="line">Disallow: /link?</span><br><span class="line">Disallow: /home/ne</span><br></pre></td></tr></table></figure>
+<ul>
+<li>user-agent:爬取框架/爬取人</li>
+<li>Disallow:不允许爬取的内容通配符</li>
+</ul>
+<h2 id="BeautifulSoup库"><a href="#BeautifulSoup库" class="headerlink" title="BeautifulSoup库"></a>BeautifulSoup库</h2><p>BeautifulSoup可用于爬虫过程第二步，对HTML进行树结构解析，并提供了相对完备的遍历方法。</p>
+<h3 id="BeautifulSoup的基本使用"><a href="#BeautifulSoup的基本使用" class="headerlink" title="BeautifulSoup的基本使用"></a>BeautifulSoup的基本使用</h3><p>使用很简单，指定HTML地址与解析方式即可。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 将纯文本文件转换为树形结构，并进行解析便是BeautifulSoup的作用</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line"><span class="comment">#第一个参数为通过requests获得的html文本</span></span><br><span class="line"><span class="comment">#第二个参数为指定用HTML格式解析此文本</span></span><br><span class="line"><span class="comment">#返回soup对象</span></span><br><span class="line">soup = bs(r.text,<span class="string">&quot;html.parser&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="soup对象的基本元素"><a href="#soup对象的基本元素" class="headerlink" title="soup对象的基本元素"></a>soup对象的基本元素</h3><table>
+<thead>
+<tr>
+<th>基本元素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tag</td>
+<td>标签，基本的信息组织单元，分别用&lt;&gt;和&lt;/&gt;表明开头与结尾</td>
+</tr>
+<tr>
+<td>Name</td>
+<td>标签名，p标签，a标签等，使用格式：Tag.name</td>
+</tr>
+<tr>
+<td>Attributes</td>
+<td>标签属性，字典形式组织，使用格式: Tag.attrs</td>
+</tr>
+<tr>
+<td>NavigableString</td>
+<td>标签内非属性字符串，使用格式：Tag.string</td>
+</tr>
+<tr>
+<td>Comment</td>
+<td>标签内字符串的注释部分，<!--....<--></td>
+</tr>
+</tbody></table>
+<p>由上表可知，soup内对象基本元素的调用，以Tag元素为基础进行。</p>
+<ul>
+<li><p>Tag标签的调用</p>
+<p>直接通过标签名称调用即可</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">soup = bs(<span class="string">&quot;htmladress&quot;</span>,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="comment">#调用a标签，并获得标签对象</span></span><br><span class="line">soup.a</span><br><span class="line"><span class="comment">#调用body标签并获得标签对象</span></span><br><span class="line">soup.body</span><br></pre></td></tr></table></figure>
+<ul>
+<li>name,标签名的获得</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">soup = bs(<span class="string">&quot;htmladress&quot;</span>,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="comment">#调用a标签，并获得标签对象</span></span><br><span class="line">tagA = soup.a</span><br><span class="line"><span class="comment">#获得a标签的标签名</span></span><br><span class="line">tagA.name</span><br></pre></td></tr></table></figure>
+<ul>
+<li>attrs,标签属性的获得</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">soup = bs(<span class="string">&quot;htmladress&quot;</span>,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="comment">#调用a标签，并获得标签对象</span></span><br><span class="line">tagA = soup.a</span><br><span class="line"><span class="comment">#获得a标签的属性字典</span></span><br><span class="line">tagA.attrs</span><br></pre></td></tr></table></figure>
+<ul>
+<li>NavigableString,标签内非属性字符串的获得</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">soup = bs(<span class="string">&quot;htmladress&quot;</span>,<span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"><span class="comment">#调用a标签，并获得标签对象</span></span><br><span class="line">tagA = soup.a</span><br><span class="line"><span class="comment">#获得普通字符串，可以跨层次</span></span><br><span class="line">tagA.string</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>Comment,标签内部Comment获得，比较特殊</p>
+<p>并没有一个为comment的属性直接进行提取Comment，但是可通过上述的.string方式获得Comment内容，不同处在于其列别可通过type()函数进行鉴别。</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">newsoup = BeautifulSoup(<span class="string">&quot;&lt;b&gt;&lt;!-- this is comment --&gt;&lt;p&gt;This is not comment&lt;/p&gt;&lt;/b&gt;&quot;</span>)</span><br><span class="line">newsoup.b.string</span><br><span class="line"><span class="comment">#获得字符，但不知是否是comment还是NavigableString</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">type</span>(newsoup.b.string) <span class="keyword">is</span> bs4.elemnt.Comment :</span><br><span class="line">    print(<span class="string">&quot;发现Comment&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>下图为熟知的HTML格式，其与BeautifulSoup基本是一一对应的。</p>
+
+
+<h3 id="BS的遍历"><a href="#BS的遍历" class="headerlink" title="BS的遍历"></a>BS的遍历</h3><p>BeautifulSoup对于树的遍历方式，并没有特殊的内容，这里仅做简单的介绍，知道即可。重点还是在应用中的情形。</p>
+<p>三种遍历方式：上行、下行、平行</p>
+
+
+<ul>
+<li>下行遍历方法展示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.content</td>
+<td>子节点的列表，将所有子节点信息存入列表</td>
+</tr>
+<tr>
+<td>.children</td>
+<td>子节点的<strong>迭代</strong>类型，用于循环<strong>遍历</strong>子节点情形</td>
+</tr>
+<tr>
+<td>.descendants</td>
+<td>子孙节点的迭代类型，包含<strong>所有的子孙节点</strong>，用于<strong>遍历</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li>上行遍历方法展示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.parent</td>
+<td>节点的父节点标签</td>
+</tr>
+<tr>
+<td>.parents</td>
+<td>节点的祖先节点标签，用于<strong>循环遍历</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li>平行遍历方法展示</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.next_sibling</td>
+<td>返回HTML文本顺序中下一个平行节点标签</td>
+</tr>
+<tr>
+<td>.previous_sibling</td>
+<td>返回HTML文本顺序中上一个平行节点标签</td>
+</tr>
+<tr>
+<td>.next_siblings</td>
+<td>迭代类型，返回HTML文本顺序中后序所有平行节点标签</td>
+</tr>
+<tr>
+<td>.previous_siblings</td>
+<td>迭代类型，返回HTML文本顺序中前序所有平行节点标签</td>
+</tr>
+</tbody></table>
+<p>注意：平行遍历指的是在同一个父节点的前提下，而不是树中所有同一层次的情况。如图：</p>
+
+<p>Bs4的遍历情况总结如图：</p>
+
+
+<h2 id="信息标注方式与信息提取方法"><a href="#信息标注方式与信息提取方法" class="headerlink" title="信息标注方式与信息提取方法"></a>信息标注方式与信息提取方法</h2><h3 id="信息标注方式简介"><a href="#信息标注方式简介" class="headerlink" title="信息标注方式简介"></a>信息标注方式简介</h3><p>常见的信息标注方式有三种，分别是XML、JSON、YAML。HTML是XML的变种，也属于XML格式。下面简单的介绍比较三种信息标注方式。</p>
+<ul>
+<li>XML：eXtensible Markup Language , 其构成单位是Tag标签，且标签内包含有名称属性等信息如图：</li>
+</ul>
+
+
+
+<pre><code>其中空元素可通过一个&lt;&gt;表示 , 注释通过&lt;!-- --&gt; 表示</code></pre>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line">#XML空元素表示</span><br><span class="line"><span class="tag">&lt;<span class="name">img</span> <span class="attr">src</span>=<span class="string">&quot;china.jpg&quot;</span> <span class="attr">size</span>=<span class="string">&quot;10&quot;</span> /&gt;</span></span><br><span class="line">#XML注释格式</span><br><span class="line"><span class="comment">&lt;!-- This is a comment --&gt;</span></span><br></pre></td></tr></table></figure>
+<p>总结：XML格式共包含三种样式</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">name</span>&gt;</span> ... <span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">name</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- --&gt;</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>JSON：JavaScript Object Notation , <strong>有类型</strong>的键值对表示方式</li>
+</ul>
+
+
+
+<p>总结：JSON格式包含三种样式</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">#普通键值对表示</span><br><span class="line">&quot;key&quot; : &quot;Value&quot;</span><br><span class="line">#多值键值对表示</span><br><span class="line">&quot;key&quot; : [&quot;Value1&quot;,&quot;Value2&quot;]</span><br><span class="line">#键值对嵌套表示</span><br><span class="line">&quot;key&quot; : &#123;&quot;subkey&quot; : &quot;subvalue&quot;&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>YAML：Ain’t Markup Language ， 无类型键值对</li>
+</ul>
+
+
+<p>  其表示各种关系情况：</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="comment">#缩进表示所属关系，同Python</span></span><br><span class="line"><span class="attr">name:</span></span><br><span class="line">	<span class="attr">newName :</span> <span class="string">北京理工</span></span><br><span class="line">	<span class="attr">OldName :</span> <span class="string">延安自然科学院</span></span><br><span class="line"><span class="comment"># “-” 表达并列关系</span></span><br><span class="line"><span class="attr">name:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">北京理工大学</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">延安自然科学院</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># “|”表达整块数据</span></span><br><span class="line"><span class="attr">text:</span> <span class="string">|</span></span><br><span class="line"><span class="string">北京理工大学创立与......</span></span><br></pre></td></tr></table></figure>
+<p>总结:三种表示形式如下</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">key :</span> <span class="string">value</span></span><br><span class="line"></span><br><span class="line"><span class="attr">key :</span> <span class="comment">#comment</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">value1</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">value2</span></span><br><span class="line"></span><br><span class="line"><span class="attr">key:</span></span><br><span class="line">	<span class="attr">subkey :</span> <span class="string">value</span> </span><br><span class="line">		</span><br></pre></td></tr></table></figure>
+<h3 id="信息标注方式实例比较"><a href="#信息标注方式实例比较" class="headerlink" title="信息标注方式实例比较"></a>信息标注方式实例比较</h3><p>XML：</p>
+<figure class="highlight xml"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">person</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">firstName</span>&gt;</span>Tian<span class="tag">&lt;/<span class="name">firstName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">lastName</span>&gt;</span>Song<span class="tag">&lt;/<span class="name">lastName</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">address</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">streetAddr</span>&gt;</span>中关村南大街5号<span class="tag">&lt;/<span class="name">streetAddr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">city</span>&gt;</span>北京市<span class="tag">&lt;/<span class="name">city</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">zipcode</span>&gt;</span>100081<span class="tag">&lt;/<span class="name">zipcode</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">address</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">prof</span>&gt;</span>ComputerSystem<span class="tag">&lt;/<span class="name">prof</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">prof</span>&gt;</span>Security<span class="tag">&lt;/<span class="name">prof</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">person</span>&gt;</span></span><br><span class="line"><span class="comment">&lt;!--最早的通用标记语言，可扩展性好，但很繁琐 --&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- 用于INTERNET 信息交互与传递 --&gt;</span></span><br></pre></td></tr></table></figure>
+<p>JSON:</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    “firstName”: “Tian”,</span><br><span class="line">    “lastName”: “Song”,</span><br><span class="line">    “address”:&#123;“streetAddr”: “中关村南大街5号” ,</span><br><span class="line">               “city”: “北京市” ,</span><br><span class="line">               “zipcode”: “100081”&#125;,</span><br><span class="line">    “prof”:[“ComputerSystem”, “Security”]</span><br><span class="line">&#125;</span><br><span class="line">#信息有类型，适合程序处理，比XML简洁</span><br><span class="line">#用于移动英语云端与节点信息通信，无注释</span><br></pre></td></tr></table></figure>
+<p>YAML:</p>
+<figure class="highlight yaml"><table><tr><td class="code"><pre><span class="line"><span class="attr">firstName:</span> <span class="string">Tian</span></span><br><span class="line"><span class="attr">lastName:</span> <span class="string">Song</span></span><br><span class="line"><span class="attr">address:</span></span><br><span class="line">	<span class="string">streetAddr:中关村南大街5号</span></span><br><span class="line">	<span class="string">city:北京市</span></span><br><span class="line">	<span class="attr">zipcode:</span> <span class="number">100081</span></span><br><span class="line"><span class="attr">prof:</span></span><br><span class="line"><span class="string">‐Computer</span> <span class="string">System</span></span><br><span class="line"><span class="string">‐Security</span></span><br><span class="line"><span class="comment"># 信息无类型，文本信息比例最高，可读性好</span></span><br><span class="line"><span class="comment"># 常用于各类系统配置文件，有注释易读</span></span><br></pre></td></tr></table></figure>
+
+
+<h3 id="信息提取的三种方法"><a href="#信息提取的三种方法" class="headerlink" title="信息提取的三种方法"></a>信息提取的三种方法</h3><p>这里的信息提取指的是提取标注信息（xml、json、yaml）内容。</p>
+<ol>
+<li><p>完整解析信息标记，再提取关键信息，需要标记解析器，如BS4。虽然准确但是繁琐，速度慢。</p>
+</li>
+<li><p>无视标记形式，直接搜索关键信息。对信息文本直接查找。提取速度快，但准确性不确定。</p>
+</li>
+<li><p>融合方法，一般先通过第二种方式确定范围，再使用第一种方式精确处理。如图</p>
+
+
+</li>
+</ol>
+<h3 id="基于Bs4库的HTML内容查找方法"><a href="#基于Bs4库的HTML内容查找方法" class="headerlink" title="基于Bs4库的HTML内容查找方法"></a>基于Bs4库的HTML内容查找方法</h3><p>由于本部分内容过于简单，更多的需要在实践中应用，故未详细说明。正则表达式也可以用于检索。</p>
+<ol>
+<li>首先利用find_all()方法，无视标记形式，直接搜索关键信息。</li>
+</ol>
+
+
+<ol start="2">
+<li>其次解析其标签格式</li>
+</ol>
+<h3 id="实例代码"><a href="#实例代码" class="headerlink" title="实例代码"></a>实例代码</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#定向页面爬取</span></span><br><span class="line"><span class="comment">#获得中国“最好”大学排名情况</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> bs4</span><br><span class="line"><span class="comment"># 1.通过requests等库获得网页内容</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getHTMLText</span>(<span class="params">url</span>):</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        r = requests.get(url, timeout=<span class="number">30</span>)</span><br><span class="line">        r.raise_for_status()</span><br><span class="line">        r.encoding = r.apparent_encoding</span><br><span class="line">        <span class="keyword">return</span> r.text</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span></span><br><span class="line"><span class="comment"># 2.通过beautifulSoup等库解析网页内容，并获取关键信息 </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fillUnivList</span>(<span class="params">ulist, html</span>):</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> tr <span class="keyword">in</span> soup.find(<span class="string">&#x27;tbody&#x27;</span>).children:</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(tr, bs4.element.Tag):</span><br><span class="line">            tds = tr(<span class="string">&#x27;td&#x27;</span>)</span><br><span class="line">            ulist.append([tds[<span class="number">0</span>].string, tds[<span class="number">1</span>].string, tds[<span class="number">3</span>].string])</span><br><span class="line"><span class="comment"># 3.可视化输出</span></span><br><span class="line"><span class="comment">#chr(12288)用于中文符号填充，未研究</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">printUnivList</span>(<span class="params">ulist, num</span>):</span></span><br><span class="line">    tplt = <span class="string">&quot;&#123;0:^10&#125;\t&#123;1:&#123;3&#125;^10&#125;\t&#123;2:^10&#125;&quot;</span></span><br><span class="line">    print(tplt.<span class="built_in">format</span>(<span class="string">&quot;排名&quot;</span>,<span class="string">&quot;学校名称&quot;</span>,<span class="string">&quot;总分&quot;</span>,<span class="built_in">chr</span>(<span class="number">12288</span>)))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(num):</span><br><span class="line">        u=ulist[i]</span><br><span class="line">        print(tplt.<span class="built_in">format</span>(u[<span class="number">0</span>],u[<span class="number">1</span>],u[<span class="number">2</span>],<span class="built_in">chr</span>(<span class="number">12288</span>)))</span><br><span class="line">     </span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span>():</span></span><br><span class="line">    uinfo = []</span><br><span class="line">    url = <span class="string">&#x27;http://www.zuihaodaxue.com/zuihaodaxuepaiming2018.html&#x27;</span></span><br><span class="line">    html = getHTMLText(url)</span><br><span class="line">    fillUnivList(uinfo, html)</span><br><span class="line">    printUnivList(uinfo, <span class="number">20</span>) <span class="comment"># 20 univs</span></span><br><span class="line">main()</span><br></pre></td></tr></table></figure>]]></content>
+      <categories>
+        <category>technology ,Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>python-正则表达式</title>
+    <url>/2020/04/06/2020-04-06-python-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="Python-正则表达式"><a href="#Python-正则表达式" class="headerlink" title="Python_正则表达式"></a>Python_正则表达式</h1><p>正则表达式是常用于字符串匹配。之前也曾系统的看过相关的内容，但是一段时间不用发现又很陌生，特将相关内容记录如下。</p>
+<a id="more"></a>
+
+<p>正则表达式本身适用于匹配含有<strong>某种特征</strong>的字符串，从而对字符串进行相关处理（分割、替换、匹配等）。Python语言通过re库支持正则表达式。</p>
+<h2 id="正则表达式简介"><a href="#正则表达式简介" class="headerlink" title="正则表达式简介"></a>正则表达式简介</h2><blockquote>
+<p>正则表达式(regular expression)描述了一种字符串匹配的模式（pattern），可以用来检查一个串是否含有某种子串、将匹配的子串替换或者从某个串中取出符合某个条件的子串等。</p>
+</blockquote>
+<p>一个正则表达式由运算符与操作符构成，而运算符与操作符又可以分为若干种类。</p>
+<h3 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h3><p>表示待匹配字符本身的符号，[a-z] 表示由a到z的单个字符。</p>
+<h4 id="普通运算符"><a href="#普通运算符" class="headerlink" title="普通运算符"></a>普通运算符</h4><p>普通字符包括没有显式指定为元字符的所有可打印和不可打印字符。这包括所有大写和小写字母、所有数字、所有标点符号和一些其他符号。这里的<a href="https://www.runoob.com/regexp/regexp-metachar.html">元字符</a>可以单纯的理解为具有特殊含义的字符，不需要记忆。</p>
+<h4 id="特殊运算符"><a href="#特殊运算符" class="headerlink" title="特殊运算符"></a>特殊运算符</h4><p>特殊运算符指的是利用<strong>转义字符</strong>表示特定字符的表示。可理解为对常见的运算符进行了约定表达，以达到简化的目的。</p>
+<p>这里仅列举了常见的特殊运算符。</p>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>\w</td>
+<td>匹配字母、数字、下划线。等价于’[A-Za-z0-9_]’。</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配非字母、数字、下划线。等价于 ‘[^A-Za-z0-9_]’。</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任何空白字符，包括空格、制表符、换页符等等。等价于 [ \f\n\r\t\v]。</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任何非空白字符。等价于 [^ \f\n\r\t\v]。</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个制表符。等价于 \x09 和 \cI。</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配一个数字字符。等价于 [0-9]。</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配一个非数字字符。等价于 [^0-9]。</td>
+</tr>
+<tr>
+<td>\f</td>
+<td>匹配一个换页符。等价于 \x0c 和 \cL。</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符。等价于 \x0a 和 \cJ。</td>
+</tr>
+<tr>
+<td>\r</td>
+<td>匹配一个回车符。等价于 \x0d 和 \cM。</td>
+</tr>
+<tr>
+<td>\v</td>
+<td>匹配一个垂直制表符。等价于 \x0b 和 \cK。</td>
+</tr>
+</tbody></table>
+<h3 id="操作符"><a href="#操作符" class="headerlink" title="操作符"></a>操作符</h3><p>用于表示对运算符的某种操作，通常是限定符号。</p>
+<table>
+<thead>
+<tr>
+<th>字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$</td>
+<td>匹配结尾位置</td>
+</tr>
+<tr>
+<td>( )</td>
+<td>标记一个子表达式的开始和结束位置</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。要匹配 * 字符，请使用 *。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。要匹配 + 字符，请使用 +。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除换行符 \n 之外的任何单字符。要匹配 . ，请使用 . 。</td>
+</tr>
+<tr>
+<td>[</td>
+<td>标记一个中括号表达式的开始。要匹配 [，请使用 [。</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配前面的子表达式零次或一次，或指明一个非贪婪限定符。</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配输入字符串的开始位置</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 是一个非负整数。匹配确定的 n 次。</td>
+</tr>
+<tr>
+<td>{n,}</td>
+<td>n 是一个非负整数。至少匹配n 次。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>最少匹配 n 次且最多匹配 m 次</td>
+</tr>
+</tbody></table>
+<p>  通过上述运算符+操作符可以表示任意符号，根据应用场景千变万化。</p>
+<h2 id="Python-中正则表达式的应用"><a href="#Python-中正则表达式的应用" class="headerlink" title="Python 中正则表达式的应用"></a>Python 中正则表达式的应用</h2><p>Python中采用re库对正则表达式进行处理。其正则表达式的调用方式分为两种：1.库直接调用 2.利用正则表达式对象调用。这里的关系我认为与类同对象的关系一致。</p>
+<h3 id="库调用"><a href="#库调用" class="headerlink" title="库调用"></a>库调用</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#实例</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="comment">#匹配一个或多个字母</span></span><br><span class="line">match = re.search(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the chamion&quot;</span> )</span><br><span class="line">print(match.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment">#Result : We</span></span><br></pre></td></tr></table></figure>
+<p>直接使用库函数调用方法即可。主要方法如下：</p>
+<table>
+<thead>
+<tr>
+<th>函数调用</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>re.search()</td>
+<td>搜索匹配的第一个，并返回<strong>match</strong>对象</td>
+</tr>
+<tr>
+<td>re.match()</td>
+<td>从<strong>开始位置</strong>匹配符合正则的字符串，并返回<strong>match</strong>对象</td>
+</tr>
+<tr>
+<td>re.findall()</td>
+<td>搜索字符串，以<strong>列表</strong>形式返回全部匹配的字符串</td>
+</tr>
+<tr>
+<td>re.split()</td>
+<td>按照正则表达式分割原始字符串，并返回<strong>列表</strong>类型</td>
+</tr>
+<tr>
+<td>re.finditer()</td>
+<td>搜索字符串，返回符合匹配结果的<strong>迭代</strong>类型，每个迭代元素均为<strong>match</strong>对象</td>
+</tr>
+<tr>
+<td>re.sub()</td>
+<td>替换符合正则表达的子串为特定字符串，返回替换后的<strong>字符串</strong></td>
+</tr>
+</tbody></table>
+<p>简单实例：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#实例</span></span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="comment">#匹配一个或多个字母</span></span><br><span class="line">match = re.search(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span> )</span><br><span class="line">print(match.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># We</span></span><br><span class="line"></span><br><span class="line">match = re.match(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span> )</span><br><span class="line">print(match.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># We</span></span><br><span class="line"></span><br><span class="line">matchList = re.findall(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span> )</span><br><span class="line">print(matchList)</span><br><span class="line"><span class="comment"># [&#x27;We&#x27;, &#x27;are&#x27;, &#x27;the&#x27;, &#x27;chamion&#x27;]</span></span><br><span class="line"></span><br><span class="line">splitList = re.split(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span>  )</span><br><span class="line">print(splitList)</span><br><span class="line"><span class="comment"># [&#x27;&#x27;, &#x27; &#x27;, &#x27; &#x27;, &#x27; 45 &#x27;, &#x27; 123&#x27;]</span></span><br><span class="line"></span><br><span class="line">iterMatch = re.finditer(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span>  )</span><br><span class="line"><span class="keyword">for</span> match <span class="keyword">in</span> iterMatch:</span><br><span class="line">    print(match.group(<span class="number">0</span>))</span><br><span class="line"><span class="comment"># We</span></span><br><span class="line"><span class="comment"># are</span></span><br><span class="line"><span class="comment"># the</span></span><br><span class="line"><span class="comment"># chamion</span></span><br><span class="line"></span><br><span class="line">   </span><br><span class="line">subResult = re.sub(<span class="string">r&quot;[a-zA-Z]+&quot;</span> ,<span class="string">&quot;zzz&quot;</span> ,<span class="string">&quot;We are the 45 chamion 123&quot;</span>   )</span><br><span class="line">print(subResult)</span><br><span class="line"><span class="comment"># zzz zzz zzz 45 zzz 123</span></span><br></pre></td></tr></table></figure>
+<p>上面仅仅是简单的实例，具体每个方法可以设置的参数都为细讲，可在应用时再看。</p>
+<p>通过观察方法表中对每种方法的描述，我们可以发现<strong>match对象</strong>多次提及，其相应的属性与方法可简单了解。</p>
+<h3 id="regex对象调用"><a href="#regex对象调用" class="headerlink" title="regex对象调用"></a>regex对象调用</h3><p>选择用regex对象调用上述方法的好处为，对于同一个正则表达式多次使用时可以减少系统默认的多次编译正则表达式次数。调用形式与库调用一致，理解为类与对象的关系即可。</p>
+<p>调用实例</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re </span><br><span class="line"><span class="comment">#先编译，返回一个regex对象</span></span><br><span class="line">regex = re.<span class="built_in">compile</span>(<span class="string">r&quot;[a-z]+&quot;</span>)</span><br><span class="line"><span class="comment">#在调用相关方法即可</span></span><br><span class="line">regex.search(<span class="string">&quot;String&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="Match对象"><a href="#Match对象" class="headerlink" title="Match对象"></a>Match对象</h3><p>在上述方法中，多个方法返回的为<strong>match对象</strong>，其有自己的属性与方法，需要简单的了解下。</p>
+<p>Match对象的属性</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.string</td>
+<td>待匹配的文本</td>
+</tr>
+<tr>
+<td>.re</td>
+<td>匹配时使用的pattern对象，即正则</td>
+</tr>
+<tr>
+<td>.pos</td>
+<td>正则搜索文本的开始位置</td>
+</tr>
+<tr>
+<td>.endpos</td>
+<td>正则搜索的结束位置</td>
+</tr>
+</tbody></table>
+<p>Match对象的方法</p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>.group(0)</td>
+<td>获得匹配的字符串</td>
+</tr>
+<tr>
+<td>.start()</td>
+<td>匹配字符串在原始字符串中的起始位置</td>
+</tr>
+<tr>
+<td>.end()</td>
+<td>匹配字符串在原始字符串中的结束位置</td>
+</tr>
+<tr>
+<td>.span()</td>
+<td>返回（.start() , .end()）</td>
+</tr>
+</tbody></table>
+<p>本文中包含由正则表达的含义，与基本的用法 + Pyhon库re对于正则表达式的用法。多是用于理解与了解必要的使用方法与框架，并没有涉及具体的代码演示。个人认为正则的使用，跟需要在应用过程中进行。</p>
+]]></content>
+      <categories>
+        <category>technology , Python , regex</category>
+      </categories>
+      <tags>
+        <tag>regex</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>picturetest</title>
+    <url>/2020/04/06/2020-04-06-picturetest/</url>
+    <content><![CDATA[
+
+]]></content>
+  </entry>
+  <entry>
+    <title>wordNet Introduction</title>
+    <url>/2020/04/26/2020-04-26-wordNet-Introduction/</url>
+    <content><![CDATA[<h1 id="WordNet简介与原理"><a href="#WordNet简介与原理" class="headerlink" title="WordNet简介与原理"></a>WordNet简介与原理</h1><h2 id="什么是WordNet"><a href="#什么是WordNet" class="headerlink" title="什么是WordNet"></a>什么是WordNet</h2><blockquote>
+<p><a href="http://wordnetweb.princeton.edu/perl/webwn">wordNet在线使用地址</a>  <a href="http://www.nltk.org/howto/wordnet.html">wordNet_API</a>  <a href="http://wordvis.com/">wordNet_可视化</a></p>
+</blockquote>
+<p>一句话概括WorNet即为：面向<strong>英文</strong>的<strong>词汇</strong>数据库，其按照单词的含义构造了单词的网络。WordNet的最大的特点为<strong>按照词义构建词集</strong>，</p>
+<a id="more"></a>
+
+<p>在WordNet中词性是分类的重要标准，按照词性划分为四类同义词集，分别是动词同义词集、名词同义词集、形容词同义词集与副词同义词集。上述的四种同义词集各自构成了同义词网络。每一个同义词的集合表示一个基本<strong>语义</strong>概念，并且集合之间存在各种关系。</p>
+<p>集合之间的关系包括九类：上下位关系（动词、名词）、蕴含关系（动词）、相似关系（名词）、成员部分关系（名词）、物质部分关系（名词）、部件部分关系（名词）、致使关系（动词）、相关动词关系（动词）、属性关系（形容词）。</p>
+<p>例如名词”Love”的上下位关系为：</p>
+<blockquote>
+<p>entity——&gt;abstract entity——&gt;abstraction——&gt;attribute——&gt;state——&gt;feeling——&gt; emotion——&gt;love;</p>
+</blockquote>
+<h2 id="WordNet的特点"><a href="#WordNet的特点" class="headerlink" title="WordNet的特点"></a>WordNet的特点</h2><h3 id="1-与一般词典的组织结构不同"><a href="#1-与一般词典的组织结构不同" class="headerlink" title="1.与一般词典的组织结构不同"></a>1.与一般词典的组织结构不同</h3><p>它利用<strong>同义词集合</strong>作为基本组织单位，用户可以在同义词集中找到合适的词表示某个已知的基本概念，同时也给出了定义与例句。</p>
+<p>如果将WordNet视为数据库，则Synset就是一条数据的主键，代表了一个词义。Python中Synset展示：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-2bb918806d6a3a21932dbed3514368a9_720w.jpg"></p>
+<p>上图中是Synset基础用法，其通过单词”dog”，寻找包含”dog”的所有同义词集。</p>
+<h3 id="2-同义词集间通过关系构成网络"><a href="#2-同义词集间通过关系构成网络" class="headerlink" title="2.同义词集间通过关系构成网络"></a>2.同义词集间通过关系构成网络</h3><p>WordNet中同义词集并非是独立的，其通过特定的关系类型构建同义词集网络架构。</p>
+
+
+<p>上图是”China”词，在WordNet中涉及的同义词集关系展示。</p>
+<h3 id="3-WordNet中同义词集的单义性"><a href="#3-WordNet中同义词集的单义性" class="headerlink" title="3.WordNet中同义词集的单义性"></a>3.WordNet中同义词集的单义性</h3><p>在WordNet中，大多数的同义词集都有说明性的注释，但一个Synset不等于词典中的一个词条，因为一个Synset只包含一个注释，而在传统词典中的词条是多义词，会有多个解释。</p>
+<p>所以说，“一个Synset等于的是一个词义”这一点必须反复强调。以一条词义为一条数据，是<strong>跨语言</strong>想要成立所必须的条件。</p>
+<h3 id="WordNet-非重要概念"><a href="#WordNet-非重要概念" class="headerlink" title="WordNet 非重要概念"></a>WordNet 非重要概念</h3><p>这一部分内容介绍了WordNet中不太重要的概念，不影响基本使用，但有利于理解。</p>
+<ol>
+<li><p>独立起始概念（Unique Beginner）</p>
+<p>某些同义词集不存在上位词集，那么我们称之为独立起始概念。这个可以认为是语义领域内所有概念的<strong>原始语义元素</strong>。在WordNet中名词体系中存在25个独立起始概念，例如：时间、物质、目的、关系、属性等等。其下位词继承上位词的所有特点，这与编程思想中父子类的关系类似。</p>
+</li>
+<li><p>词典ID（Lexicographer ID）</p>
+<p>每一个同义词集都包含一个唯一的编号。</p>
+</li>
+<li><p>概念链（Concept Chain）</p>
+<p>这里的概念链指的是同义词集间<strong>上下位关系</strong>，构成的概念链条。与上面提到的关系可视化概念类似，但其仅包含<strong>上下位关系</strong>。</p>
+<p><img src="https://images0.cnblogs.com/blog/577482/201411/271433099491914.png"></p>
+<p>上图内容与可视化展示相似，这里不解释。</p>
+</li>
+</ol>
+<h3 id="WordNet文件结构简介"><a href="#WordNet文件结构简介" class="headerlink" title="WordNet文件结构简介"></a>WordNet文件结构简介</h3><p>WordNet语料库中最常用的有两个：omw与wordnet</p>
+<h3 id="omw文件夹"><a href="#omw文件夹" class="headerlink" title="omw文件夹"></a>omw文件夹</h3><p>此文件夹内包含有各国家地区的研究人员基于英文WordNet构建的本国语言的WordNet，目前包含有27个国家与地区，其中cmn(简体中文)和qcn（繁体中文）与中文相关。</p>
+<p>文件夹中有三个文件，分别是<em>citation.bib</em>、<em>LICENSE</em>和<em>wn-data-语言名.tab</em>。</p>
+<h4 id="wn-data-cmn-tab文件"><a href="#wn-data-cmn-tab文件" class="headerlink" title="wn-data-cmn.tab文件"></a>wn-data-cmn.tab文件</h4><p>词条保存在<em>wn-data-语言名.tab</em>文件中。打开后发现，简体中文下的词条一共有79808条，繁体为8069条</p>
+<blockquote>
+<p>数据为两年前，目前中文词条应高于上述数据。</p>
+</blockquote>
+<p>如图：<img src="https://pic3.zhimg.com/80/v2-41006ed2100aa2b4db229b225f1a232e_720w.jpg"></p>
+<p>文件的内容分为三列，第一列为词义的八位十进制序号（offset）（对应于上述的词典ID）和词性（n：名词、v：动词、a：形容词、r：动词）；第二列内容为“语言名：lemma”；第三列是对应语言的词义。</p>
+<p>“00001740-a”的词义共包含有3个具体的词汇，分别是可以+的，有能力+的、能。</p>
+<p>中文简体通过去重之后的词义数量为42312条数据。</p>
+<p>WordNet中原本的此役统计数据为：名词：82115条，动词：13767条，形容词：18156条，副词：3621条，共计：117659条。大约占三分之一。</p>
+<h4 id="wordnet文件"><a href="#wordnet文件" class="headerlink" title="wordnet文件"></a>wordnet文件</h4><p>此文件内包含有wordnet的本体。</p>
+<blockquote>
+<p>wordnet文件夹中一共有18个文件，比较重要的文件有15个。其中四个是data文件，存放四种词性的词的根本内容；四个是index文件，即索引文件；四个是exc文件，对词汇的变形进行对应；还有一个是lexnames文件，存放所有词的45个意向集（即这117659条词义，可以被归为这45个类）。</p>
+</blockquote>
+<p><img src="https://pic4.zhimg.com/v2-c5dbed774c162f765bc463d8e304eaa7_r.jpg"></p>
+<p><strong>data.pos文件</strong></p>
+<p>此文件是一个数据文件，以data.adj中able词条为例子：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-1827c3322b2e806c0d7c39ac1aea170f_720w.jpg"></p>
+<p>上图中表示了”1740”同义词集下的able词条，其内容依次包含：词典ID、词意向集序号、词性、同义词集内词个数、指针个数、指针列表、句型、注释与例句。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-ab25ae65a88e5b69cc1021d465ee0fa2_720w.jpg"></p>
+<p>上图是指针符号列表，用于表示此同义词集与其他同义词集的关系。</p>
+<p><strong>lexnames文件</strong></p>
+<p>WordNet讲英文单词归类为45个意向集，其中名词26个，动词15个，形容词3个，副词1个。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-9344743c81376dce4224704602f02ef9_720w.jpg"></p>
+<h2 id="WordNet-API"><a href="#WordNet-API" class="headerlink" title="WordNet_API"></a>WordNet_API</h2><p>官方提供了WordNet接口用于研究与应用。其提供了基于上述数据库文件的基本使用方式：包括同义词集的获取、同义词集对应关系的获取、意向词集的获取、语义相似度的判断。</p>
+<p>wordNet提供了多种维度的语义相似度接口，一共包含有6种；</p>
+<ol>
+<li><p>基于上下位词的最短路径,输出空间0-1.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.path_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">0.2</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于上下位词的最短路径与最大深度，其计算公式$-\log(p/2d)$.</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.lch_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">2.028</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于两同义词深度与最近公共父节点</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.wup_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">0.857</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于两同义词深度与最近公共父节点的含义</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.res_similarity(cat, brown_ic)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">7.911</span>...</span><br></pre></td></tr></table></figure>
+<p>第五种与第六种与上述类似，仅仅是公式不同，这里不再赘述。</p>
+</li>
+</ol>
+<p>可以看到WordNet利用了同义词集、同义词集网络深度等信息实现语义相似度的计算。</p>
+<p>参考地址：</p>
+<blockquote>
+<p><a href="https://wordnet.princeton.edu/">wordnet官网</a> <br><a href="https://blog.csdn.net/weixin_30600503/article/details/97794989">wordnet的一些入门性介绍</a><br><a href="https://blog.csdn.net/skiffloveblue/article/details/9359427">wordnet词网研究</a><br><a href="https://zhuanlan.zhihu.com/p/26527203">wordnet思路</a><br><a href="http://wordnetweb.princeton.edu/perl/webwn">wordNet在线使用地址</a>  <br><a href="http://www.nltk.org/howto/wordnet.html">wordNet_API</a><br> [wordNet_可视化](</p>
+</blockquote>
+]]></content>
+      <tags>
+        <tag>wordnet</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>二叉树的三种遍历方式</title>
+    <url>/2020/04/26/2020-04-26-%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/</url>
+    <content><![CDATA[<h1 id="二叉树的三种遍历方式原理与实现"><a href="#二叉树的三种遍历方式原理与实现" class="headerlink" title="二叉树的三种遍历方式原理与实现"></a>二叉树的三种遍历方式原理与实现</h1><p>学习二叉树时，前序中序后序遍历方式是基础知识。最近再刷Leetcode时，发现很多遍历实现的基本本方式已经忘记了，这里将各种方式的原理与代码实现整理如下；</p>
+<a id="more"></a>
+
+<h2 id="三种遍历方式原理"><a href="#三种遍历方式原理" class="headerlink" title="三种遍历方式原理"></a>三种遍历方式原理</h2><p>三种遍历方式简单的一句话就是：根左右、左根右、左右根。</p>
+<h3 id="相关图示："><a href="#相关图示：" class="headerlink" title="相关图示："></a>相关图示：</h3><blockquote>
+<p><a href="https://www.pianshen.com/article/7106254596/">图片来源</a></p>
+</blockquote>
+<p>前序：</p>
+<ul>
+<li>结果：ABDHIEJCFKG</li>
+</ul>
+<p>中序：</p>
+<ul>
+<li>结果：HDIBEJAFKCG</li>
+</ul>
+<p>后序：</p>
+<ul>
+<li>结果：HIDJEBKFGCA</li>
+</ul>
+<h3 id="如何理解前中后序"><a href="#如何理解前中后序" class="headerlink" title="如何理解前中后序"></a>如何理解前中后序</h3><p>理解前中后序的算法本身并不难，很多人直接就可以把前中后序算法结果写在纸面上。但还是要简单的说下过程：</p>
+<p>首先看一张遍历图示：</p>
+
+
+<p>遍历图示显示，遍历的顺序为<strong>从根节点出发，先左子树后右子树。</strong>除了根节点与空节点外<strong>每一个节点均有三个入箭头</strong>，这三个如箭头分别表示：<strong>从父节点来、从左子树返回、从右子树返回</strong>。我们可以认为在<strong>递归算法中</strong>，每个节点均被遍历了三遍，但是哪一遍<strong>访问节点</strong>，决定了前、中、后序算法。</p>
+<blockquote>
+<p>非递归算法中，是否遍历了三遍、我无法确定。就算是使用栈实现遍历时，不同的算法策略也不尽相同。</p>
+</blockquote>
+<h2 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><h4 id="节点定义："><a href="#节点定义：" class="headerlink" title="节点定义："></a>节点定义：</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, x</span>):</span></span><br><span class="line">        self.val = x</span><br><span class="line">        self.left = <span class="literal">None</span></span><br><span class="line">        self.right = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<h4 id="构成树代码"><a href="#构成树代码" class="headerlink" title="构成树代码"></a>构成树代码</h4><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">A = TreeNode(<span class="string">&quot;A&quot;</span>)</span><br><span class="line">B = TreeNode(<span class="string">&quot;B&quot;</span>)</span><br><span class="line">C = TreeNode(<span class="string">&quot;C&quot;</span>)</span><br><span class="line">D = TreeNode(<span class="string">&quot;D&quot;</span>)</span><br><span class="line">E = TreeNode(<span class="string">&quot;E&quot;</span>)</span><br><span class="line">F = TreeNode(<span class="string">&quot;F&quot;</span>)</span><br><span class="line">G = TreeNode(<span class="string">&quot;G&quot;</span>)</span><br><span class="line">H = TreeNode(<span class="string">&quot;H&quot;</span>)</span><br><span class="line">I = TreeNode(<span class="string">&quot;I&quot;</span>)</span><br><span class="line">J = TreeNode(<span class="string">&quot;J&quot;</span>)</span><br><span class="line">K = TreeNode(<span class="string">&quot;K&quot;</span>)</span><br><span class="line">A.left = B</span><br><span class="line">A.right = C</span><br><span class="line">B.left = D</span><br><span class="line">B.right = E</span><br><span class="line">D.left = H</span><br><span class="line">D.right = I</span><br><span class="line">E.right = J</span><br><span class="line">C.left = F</span><br><span class="line">C.right = G</span><br><span class="line">F.right = K</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="先序遍历"><a href="#先序遍历" class="headerlink" title="先序遍历"></a>先序遍历</h4><h5 id="递归："><a href="#递归：" class="headerlink" title="递归："></a>递归：</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">frontorderTraversal</span>(<span class="params">root</span>):</span></span><br><span class="line">    res = []</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">frontorder</span>(<span class="params">tree</span>):</span></span><br><span class="line">        res.append(tree.val)</span><br><span class="line">        <span class="keyword">if</span> tree.left:</span><br><span class="line">            frontorder(tree.left)</span><br><span class="line">        <span class="keyword">if</span> tree.right:</span><br><span class="line">            frontorder(tree.right)</span><br><span class="line">    frontorder(root)</span><br><span class="line">    <span class="keyword">return</span> res </span><br></pre></td></tr></table></figure>
+<h5 id="通用框架——先序"><a href="#通用框架——先序" class="headerlink" title="通用框架——先序"></a>通用框架——先序</h5><blockquote>
+<p>这里的通用框架是在刷leetcode过程中，发现的一种类似于递归方式的，只需要更改部分代码，即可从先序转为中序或后序。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">frontorderTraversal</span>(<span class="params"> root</span>):</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    1. 递归法可以一行代码完成，无需讨论；</span></span><br><span class="line"><span class="string">    2. 迭代法一般需要通过一个栈保存节点顺序，我们这里直接使用列表</span></span><br><span class="line"><span class="string">      - 首先，我要按照中序遍历的顺序存入栈，这边用的逆序，方便从尾部开始处理</span></span><br><span class="line"><span class="string">      - 在存入栈时加入一个是否需要深化的参数</span></span><br><span class="line"><span class="string">      - 在回头取值时，这个参数应该是否，即直接取值</span></span><br><span class="line"><span class="string">      - 简单调整顺序，即可实现前序和后序遍历</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># 迭代法</span></span><br><span class="line">    result = []</span><br><span class="line">    stack = [(<span class="number">1</span>, root)]</span><br><span class="line">    <span class="keyword">while</span> stack:</span><br><span class="line">        go_deeper, node = stack.pop()</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> go_deeper:</span><br><span class="line">            <span class="comment"># 左右节点还需继续深化，并且入栈是先右后左</span></span><br><span class="line">            stack.append((<span class="number">1</span>, node.right))</span><br><span class="line">            <span class="comment"># 节点自身已遍历，回头可以直接取值</span></span><br><span class="line">            </span><br><span class="line">            stack.append((<span class="number">1</span>, node.left))</span><br><span class="line">            stack.append((<span class="number">0</span>, node))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(node.val)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+
+
+<h4 id="中序遍历"><a href="#中序遍历" class="headerlink" title="中序遍历"></a>中序遍历</h4><h5 id="递归：-1"><a href="#递归：-1" class="headerlink" title="递归："></a>递归：</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span>(<span class="params">root</span>):</span></span><br><span class="line">    res = []</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inorder</span>(<span class="params">tree</span>):</span></span><br><span class="line">        <span class="keyword">if</span> tree.left:</span><br><span class="line">            inorder(tree.left)</span><br><span class="line">        res.append(tree.val)</span><br><span class="line">        <span class="keyword">if</span> tree.right:</span><br><span class="line">            inorder(tree.right)</span><br><span class="line">    inorder(root)</span><br><span class="line">    <span class="keyword">return</span> res </span><br></pre></td></tr></table></figure>
+<h5 id="通用框架——中序"><a href="#通用框架——中序" class="headerlink" title="通用框架——中序"></a>通用框架——中序</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span>(<span class="params"> root</span>):</span></span><br><span class="line">    result = []</span><br><span class="line">    stack = [(<span class="number">1</span>, root)]</span><br><span class="line">    <span class="keyword">while</span> stack:</span><br><span class="line">        go_deeper, node = stack.pop()</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> go_deeper:</span><br><span class="line">            <span class="comment"># 左右节点还需继续深化，并且入栈是先右后左</span></span><br><span class="line">            stack.append((<span class="number">1</span>, node.right))</span><br><span class="line">            <span class="comment"># 节点自身已遍历，回头可以直接取值</span></span><br><span class="line">            stack.append((<span class="number">0</span>, node))</span><br><span class="line">            stack.append((<span class="number">1</span>, node.left))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(node.val)</span><br><span class="line">    <span class="keyword">return</span> result</span><br></pre></td></tr></table></figure>
+<h5 id="教材法"><a href="#教材法" class="headerlink" title="教材法"></a>教材法</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inorderTraversal</span>(<span class="params">self, root: TreeNode</span>) -&gt; List[int]:</span></span><br><span class="line">        res = []</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        stack = []</span><br><span class="line">        curr = root</span><br><span class="line">        <span class="keyword">while</span>  stack  <span class="keyword">or</span> curr  :</span><br><span class="line">            <span class="comment"># 这里面写while也可以，或者写if都是可以的</span></span><br><span class="line">            <span class="comment"># 这里的代码有优化过</span></span><br><span class="line">            <span class="keyword">while</span>(curr):</span><br><span class="line">                stack.append(curr)</span><br><span class="line">                curr = curr.left</span><br><span class="line">            curr = stack.pop()</span><br><span class="line">            res.append(curr.val)</span><br><span class="line">            curr = curr.right     </span><br><span class="line">        <span class="keyword">return</span> res </span><br></pre></td></tr></table></figure>
+
+
+<h4 id="后序遍历"><a href="#后序遍历" class="headerlink" title="后序遍历"></a>后序遍历</h4><h5 id="递归"><a href="#递归" class="headerlink" title="递归:"></a>递归:</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backorderTraversal</span>(<span class="params">root</span>):</span></span><br><span class="line">    res = []</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> root:</span><br><span class="line">        <span class="keyword">return</span> []</span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">backorder</span>(<span class="params">tree</span>):</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> tree.left:</span><br><span class="line">            backorder(tree.left)</span><br><span class="line">        <span class="keyword">if</span> tree.right:</span><br><span class="line">            backorder(tree.right)</span><br><span class="line">        res.append(tree.val)</span><br><span class="line">    backorder(root)</span><br><span class="line">    <span class="keyword">return</span> res </span><br></pre></td></tr></table></figure>
+<h5 id="通用框架——后序"><a href="#通用框架——后序" class="headerlink" title="通用框架——后序"></a>通用框架——后序</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backorderTraversal</span>(<span class="params"> root</span>):</span></span><br><span class="line">    result = []</span><br><span class="line">    stack = [(<span class="number">1</span>, root)]</span><br><span class="line">    <span class="keyword">while</span> stack:</span><br><span class="line">        go_deeper, node = stack.pop()</span><br><span class="line">        <span class="keyword">if</span> node <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> go_deeper:</span><br><span class="line">            stack.append((<span class="number">0</span>, node))</span><br><span class="line">            <span class="comment"># 左右节点还需继续深化，并且入栈是先右后左</span></span><br><span class="line">            stack.append((<span class="number">1</span>, node.right))</span><br><span class="line">            <span class="comment"># 节点自身已遍历，回头可以直接取值</span></span><br><span class="line">            </span><br><span class="line">            stack.append((<span class="number">1</span>, node.left))</span><br><span class="line">            </span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            result.append(node.val)</span><br><span class="line">    <span class="keyword">return</span> result</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>回溯法（backtracking）</title>
+    <url>/2020/04/26/2020-04-26-%E5%9B%9E%E6%BA%AF%E6%B3%95%EF%BC%88backtracking%EF%BC%89/</url>
+    <content><![CDATA[<h3 id="回朔法的思想："><a href="#回朔法的思想：" class="headerlink" title="回朔法的思想："></a>回朔法的思想：</h3><p>回朔法的重要思想在于： 通过枚举法，对所有可能性进行遍历。 但是枚举的顺序是 一条路走到黑，发现黑之后，退一步，再向前尝试没走过的路。直到所有路都试过。因此回朔法可以简单的理解为： 走不通就退一步的方枚举法就叫回朔法。而这里回退点也叫做回朔点。</p>
+<a id="more"></a>
+
+<h3 id="回朔关键点"><a href="#回朔关键点" class="headerlink" title="回朔关键点"></a>回朔关键点</h3><p>通过分析发现，回朔法实现的三大技术关键点分别是：</p>
+<ol>
+<li>一条路走到黑</li>
+<li>回退一步</li>
+<li>另寻他路</li>
+</ol>
+<h3 id="关键点的实现"><a href="#关键点的实现" class="headerlink" title="关键点的实现"></a>关键点的实现</h3><p>那么如何才能用代码实现上述三个关键点呢？</p>
+<ol>
+<li>for 循环</li>
+<li>递归</li>
+</ol>
+<h4 id="解释如下"><a href="#解释如下" class="headerlink" title="解释如下"></a>解释如下</h4><ul>
+<li>for循环的作用在于另寻他路： 你可以用for循环可以实现一个路径选择器的功能，该路径选择器可以逐个选择当前节点下的所有可能往下走下去的分支路径。 例如： 现在你走到了节点a，a就像个十字路口，你从上面来到达了a，可以继续向下走。若此时向下走的路有i条，那么你肯定要逐个的把这i条都试一遍才行。而for的作用就是可以让你逐个把所有向下的i个路径既不重复，也不缺失的都试一遍</li>
+<li>递归可以实现一条路走到黑和回退一步： 一条路走到黑： 递归意味着继续向着for给出的路径向下走一步。 如果我们把递归放在for循环内部，那么for每一次的循环，都在给出一个路径之后，进入递归，也就继续向下走了。直到递归出口（走无可走）为止。 那么这就是一条路走到黑的实现方法。 递归从递归出口出来之后，就会实现回退一步。</li>
+</ul>
+<p>因此for循环和递归配合可以实现回朔： 当递归从递归出口出来之后。上一层的for循环就会继续执行了。而for循环的继续执行就会给出当前节点下的下一条可行路径。而后递归调用，就顺着这条从未走过的路径又向下走一步。这就是回朔</p>
+<p>说了这么多，回朔法的通常模板是什么呢？ 递归和for又是如何配合的呢？</p>
+<h4 id="回朔代码模板"><a href="#回朔代码模板" class="headerlink" title="回朔代码模板"></a>回朔代码模板</h4><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">def backward():</span><br><span class="line">    </span><br><span class="line">    if (回朔点）：# 这条路走到底的条件。也是递归出口</span><br><span class="line">        保存该结果</span><br><span class="line">        return   </span><br><span class="line">    </span><br><span class="line">    else:</span><br><span class="line">        for route in all_route_set :  逐步选择当前节点下的所有可能route</span><br><span class="line">            </span><br><span class="line">            if 剪枝条件：</span><br><span class="line">                剪枝前的操作</span><br><span class="line">                return   #不继续往下走了，退回上层，换个路再走</span><br><span class="line">            </span><br><span class="line">            else：#当前路径可能是条可行路径</span><br><span class="line">            </span><br><span class="line">                保存当前数据  #向下走之前要记住已经走过这个节点了。例如push当前节点</span><br><span class="line">        </span><br><span class="line">                self.backward() #递归发生，继续向下走一步了。</span><br><span class="line">                </span><br><span class="line">                回朔清理     # 该节点下的所有路径都走完了，清理堆栈，准备下一个递归。例如弹出当前节点</span><br></pre></td></tr></table></figure>
+<p>这里剪枝操作指的是： 对于有些问题，你走着走着，若某种情况发生了，你就已经直到不能继续往下走了，再走也没有用了。而这个情况就被称之为剪枝条件。</p>
+<p>而DFS就是一个最典型的回朔法的应用。</p>
+<h2 id="本题代码"><a href="#本题代码" class="headerlink" title="本题代码"></a>本题代码</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">combinationSum</span>(<span class="params">self, candidates: List[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; List[List[int]]:</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(candidates) == <span class="number">0</span>:</span><br><span class="line">            <span class="keyword">return</span> []</span><br><span class="line">        candidates.sort()</span><br><span class="line">        path = []</span><br><span class="line">        res = []</span><br><span class="line">        <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        ！！！重点！！！</span></span><br><span class="line"><span class="string">        在python中，如果传参是mutable var, 那么传参相当于引用，因此调用后，如果调用函数的内部对该传入变量进行修改，就会导致直接改变原始对象。这就是典型的privacy leak！！发生了。</span></span><br><span class="line"><span class="string">        例如在这个，list就是该mutable var，而如果以path或res 为传参，放在__DFS 中， 那么就相当于在__DFS内部，实际上用的都是一个物理地址下的res和path，类似于全局变量。</span></span><br><span class="line"><span class="string">        因此combinationSum下的局部变量path和res也在——DFS运行的过程中发生了改变。</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        利用这个性质，我们可以把mutable var当成传入参数，从而实现全局变量的效果。</span></span><br><span class="line"><span class="string">        &#x27;&#x27;&#x27;</span></span><br><span class="line">        self.__DFS(candidates, target, <span class="number">0</span>, path, res)</span><br><span class="line">        <span class="keyword">return</span> res</span><br><span class="line">    <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">        DFS的实现</span></span><br><span class="line"><span class="string">    &#x27;&#x27;&#x27;</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__DFS</span>(<span class="params">self, candidates, target, begin, path, res</span>):</span></span><br><span class="line">        path = path.copy()</span><br><span class="line">        <span class="comment"># 递归出口 就是余数为0</span></span><br><span class="line">        <span class="keyword">if</span> target == <span class="number">0</span>:</span><br><span class="line">            res.append(path)   <span class="comment">#记录该符合条件的结果</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">#若当前路径有可能可行。</span></span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(begin, <span class="built_in">len</span>(candidates)):  <span class="comment"># 我们现在到begin的节点上了</span></span><br><span class="line">            <span class="keyword">if</span> target - candidates[i] &lt; <span class="number">0</span>:  <span class="comment"># 剪枝条件</span></span><br><span class="line">                <span class="keyword">return</span>                      <span class="comment"># 如果当前节点就不行了，就不用继续了,这里到不用继续了即包括该depth不用继续了，也包括该节点更大到child也不用继续了，该节点pop出来</span></span><br><span class="line">            </span><br><span class="line">            path.append(candidates[i])  <span class="comment">#记录当前为止</span></span><br><span class="line">            self.__DFS(candidates, target - candidates[i], i, path, res)<span class="comment"># 向下继续走，记住递归不是return，递归到实现是调用！一旦return发生，递归停止。</span></span><br><span class="line">            path.pop()  <span class="comment"># 回朔清理。当前节点下的所有情况都进行完了，该节点也不应该在path</span></span><br></pre></td></tr></table></figure>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>堆排序简介</title>
+    <url>/2020/05/03/2020-05-03-%E5%A0%86%E6%8E%92%E5%BA%8F%E7%AE%80%E4%BB%8B/</url>
+    <content><![CDATA[<h1 id="堆排序简介与用处"><a href="#堆排序简介与用处" class="headerlink" title="堆排序简介与用处"></a>堆排序简介与用处</h1><p>堆排序实在数据结构中常见的排序算法，但许久未看已经忘得差不多啦。这里简单的将相关概念记录如下：</p>
+<a id="more"></a>
+
+<p>PS:这里也同时为了测试图床的效果</p>
+<blockquote>
+<p>[参考博客]（<a href="https://www.cnblogs.com/lanhaicode/p/10546257.html%EF%BC%89">https://www.cnblogs.com/lanhaicode/p/10546257.html）</a></p>
+</blockquote>
+<h2 id="什么是堆"><a href="#什么是堆" class="headerlink" title="什么是堆"></a>什么是堆</h2><p><strong>堆是利用完全二叉树的结构进行维护的一位数组</strong>，我们可以将其看作是一维数组也可以看作是完全二叉树，物理上是线性结构，理论上是非线性结构。</p>
+<p><strong>大顶堆</strong>：每个节点值<strong>大于或等于</strong>左右子节点的值<br><strong>小顶堆</strong>：每个节点值<strong>小于或等于</strong>左右子节点的值<br>这也是堆最重要的特性</p>
+<h3 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h3><p><img src="https://i.loli.net/2020/05/03/aueKbsSfq5Ux8d2.png"></p>
+<p>我们对堆中的结点按层进行编号，将这种逻辑结构映射到数组中就是下面这个样子.<img src="https://i.loli.net/2020/05/03/cQMLjeoiRzyCrvX.png"></p>
+<p><strong>公式定义：</strong></p>
+<p><strong>大顶堆：</strong>arr[i] &gt;= arr[2i+1] &amp;&amp; arr[i] &gt;= arr[2i+2] </p>
+<p><strong>小顶堆：</strong>arr[i] &lt;= arr[2i+1] &amp;&amp; arr[i] &lt;= arr[2i+2] </p>
+<h2 id="相关易混淆概念"><a href="#相关易混淆概念" class="headerlink" title="相关易混淆概念"></a>相关易混淆概念</h2><p><strong>平衡树</strong>：比如AVL、红黑树等，其要求左子树节点&lt;根&lt;右子树节点，并且左右子树均符合此定义。也就是说其<strong>整棵树都是有序</strong>的。</p>
+<p><strong>为什么不用树存储而使用数组：</strong>1.树存储本身浪费空间 2.堆逻辑上为完全二叉树，这对于数组而言不浪费空间。</p>
+<p><strong>堆不适合搜索：</strong>虽然二叉树是适合搜索的，但是堆并不合适，这也是堆部分有序造成的困扰。</p>
+<h2 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h2><p>堆排序是堆最常见的应用方式，堆排序的过程由三个步骤迭代完成。</p>
+<ol>
+<li><p>堆的构建</p>
+</li>
+<li><p>出堆</p>
+</li>
+<li><p>堆调整</p>
+<p><strong>升序</strong> ： 使用大顶堆</p>
+<blockquote>
+<p>每个结点的值都<strong>大于</strong>或<strong>等于</strong>其左右孩子结点的值，我们把<strong>大顶堆构建完毕后根节点的值一定是最大的，然后把根节点的和最后一个元素（也可以说最后一个节点）交换位置，那么末尾元素此时就是最大元素了（理解这点很重要）</strong></p>
+</blockquote>
+<ol>
+<li>先n个元素的无序序列，构建成大顶堆</li>
+<li>将根节点与最后一个元素交换位置，（<strong>将最大元素”沉”到数组末端</strong>）</li>
+<li>交换过后可能不再满足大顶堆的条件，所以需要将剩下的n-1个元素重新构建成大顶堆</li>
+<li>重复第二步、第三步直到整个数组排序完成</li>
+</ol>
+<p><strong>降序</strong> :使用小顶堆</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Hello World</title>
+    <url>/2021/01/09/hello-world/</url>
+    <content><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+]]></content>
+  </entry>
+  <entry>
+    <title>动态规划（dynamic programming）</title>
+    <url>/2020/04/26/2020-04-26-%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%EF%BC%88dynamic-programming%EF%BC%89/</url>
+    <content><![CDATA[<h1 id="动态规划算法解释"><a href="#动态规划算法解释" class="headerlink" title="动态规划算法解释"></a>动态规划算法解释</h1><p>初次见到动态规划是在王道论坛划水的时候，见到时简直一脸懵逼。最近在刷Leetcode发现大量的题目建议采用动态规划的解法，遂将相关概念整理如下。</p>
+<a id="more"></a>
+
+<p>参考地址：<a href="https://www.zhihu.com/question/23995189/answer/35324479">知乎众解答</a> <a href="https://www.cnblogs.com/cthon/p/9251909.html">博客漫画引入解释</a></p>
+<p>在看大家对动态规划的解读时，发现很有意思的现象，就是大家对动态规划的解读点并不一致。有的是理论型：从动态规划的本质出发，因对动态规划与其他算法的异同进行解释。有的是实战型，直接列出动态规划问题的处理模式。大部分解答甚至会将一部分算法技巧也列入动态规划之中，比如重复记忆等。个人认为这种现象的出现恰是由于动态规划本身定位就存在争论。以下的解释将从理论出发，逐步过渡到实战中的步骤或技巧。</p>
+<h2 id="动态规划适用的问题与定义"><a href="#动态规划适用的问题与定义" class="headerlink" title="动态规划适用的问题与定义"></a>动态规划适用的问题与定义</h2><blockquote>
+<p>主要参考知乎中[<a href="https://www.zhihu.com/people/anchor89">王勐</a>]的回答</p>
+</blockquote>
+<p>动态规划是对<strong>某一类问题</strong>的解决算法思路，这类问题具有两个特点：</p>
+<ol>
+<li><strong>最优子结构</strong> : 每个阶段的最优状态，由之前某阶段的一个或者几个状态得到</li>
+<li><strong>无后效性</strong> :而不管这些状态是怎么得到的。</li>
+</ol>
+<p>一开始看不懂上面在说什么，接着向下看即可。很多解答中还提到了<strong>重复子问题</strong>，并将其列入动态规划的定义之中，我个人认为那并不是核心特点。要清楚动态规划的定位，那么首先需要弄清楚一系列的相关概念，例如递推、贪心、递归、搜索等等。</p>
+<h3 id="问题导入"><a href="#问题导入" class="headerlink" title="问题导入"></a>问题导入</h3><p>在处理很多问题时，其实我们可以引入<strong>时间步</strong>的概念，比如迷宫问题，可以假设一个时间步走一次。那么每个时间步我们称其为<strong>阶段</strong>，而一个阶段可以有多种<strong>状态</strong>，比如你在第 $n$ 步可以自由的选择向尚未走过的多个方向前进，导致你的状态产生多个。</p>
+<blockquote>
+<p>比如说我想计算第100个非波那契数，每一个非波那契数就是这个问题的一个状态，每求一个新数字只需要之前的两个状态。所以同一个时刻，最多只需要保存两个状态，空间复杂度就是常数；每计算一个新状态所需要的时间也是常数且状态是线性递增的，所以时间复杂度也是线性的。</p>
+<p>上面这种状态计算很直接，只需要依照固定的模式从旧状态计算出新状态就行（a[i]=a[i-1]+a[i-2]），不需要考虑是不是需要更多的状态，也不需要选择哪些旧状态来计算新状态。对于这样的解法，我们叫<strong>递推</strong>。</p>
+</blockquote>
+<p>上面是其回答的原句，比我自己举得例子要更加直观。<strong>阶段</strong>就是随着问题的开展，在某个时刻可能会得到的不同状态的集合。非波那契数列中，每一步会计算得到一个新数字，所以每个阶段只有一个状态。而迷宫问题，你可以有多种选择，自然你的阶段状态数是多个。从头开始走了几步就是第几个阶段，走了n步所处的位置我们称为一个状态，而走了n步所有可能到达的位置的集合就是这个阶段的所有可能的状态。虽然说起来很绕口，但是很好理解。</p>
+<h3 id="相关算法的适用问题"><a href="#相关算法的适用问题" class="headerlink" title="相关算法的适用问题"></a>相关算法的适用问题</h3><p>有了阶段，针对不同问题，计算新状态的方式是不同的，就需要不同的算法，从而衍生出递推、贪心、动归等等。</p>
+<p>假设：问题存在n个阶段，并且每个阶段存在多个状态，不同阶段的状态数不一定相同，一个阶段的一个状态可以得到下个阶段的所有状态中的几个。</p>
+<p>共识：要计算出最终阶段的状态数，必然其经历了<strong>之前每个阶段</strong>的部分状态。</p>
+<p>分歧：不同的问题对之前阶段状态的需求不同，导致了不同的算法。</p>
+<h4 id="贪心算法适用问题"><a href="#贪心算法适用问题" class="headerlink" title="贪心算法适用问题"></a>贪心算法适用问题</h4><p>贪心算法的特点便是<strong>鼠目寸光</strong>，“下一步的最优<strong>只需要</strong>由当前最优得到”。</p>
+<p>例如棋盘问题：从棋盘左上角到右下角最短需要几步。我们已经知道，某个阶段存在多个状态，你走了n步，可以到达的位置很多，但是有哪些位置可以让你在第n+1步中走得最远呢？？？答案很明显，即是在第n步中走得最远的位置。</p>
+<p>这类问题特点，<strong>下一步最优是从当前最优得到的</strong>，解决此问题，只需寻出每一步的最优值即可，解决此类问题的算法为<strong>贪心</strong>，计算的方法为<strong>递推</strong>。</p>
+<h4 id="搜索算法适用问题"><a href="#搜索算法适用问题" class="headerlink" title="搜索算法适用问题"></a>搜索算法适用问题</h4><p>搜索算法的特点是考虑全局问题，下一步的选择需要考虑之前<strong>所有阶段的状态</strong>。</p>
+<p>例如迷宫问题，计算从起点到终点的最短路线时，只保存当前阶段的状态是不够的，题目要求你最短，故需要知道之前走过的所有位置。即使你当前阶段的位置不变，之前路线的不同会影响你之后选择的路线。这时需要保存之前每个阶段经历的状态，根据这些信息才能计算出下一个状态。每个阶段的状态或许不多，但是每个状态都可以转移到下一阶段的多个状态，所以解的复杂度就是指数的，因此时间复杂度也是指数的。刚刚提到的之前的路线会影响到下一步的选择，这个令人不开心的情况就叫做<strong>有后效性</strong>。</p>
+<p>此类问题的解决方式，就是暴力解决，也就是最直观的搜索算法。</p>
+<h4 id="动态规划适用问题"><a href="#动态规划适用问题" class="headerlink" title="动态规划适用问题"></a>动态规划适用问题</h4><p>有一类问题，看似需要所有状态，但其实不用。</p>
+<p>例如最长上升子序列问题，</p>
+<blockquote>
+<p>假装我们年幼无知想用搜索去寻找最长上升子序列。怎么搜索呢？需要从头到尾依次枚举是否选择当前的数字，每选定一个数字就要去看看是不是满足“上升”的性质，这里第i个阶段就是去思考是否要选择第i个数，第i个阶段有两个状态，分别是选和不选。哈哈，依稀出现了刚刚迷宫找路的影子！咦慢着，每次当我决定要选择当前数字的时候，只需要和之前选定的一个数字比较就行了！这是和之前迷宫问题的本质不同！这就可以纵容我们不需要记录之前所有的状态啊！既然我们的选择已经不受之前状态的组合的影响了，那时间复杂度自然也不是指数的了啊！虽然我们不在乎某序列之前都是什么元素，但我们还是需要这个序列的长度的。所以我们只需要记录以某个元素结尾的LIS长度就好！因此第i个阶段的最优解只是由前i-1个阶段的最优解得到的，然后就得到了DP方程。</p>
+
+</blockquote>
+<h4 id="小结："><a href="#小结：" class="headerlink" title="小结："></a>小结：</h4><p>每个阶段只有一个状态-&gt;递推；<br>每个阶段的最优状态都是由上一个阶段的最优状态得到的-&gt;贪心；<br>每个阶段的最优状态是由之前所有阶段的状态的组合得到的-&gt;搜索；<br>每个阶段的最优状态可以从之前某个阶段的某个或某些状态直接得到而不管之前这个状态是如何得到的-&gt;动态规划。</p>
+<blockquote>
+<p>每个阶段的最优状态可以从之前某个阶段的某个或某些状态直接得到，这些状态也是上一阶段**”最优”**状态.</p>
+</blockquote>
+<p>这个性质叫做<strong>最优子结构</strong>；</p>
+<blockquote>
+<p>而不管之前这个状态是如何得到的</p>
+</blockquote>
+<p>这个性质叫做<strong>无后效性</strong>。</p>
+<p>通过这一部分：</p>
+<ol>
+<li>应该理解了<strong>最优子结构</strong>、<strong>无后效性</strong>,但还是偏抽象，接下来的例子中会进一步进行解释。</li>
+<li>各种算法适用的问题类型。</li>
+</ol>
+<h2 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h2><blockquote>
+<p>知乎徐凯强 Andy的回答</p>
+</blockquote>
+<p>在这一部分，不再是单纯的理论上理解动态规划的概念，其涉及了动态规划的思考方式与本质的讨论。</p>
+<h3 id="本质是什么"><a href="#本质是什么" class="headerlink" title="本质是什么"></a>本质是什么</h3><p>动态规划的本质，是对问题*<strong>状态的定义*</strong>和*<strong>状态转移方程*的定义</strong>。</p>
+<p><strong>动态规划中递推式的求解方法不是动态规划的本质。</strong></p>
+<blockquote>
+<p> 维基百科定义</p>
+<p> <strong>dynamic programming</strong> is a method for solving a complex problem by <strong>breaking it down into a collection of simpler subproblems</strong>.</p>
+</blockquote>
+<p>动态规划是通过<strong>拆分问题</strong>，定义问题与状态之间的关系，进而是问题能够通过递推（或分治）的方式解决。</p>
+<p>作者认为<strong>如何拆分问题</strong>，是动态规划的核心。<strong>拆分问题</strong>，靠<strong>状态的定义</strong>与<strong>状态转移方程</strong>的定义。</p>
+<h3 id="什么是状态的定义"><a href="#什么是状态的定义" class="headerlink" title="什么是状态的定义"></a>什么是状态的定义</h3><p>对于状态的定义就是你对问题<strong>从可拆分的角度</strong>重新对其定义。</p>
+<p>例如经典的最长上升子序列问题：</p>
+<blockquote>
+<p>给定一个数列，长度为N，<br>求这个数列的最长上升（递增）子数列（LIS）的长度.<br>以<br>1 7 2 8 3 4<br>为例。<br>这个数列的最长递增子数列是 1 2 3 4，长度为4；<br>次长的长度为3， 包括 1 7 8; 1 2 3 等.</p>
+</blockquote>
+<p>此问题提出，一开始<strong>找不到子问题</strong>，需要你从其他角度，将其定义为<strong>可拆分子问题</strong>，否则没有子问题只能通过暴力方式解决。</p>
+<p>重新定义为：</p>
+<blockquote>
+<p>给定一个数列，长度为N，<br>设<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">为：以数列中第k项结尾的最长递增子序列的长度.<br>求<img src="https://www.zhihu.com/equation?tex=F_%7B1%7D..F_%7BN%7D" alt="[公式]"> 中的最大值.</p>
+</blockquote>
+<p>显然，这个新问题与原问题等价。<br>而对于<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">来讲，<img src="https://www.zhihu.com/equation?tex=F_%7B1%7D+..+F_%7Bk-1%7D" alt="[公式]">都是<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">的子问题：因为以第k项结尾的最长递增子序列（下称LIS），包含着以第<img src="https://www.zhihu.com/equation?tex=1..k-1" alt="[公式]">中某项结尾的LIS。</p>
+<p>上述的新问题<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">也可以叫做状态，定义中的“<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">为数列中第k项结尾的LIS的长度”，就叫做对状态的定义。之所以把<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">做“状态”而不是“问题” ，一是因为避免跟原问题中“问题”混淆，二是因为这个新问题是数学化定义的。</p>
+<p>对问题的定义可以有多种，这只是其中一种。作者在回答中对此有其他定义，但没必要均罗列到上面。</p>
+<h3 id="什么是状态转移方程"><a href="#什么是状态转移方程" class="headerlink" title="什么是状态转移方程"></a>什么是状态转移方程</h3><p>状态与状态之间的关系，就叫做<strong>状态转移方程</strong>。</p>
+<p>比如，对于LIS问题，我们的第一种定义：</p>
+<blockquote>
+<p>设<img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D" alt="[公式]">为：以数列中第k项结尾的最长递增子序列的长度.</p>
+</blockquote>
+<p>设A为题中数列，状态转移方程为：</p>
+<blockquote>
+<p><img src="https://www.zhihu.com/equation?tex=F_%7B1%7D+=+1" alt="[公式]"> （根据状态定义导出边界情况）<br><img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D=max(F_%7Bi%7D+1+%7C+A_%7Bk%7D%3EA_%7Bi%7D,+i%5Cin+(1..k-1))+" alt="[公式]"><img src="https://www.zhihu.com/equation?tex=(k%3E1)" alt="[公式]"></p>
+</blockquote>
+<p>用文字解释一下是：<br>以第k项结尾的LIS的长度是：保证第i项比第k项小的情况下，以第i项结尾的LIS长度加一的最大值，取遍i的所有值（i小于k）。</p>
+<p>这里可以看出，这里的状态转移方程，就是定义了问题和子问题之间的关系。<br>可以看出，状态转移方程就是带有条件的递推式。</p>
+<h3 id="动态规划迷思"><a href="#动态规划迷思" class="headerlink" title="动态规划迷思"></a>动态规划迷思</h3><ul>
+<li><p>缓存、重叠子问题、记忆化</p>
+<p>这些仅仅是在DP问题中求解递推式的<strong>技巧</strong>。以Fibonacci数列为例，计算第100项的时候，需要计算第99项和98项；在计算第101项的时候，需要第100项和第99项，这时候你还需要重新计算第99项吗？不需要，你只需要在第一次计算的时候把它记下来就可以了。</p>
+<p>上述的需要再次计算的“第99项”，就叫“重叠子问题”。如果没有计算过，就按照递推式计算，如果计算过，直接使用，就像“缓存”一样，这种方法，叫做“记忆化”，这是递推式求解的技巧。这种技巧，通俗的说叫“花费空间来节省时间”。<strong>都不是动态规划的本质，**</strong>不是动态规划的核心。**</p>
+</li>
+<li><p>递归</p>
+<p>递归是递推式求解的方法。</p>
+</li>
+</ul>
+<h3 id="小结：-1"><a href="#小结：-1" class="headerlink" title="小结："></a>小结：</h3><p>在这一部分我们对动态规划的本质有了一个直观的理解，也就是<strong>状态定义</strong> + <strong>状态转移方程</strong>。通过<strong>拆分为子问题</strong>的思想对状态进行定义，通过<strong>定义分析</strong>获得状态间的递推公式。这就是动态规划的<strong>本质</strong>。</p>
+<h2 id="动态规划的样例解读"><a href="#动态规划的样例解读" class="headerlink" title="动态规划的样例解读"></a>动态规划的样例解读</h2><blockquote>
+<p>知乎<a href="https://www.zhihu.com/people/ruan-xing-zhi">阮行止</a>解答</p>
+</blockquote>
+<h3 id="DAG最短路径"><a href="#DAG最短路径" class="headerlink" title="DAG最短路径"></a>DAG最短路径</h3><p>问题：给定一个城市的地图，所有的道路都是单行道，而且不会构成环。每条道路都有过路费，问您从S点到T点花费的最少费用。</p>
+<p><img src="D:/nut_repo/Learning/leetcode/pictures/DAG.jpg"></p>
+<p><strong>状态定义</strong>：记$f(P)$ 为从S点到P点的最少费用。</p>
+<blockquote>
+<p>要想到达T点，要么经过C要么经过D</p>
+</blockquote>
+<p><strong>状态转移方程:</strong>$f(T) = \min{ f(C)+20 , f(D)+10}$</p>
+<ul>
+<li>无后效性：一旦获得$f(P)$ ，并不关心$f(P)$ 是如何得到的。</li>
+<li>最优子结构：对于P，我们当然只关心到P的最小费用，即f(P)。如果我们从S走到T是 <img src="https://www.zhihu.com/equation?tex=S+%5Cto+P%5Cto+Q%5Cto+T" alt="[公式]"> ，那肯定S走到Q的最优路径是 <img src="https://www.zhihu.com/equation?tex=S%5Cto+P%5Cto+Q" alt="[公式]"> 。对一条最优的路径而言，从S走到<strong>沿途上所有的点（子问题）</strong>的最优路径，都是这条大路的一部分。这个问题的最优子结构性质是显然的。</li>
+</ul>
+<p>既然这两个性质都满足，那么本题可以DP。式子明显为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=f(P)=%5Cmin%E2%81%A1%5C%7Bf(R)+w_%7BR%E2%86%92P%7D%5C%7D" alt="[公式]"></p>
+<p>其中R为有路通到P的所有的点， <img src="https://www.zhihu.com/equation?tex=w_%7BR%E2%86%92P%7D" alt="[公式]"> 为R到P的过路费。</p>
+<h4 id="小结：-2"><a href="#小结：-2" class="headerlink" title="小结："></a>小结：</h4><p>原答案中作者还有其他方面的阐述，这里不表。这里展示了DP算法中状态定义以及状态转移方程的样子，可作为经典理解。</p>
+<h2 id="DP问题的技巧"><a href="#DP问题的技巧" class="headerlink" title="DP问题的技巧"></a>DP问题的技巧</h2><blockquote>
+<p>知乎 Mingqi 解答</p>
+</blockquote>
+<p>在这一部分，我们会讨论动态规划<strong>非本质</strong>的技巧，但却常常能够是代码质量得到提升。其认为动态规划的特点有三个：</p>
+<blockquote>
+<p>再次提及维基定义</p>
+<p><strong>dynamic programming</strong> is a method for solving a complex problem by <strong>breaking it down into a collection of simpler subproblems</strong>, solving each of those subproblems <strong>just once</strong>, and <strong>storing their solutions</strong>.</p>
+</blockquote>
+<ol>
+<li>把原来的问题分解成了几个<strong>相似的子问题</strong>。（强调“相似子问题”）</li>
+<li>所有的子问题都<strong>只需要解决一次</strong>。（强调“只解决一次”）</li>
+<li><strong>储存</strong>子问题的解。（强调“储存”）</li>
+</ol>
+<h4 id="理解存储的好处"><a href="#理解存储的好处" class="headerlink" title="理解存储的好处"></a>理解存储的好处</h4><p>以斐波那契数列(Fibonacci)的例子：</p>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">1， 1， 2， 3， 5， 8， 13 ，21 ...</span><br></pre></td></tr></table></figure>
+<p>其状态转移方程为：</p>
+
+
+
+
+<p>我们通常是从上至下分解问题，再向上返回结果。n=6时的计算图为：</p>
+
+
+
+<p><strong>出现大量重复计算</strong>，无法体现其<strong>子问题只解决一次</strong>的特点。可以利用<strong>存储子问题的解</strong>的方式，解决上述问题，一般利用数组存储。其计算图为：</p>
+
+
+<p>这个例子其实并不是动态规划的经典例子，其使用单纯的<strong>递推</strong>，也是一样的结果。但可以用来理解<strong>存储重复子问题</strong>的效果。</p>
+<h4 id="理解动态规划算法的优势"><a href="#理解动态规划算法的优势" class="headerlink" title="理解动态规划算法的优势"></a>理解动态规划算法的优势</h4><p>这里的优势是相对于暴力解决法。还是以最长上升子数列的长度（LIS）为例：</p>
+<p>给定一个数列：</p>
+
+
+
+
+<p>最长上升子数列为：</p>
+
+
+
+<p>其长度为4.</p>
+<p>暴力解决方式：穷举法</p>
+
+
+
+<p>其时间复杂度为：</p>
+
+
+<p>动态规划解决：</p>
+<p><strong>状态转移方程：</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=F_%7B1%7D+=+1" alt="[公式]"> （根据状态定义导出边界情况）<br><img src="https://www.zhihu.com/equation?tex=F_%7Bk%7D=max(F_%7Bi%7D+1+%7C+A_%7Bk%7D%3EA_%7Bi%7D,+i%5Cin+(1..k-1))+" alt="[公式]"><img src="https://www.zhihu.com/equation?tex=(k%3E1)" alt="[公式]"></p>
+<p>其计算图为：</p>
+
+
+
+<p>可以看到这里的计算量相较于穷举法已经下降了很多。</p>
+<p>同样的可以使用存储的方式减少计算量。</p>
+<p>未使用存储：</p>
+
+
+
+
+<p>使用存储：</p>
+
+
+
+<h4 id="小结：-3"><a href="#小结：-3" class="headerlink" title="小结："></a>小结：</h4><p>在这一部分我们能够理解动态规划中<strong>存储</strong>的重要性，其是动态规划高效的核心。</p>
+<p><strong>动态规划本身是将原问题通过某种定义，演变成可拆分为子问题的形式，通过解决小问题从而以递推或分治的方式解决大问题。那么其本身的形式，必然存在大量的重复子问题，通过存储的方式，可以有效的降低时间复杂度，减少不必要的计算。</strong></p>
+<h2 id="DP的实践"><a href="#DP的实践" class="headerlink" title="DP的实践"></a>DP的实践</h2><p>上面的几部分内容，均针对如何更好地理解动态规划，并没有涉及深入的实践环节。像这样的解答网上也有很多，例如知乎<a href="https://www.zhihu.com/people/iamshuaidi">帅地</a>的答案就偏向于实践。</p>
+<p>我个人在接触之时，也看了很多实践的帖子，我个人的感受为：很多帖子只是花式的告诉你如何操作你就解决了动态规划问题，但是你个人还是不知道如何审题，无法确认此问题是否是动态规划问题。而且很多帖子不讲DP的本质，一开始就告诉你先整个数组，用于存储，这就很懵逼，对于我这样的小白肯定是不友好的，就像做数学题只注重套路没有看到此题的本质。</p>
+<p>大家所说的也是大同小异，无非是：</p>
+<ol>
+<li><strong>定义状态</strong> 2.<strong>寻找状态转移方程</strong> 3.<strong>寻找边界</strong> 4.<strong>存储</strong></li>
+</ol>
+<p>光说不做假把式，实际问题更需要灵活的解决，好吧，我去刷题啦。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>排序算法总结</title>
+    <url>/2020/04/26/2020-04-26-%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</url>
+    <content><![CDATA[<h1 id="排序算法总结"><a href="#排序算法总结" class="headerlink" title="排序算法总结"></a>排序算法总结</h1><blockquote>
+<p><a href="https://www.zhihu.com/search?type=content&q=%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93">知乎参考地址</a></p>
+</blockquote>
+<p>最近在刷Leetcode过程中，部分题目需要手写排序算法。发现很多之前学习过的排序算法，均已经玩的差不多啦。特将常见的排序算法思想与算法实现总结如下：</p>
+<a id="more"></a>
+
+<h2 id="准备工作"><a href="#准备工作" class="headerlink" title="准备工作"></a>准备工作</h2><blockquote>
+<p>这里直接采用<a href="https://zhuanlan.zhihu.com/p/40695917">LeetCode</a>回答所采用的准备工作，用于测试或算法部件</p>
+</blockquote>
+<ul>
+<li>生成算法需要的数列：随机数列</li>
+<li>对于一些极端情况，考虑算法的效率，需要生成基本有序的数列</li>
+<li>测试算法性能的函数</li>
+<li>判断数列是否有序</li>
+<li>数列中元素相互交换</li>
+<li>数列的拷贝</li>
+</ul>
+<h3 id="生成随机数列"><a href="#生成随机数列" class="headerlink" title="生成随机数列"></a>生成随机数列</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#coding=utf-8</span></span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> randint</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generateRandomArray</span>(<span class="params">n, <span class="built_in">min</span>, <span class="built_in">max</span></span>):</span></span><br><span class="line">    arr = []</span><br><span class="line">    arr = [randint(<span class="built_in">min</span>, <span class="built_in">max</span>) <span class="keyword">for</span> x <span class="keyword">in</span> <span class="built_in">range</span>(n)]</span><br><span class="line">    <span class="keyword">return</span> arr</span><br></pre></td></tr></table></figure>
+<h3 id="生成基本有序的数列"><a href="#生成基本有序的数列" class="headerlink" title="生成基本有序的数列"></a>生成基本有序的数列</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">generateNearlyOrderedArray</span>(<span class="params">n, swapTimes</span>):</span></span><br><span class="line">    arr = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n):</span><br><span class="line">        arr.append(i)</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(swapTimes):</span><br><span class="line">        posx = randint(<span class="number">0</span>, n-<span class="number">1</span>)</span><br><span class="line">        posy = randint(<span class="number">0</span>, n-<span class="number">1</span>)</span><br><span class="line">        arr[posx], arr[posy] = arr[posy], arr[posx]</span><br><span class="line">    <span class="keyword">return</span> arr</span><br></pre></td></tr></table></figure>
+<h3 id="判断数列是否有序"><a href="#判断数列是否有序" class="headerlink" title="判断数列是否有序"></a>判断数列是否有序</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">isSorted</span>(<span class="params">alist</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(alist)-<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">if</span> alist[i] &gt; alist[i+<span class="number">1</span>]:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">True</span></span><br></pre></td></tr></table></figure>
+<h3 id="测试算法性能"><a href="#测试算法性能" class="headerlink" title="测试算法性能"></a>测试算法性能</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">t1 = timeit.Timer(<span class="string">&#x27;testSort(&quot;某种排序算法函数&quot;, alist)&#x27;</span>, <span class="string">&#x27;from __main__ import testSort, 某种排序算法函数, alist&#x27;</span>)</span><br><span class="line">print(<span class="string">&#x27;某种排序算法：%s s&#x27;</span> %t1.timeit(number=<span class="number">1</span>))</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># func表示要检测的算法函数，alist为传入的数列</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">testSort</span>(<span class="params">func, alist</span>):</span></span><br><span class="line">    alist =  func(alist)</span><br><span class="line">    <span class="keyword">assert</span> isSorted(alist), <span class="string">&quot;排序算法错误\n&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="数列中元素互换"><a href="#数列中元素互换" class="headerlink" title="数列中元素互换"></a>数列中元素互换</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">alist[i], alist[j] = alist[j], alist[i]</span><br></pre></td></tr></table></figure>
+<h3 id="数列拷贝"><a href="#数列拷贝" class="headerlink" title="数列拷贝"></a>数列拷贝</h3><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 直接使用切片</span></span><br><span class="line"><span class="comment"># list = [8,6,2,3,1,5,7,4]</span></span><br><span class="line">alist=<span class="built_in">list</span>[:]</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="比较类排序"><a href="#比较类排序" class="headerlink" title="比较类排序"></a>比较类排序</h2><p>指通过比较元素间的相对次序，来完成排序的算法，但其时间复杂度<strong>无法超过$O(n\log(n))$</strong>,也称为<strong>非线性时间</strong>比较类排序。</p>
+<h3 id="交换排序"><a href="#交换排序" class="headerlink" title="交换排序"></a>交换排序</h3><h4 id="冒泡排序（Bubble-Sort）"><a href="#冒泡排序（Bubble-Sort）" class="headerlink" title="冒泡排序（Bubble Sort）"></a>冒泡排序（Bubble Sort）</h4><h5 id="算法思想"><a href="#算法思想" class="headerlink" title="算法思想"></a>算法思想</h5><p>冒泡排序要对一个列表<strong>多次重复遍历</strong>。它要比较<strong>相邻</strong>的两项，并且交换顺序排错的项。每对 列表实行一次遍历，就有一个最大项排在了正确的位置。</p>
+<p>大体上讲，列表的每一个数据项都会在 其相应的位置 “冒泡”。如果列表有 n 项，第一次遍历就要比较 n-1 对数据。最不理想的情况下（逆序）：需要遍历 $n-1$ 次，最理想的情况下：需要遍历$1$ 次</p>
+<h5 id="算法图解"><a href="#算法图解" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">bubbleSort</span>(<span class="params">alist</span>):</span></span><br><span class="line">    n = <span class="built_in">len</span>(alist)</span><br><span class="line">    exchange = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n-<span class="number">1</span>, <span class="number">0</span>, -<span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, i):</span><br><span class="line">            <span class="keyword">if</span> alist[j] &gt; alist[j+<span class="number">1</span>]:</span><br><span class="line">                alist[j], alist[j+<span class="number">1</span>] = alist[j+<span class="number">1</span>], alist[j]</span><br><span class="line">                exchange = <span class="literal">True</span></span><br><span class="line">        <span class="comment"># 如果发现整个排序过程中没有交换，提前结束</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> exchange:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    <span class="keyword">return</span> alist</span><br></pre></td></tr></table></figure>
+<h5 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h5><ul>
+<li><p>时间复杂度：$O(n^2)$</p>
+<ul>
+<li>最理想$O(n)$</li>
+</ul>
+</li>
+<li><p>空间复杂度：$O(1)$</p>
+</li>
+<li><p>稳定</p>
+</li>
+</ul>
+<h4 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h4><h5 id="算法思想-1"><a href="#算法思想-1" class="headerlink" title="算法思想"></a>算法思想</h5><p>很经典的排序算法。通过一趟排序将数据分割为两部分，一部分的数据均比另一部分的数据要小；再按照此方法对两部分数据分别进行快速排序，可利用递归方式实现。通常步骤：</p>
+<ol>
+<li>从数列中挑选一个基准；</li>
+<li>重新排序数列，所有比基准小的元素放在基准前面，所有比基准大的放在基准后面（<strong>基准本身已排好</strong>）；</li>
+<li>递归的把左右两区进行上述两步骤。</li>
+</ol>
+<h5 id="算法图解-1"><a href="#算法图解-1" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+
+<h5 id="代码实现-1"><a href="#代码实现-1" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">quickSort</span>(<span class="params">alist, l, r</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">#当数列的大小比较小的时候，数列近乎有序的概率较大</span></span><br><span class="line">    <span class="comment"># if (r - l &lt;= 15):</span></span><br><span class="line">    <span class="comment">#     insertionSortHelp(alist, l, r)</span></span><br><span class="line">    <span class="comment">#     return</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> l &gt;= r:</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="comment"># p = partition(alist, l, r)</span></span><br><span class="line">    p = partition(alist, l, r)</span><br><span class="line"></span><br><span class="line">    quickSort(alist, l, p-<span class="number">1</span>)</span><br><span class="line">    quickSort(alist, p+<span class="number">1</span>, r)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在alist[l...r]中寻找j,使得alist[l...j] &lt;= alist[l], alist[j+1...r] &gt;alist[l]</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">partition</span>(<span class="params">alist, l, r</span>):</span></span><br><span class="line">    pos = randint(l, r)</span><br><span class="line">    alist[pos], alist[l] = alist[l], alist[pos]</span><br><span class="line">    v = alist[l]</span><br><span class="line">    <span class="comment"># v = alist[l]</span></span><br><span class="line">    j = l</span><br><span class="line">    i = l + <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> i &lt;= r:</span><br><span class="line">        <span class="keyword">if</span> alist[i] &lt;= v:</span><br><span class="line">            alist[j+<span class="number">1</span>],alist[i] = alist[i],alist[j+<span class="number">1</span>]</span><br><span class="line">            j += <span class="number">1</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    alist[l], alist[j] = alist[j], alist[l]</span><br><span class="line">    <span class="keyword">return</span> j</span><br></pre></td></tr></table></figure>
+<h5 id="算法分析-1"><a href="#算法分析-1" class="headerlink" title="算法分析"></a>算法分析</h5><ul>
+<li>时间复杂度：$n\log(n)$</li>
+<li>空间复杂度：$n\log(n)$</li>
+</ul>
+<h3 id="插入排序"><a href="#插入排序" class="headerlink" title="插入排序"></a>插入排序</h3><h4 id="简单插入排序"><a href="#简单插入排序" class="headerlink" title="简单插入排序"></a>简单插入排序</h4><h5 id="算法思想-2"><a href="#算法思想-2" class="headerlink" title="算法思想"></a>算法思想</h5><p>它总是保持一个位置靠前的 已排好的子表，然后每一个新的数据项被 “插入” 到前边的子表里，排好的子表增加一项。我们认为只含有一个数据项的列表是已经排好的。每排后面一个数据（从 1 开始到 n-1），这 个的数据会和已排好子表中的数据比较。比较时，我们把之前已经排好的列表中比这个数据大的移到它的右边。当子表数据小于当前数据，或者当前数据已经和子表的所有数据比较了时，就可 以在此处插入当前数据项。</p>
+<h5 id="算法图解-2"><a href="#算法图解-2" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现-2"><a href="#代码实现-2" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 插入排序</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">insertionSort</span>(<span class="params">alist</span>):</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>,<span class="built_in">len</span>(alist)):</span><br><span class="line">        currentvalue=alist[i]</span><br><span class="line">        position=i</span><br><span class="line">        <span class="keyword">while</span> alist[position-<span class="number">1</span>]&gt;currentvalue <span class="keyword">and</span> position&gt;<span class="number">0</span>:</span><br><span class="line">            alist[position]=alist[position-<span class="number">1</span>]</span><br><span class="line">            position=position-<span class="number">1</span></span><br><span class="line">        alist[position]=currentvalue</span><br><span class="line">    <span class="keyword">return</span> alist </span><br></pre></td></tr></table></figure>
+<h5 id="算法分析-2"><a href="#算法分析-2" class="headerlink" title="算法分析"></a>算法分析</h5><ul>
+<li>时间复杂度：$O(n^2)$</li>
+<li>空间复杂度:$O(1)$</li>
+</ul>
+<h4 id="希尔排序"><a href="#希尔排序" class="headerlink" title="希尔排序"></a>希尔排序</h4><h5 id="算法思想-3"><a href="#算法思想-3" class="headerlink" title="算法思想"></a>算法思想</h5><p>这个是插入排序的修改版，根据步长由长到短分组，进行排序，直到步长为1为止，属于插入排序的一种。</p>
+<h5 id="算法图解-3"><a href="#算法图解-3" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现-3"><a href="#代码实现-3" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">shellSort</span>(<span class="params">alist</span>):</span></span><br><span class="line">    n = <span class="built_in">len</span>(alist)</span><br><span class="line">    gap = n // <span class="number">2</span></span><br><span class="line">    <span class="keyword">while</span> gap &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(gap):</span><br><span class="line">            gapInsetionSort(alist, i, gap)</span><br><span class="line">        gap = gap // <span class="number">2</span></span><br><span class="line">    <span class="keyword">return</span> alist</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gapInsetionSort</span>(<span class="params">alist,startpos,gap</span>):</span></span><br><span class="line">    <span class="comment">#希尔排序的辅助函数</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(startpos+gap,<span class="built_in">len</span>(alist),gap):</span><br><span class="line">        position=i</span><br><span class="line">        currentvalue=alist[i]</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> position&gt;startpos <span class="keyword">and</span> alist[position-gap]&gt;currentvalue:</span><br><span class="line">            alist[position]=alist[position-gap]</span><br><span class="line">            position=position-gap</span><br><span class="line">        alist[position]=currentvalue</span><br></pre></td></tr></table></figure>
+<h5 id="算法分析-3"><a href="#算法分析-3" class="headerlink" title="算法分析"></a>算法分析</h5><ul>
+<li>时间复杂度：$n\log (n)$</li>
+<li></li>
+</ul>
+<h3 id="选择排序"><a href="#选择排序" class="headerlink" title="选择排序"></a>选择排序</h3><h4 id="简单选择排序"><a href="#简单选择排序" class="headerlink" title="简单选择排序"></a>简单选择排序</h4><h5 id="算法思想-4"><a href="#算法思想-4" class="headerlink" title="算法思想"></a>算法思想</h5><p>选择排序(Selection-sort)是一种简单直观的排序算法。它的工作原理：首先在未排序序列中找到最小（大）元素，存放到排序序列的起始位置，然后，再从剩余未排序元素中继续寻找最小（大）元素，然后放到已排序序列的末尾。以此类推，直到所有元素均排序完毕。</p>
+<ul>
+<li><p>初始状态：无序区为R[1..n]，有序区为空；</p>
+</li>
+<li><p>第i趟排序(i=1,2,3…n-1)开始时，当前有序区和无序区分别为R[1..i-1]和R(i..n）。该趟排序从当前无序区中-选出关键字最小的记录 R[k]，将它与无序区的第1个记录R交换，使R[1..i]和R[i+1..n)分别变为记录个数增加1个的新有序区和记录个数减少1个的新无序区；</p>
+</li>
+<li><p>n-1趟结束，数组有序化了。</p>
+</li>
+</ul>
+<h5 id="算法图解-4"><a href="#算法图解-4" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+<h5 id="代码实现-4"><a href="#代码实现-4" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">selectionSort</span>(<span class="params">alist</span>):</span></span><br><span class="line">    n = <span class="built_in">len</span>(alist)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n - <span class="number">1</span>):</span><br><span class="line">        <span class="comment"># 寻找[i,n]区间里的最小值</span></span><br><span class="line">        min_index = i</span><br><span class="line">        <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(i+<span class="number">1</span>, n):</span><br><span class="line">            <span class="keyword">if</span> alist[j] &lt; alist[min_index]:</span><br><span class="line">                min_index = j</span><br><span class="line">        alist[i], alist[min_index] = alist[min_index], alist[i]</span><br><span class="line">    <span class="keyword">return</span> alist</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="算法分析-4"><a href="#算法分析-4" class="headerlink" title="算法分析"></a>算法分析</h5><ul>
+<li>时间复杂度：$O(n^2)$</li>
+<li>空间复杂度:$O(1)$</li>
+</ul>
+<h4 id="堆排序"><a href="#堆排序" class="headerlink" title="堆排序"></a>堆排序</h4><h5 id="算法思想-5"><a href="#算法思想-5" class="headerlink" title="算法思想"></a>算法思想</h5><p>堆排序是一种基于二叉堆（Binary Heap）结构的排序算法，所谓二叉堆，我们通过完全二叉树来对比，只不过相比较完全二叉树而言，二叉堆的所有父节点的值都大于（或者小于）它的孩子节点，像这样：</p>
+
+
+
+<p>首先需要引入最大堆的定义：</p>
+<ul>
+<li>最大堆中的最大元素值出现在根结点（堆顶）</li>
+<li>堆中每个父节点的元素值都大于等于其孩子结点</li>
+</ul>
+<h5 id="算法图解-5"><a href="#算法图解-5" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+
+
+
+<h5 id="代码实现-5"><a href="#代码实现-5" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#建立堆函数：</span></span><br><span class="line"></span><br><span class="line">void heapify(<span class="built_in">int</span> arr[], <span class="built_in">int</span> n, <span class="built_in">int</span> i) </span><br><span class="line">&#123; </span><br><span class="line">    <span class="built_in">int</span> largest = i; // 将最大元素设置为堆顶元素</span><br><span class="line">    <span class="built_in">int</span> l = <span class="number">2</span>*i + <span class="number">1</span>; // left = <span class="number">2</span>*i + <span class="number">1</span> </span><br><span class="line">    <span class="built_in">int</span> r = <span class="number">2</span>*i + <span class="number">2</span>; // right = <span class="number">2</span>*i + <span class="number">2</span> </span><br><span class="line">  </span><br><span class="line">    // 如果 left 比 root 大的话</span><br><span class="line">    <span class="keyword">if</span> (l &lt; n &amp;&amp; arr[l] &gt; arr[largest]) </span><br><span class="line">        largest = l; </span><br><span class="line">  </span><br><span class="line">    // I如果 right 比 root 大的话</span><br><span class="line">    <span class="keyword">if</span> (r &lt; n &amp;&amp; arr[r] &gt; arr[largest]) </span><br><span class="line">        largest = r; </span><br><span class="line">  </span><br><span class="line">    <span class="keyword">if</span> (largest != i) </span><br><span class="line">    &#123; </span><br><span class="line">        swap(arr[i], arr[largest]); </span><br><span class="line">  </span><br><span class="line">        // 递归地定义子堆</span><br><span class="line">        heapify(arr, n, largest); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>堆排序的方法如下，把最大堆堆顶的最大数取出，将剩余的堆继续调整为最大堆，再次将堆顶的最大数取出，这个过程持续到剩余数只有一个时结束。</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">void heapSort(<span class="built_in">int</span> arr[], <span class="built_in">int</span> n) </span><br><span class="line">&#123; </span><br><span class="line">    // 建立堆</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i = n / <span class="number">2</span> - <span class="number">1</span>; i &gt;= <span class="number">0</span>; i--) </span><br><span class="line">        heapify(arr, n, i); </span><br><span class="line">  </span><br><span class="line">    // 一个个从堆顶取出元素</span><br><span class="line">    <span class="keyword">for</span> (<span class="built_in">int</span> i=n-<span class="number">1</span>; i&gt;=<span class="number">0</span>; i--) </span><br><span class="line">    &#123; </span><br><span class="line">        swap(arr[<span class="number">0</span>], arr[i]);  </span><br><span class="line">        heapify(arr, i, <span class="number">0</span>); </span><br><span class="line">    &#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+<h5 id="算法分析-5"><a href="#算法分析-5" class="headerlink" title="算法分析"></a>算法分析</h5><h3 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h3><h4 id="二路归并排序"><a href="#二路归并排序" class="headerlink" title="二路归并排序"></a>二路归并排序</h4><h5 id="算法思想-6"><a href="#算法思想-6" class="headerlink" title="算法思想"></a>算法思想</h5><p>归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。将已有序的子序列合并，得到完全有序的序列；即先使每个子序列有序，再使子序列段间有序。若将两个有序表合并成一个有序表，称为2-路归并。</p>
+<ul>
+<li>把长度为n的输入序列分成两个长度为n/2的子序列；</li>
+<li>对这两个子序列分别采用归并排序；</li>
+<li>将两个排序好的子序列合并成一个最终的排序序列。</li>
+</ul>
+
+
+
+<h5 id="算法图解-6"><a href="#算法图解-6" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现-6"><a href="#代码实现-6" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#之前copy了一份归并排序的算法，但那份代码包含太多优化行，导致算法思路不清晰</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mergeSort</span>(<span class="params">arr,l,r</span>):</span></span><br><span class="line">    <span class="comment"># l == r 时，不做任何处理，单独有序</span></span><br><span class="line">    <span class="keyword">if</span> l &lt; r :</span><br><span class="line">        m = <span class="built_in">int</span>((l + r) / <span class="number">2</span>)</span><br><span class="line">        mergeSort(arr,l,m)</span><br><span class="line">        mergeSort(arr , m+<span class="number">1</span> , r)</span><br><span class="line">        merge(arr , l ,m , r)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">arr , l , m , r</span>):</span></span><br><span class="line">    copyl = arr[l:m+<span class="number">1</span>]</span><br><span class="line">    copyr = arr[m+<span class="number">1</span>:r+<span class="number">1</span>]</span><br><span class="line">    lenl = <span class="built_in">len</span>(copyl)</span><br><span class="line">    lenr = <span class="built_in">len</span>(copyr)</span><br><span class="line">    i = <span class="number">0</span></span><br><span class="line">    j = <span class="number">0</span></span><br><span class="line">    k = l</span><br><span class="line">    <span class="keyword">while</span> i &lt; lenl <span class="keyword">and</span> j &lt; lenr :</span><br><span class="line">        <span class="keyword">if</span> copyl[i] &lt; copyr[j]:</span><br><span class="line">            arr[k] = copyl[i]</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">            i += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            arr[k] = copyr[ j]</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">            j += <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> i &lt; lenl :</span><br><span class="line">        arr[k] = copyl[i]</span><br><span class="line">        k += <span class="number">1</span></span><br><span class="line">        i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> j &lt; lenr:</span><br><span class="line">        arr[k] = copyr[j]</span><br><span class="line">        k += <span class="number">1</span></span><br><span class="line">        j += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>注意：这里进行小的优化，当数列的长度小于等于15的时候，我们一般认为数列此时基本有序，这时候采用直接插入排序非常快。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 自底向上的归并算法</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">mergeBU</span>(<span class="params">alist</span>):</span></span><br><span class="line">    n = <span class="built_in">len</span>(alist)</span><br><span class="line">    <span class="comment">#表示归并的大小</span></span><br><span class="line">    size = <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> size &lt;= n:</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, n-size, size+size):</span><br><span class="line">            merge(alist, i, i+size-<span class="number">1</span>, <span class="built_in">min</span>(i+size+size-<span class="number">1</span>, n-<span class="number">1</span>))</span><br><span class="line">        size += size</span><br><span class="line">    <span class="keyword">return</span> alist</span><br><span class="line"></span><br><span class="line"><span class="comment"># 合并有序数列alist[start....mid] 和 alist[mid+1...end]，使之成为有序数列</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">merge</span>(<span class="params">alist, start, mid, end</span>):</span></span><br><span class="line">    <span class="comment"># 复制一份</span></span><br><span class="line">    blist = alist[start:end+<span class="number">1</span>]</span><br><span class="line">    l = start</span><br><span class="line">    k = mid + <span class="number">1</span></span><br><span class="line">    pos = start</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> pos &lt;= end:</span><br><span class="line">        <span class="keyword">if</span> (l &gt; mid):</span><br><span class="line">            alist[pos] = blist[k-start]</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">        <span class="keyword">elif</span> (k &gt; end):</span><br><span class="line">            alist[pos] = blist[l-start]</span><br><span class="line">            l += <span class="number">1</span></span><br><span class="line">        <span class="keyword">elif</span> blist[l-start] &lt;= blist[k-start]:</span><br><span class="line">            alist[pos] = blist[l-start]</span><br><span class="line">            l += <span class="number">1</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            alist[pos] = blist[k-start]</span><br><span class="line">            k += <span class="number">1</span></span><br><span class="line">        pos += <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+
+<h5 id="算法分析-6"><a href="#算法分析-6" class="headerlink" title="算法分析"></a>算法分析</h5><h4 id="多路归并排序"><a href="#多路归并排序" class="headerlink" title="多路归并排序"></a>多路归并排序</h4><p>这里没有写</p>
+<h2 id="非比较排序"><a href="#非比较排序" class="headerlink" title="非比较排序"></a>非比较排序</h2><p>非比较排序打破了时间复杂度$n\log n$ 的限制</p>
+<h4 id="计数排序"><a href="#计数排序" class="headerlink" title="计数排序"></a>计数排序</h4><h5 id="算法思想-7"><a href="#算法思想-7" class="headerlink" title="算法思想"></a>算法思想</h5><p>计数排序不是基于比较的排序算法，其核心在于将输入的数据值转化为键存储在额外开辟的数组空间中。 作为一种线性时间复杂度的排序，计数排序要求输入的数据必须是有确定范围的整数。</p>
+<ul>
+<li>找出待排序的数组中最大和最小的元素；</li>
+<li>统计数组中每个值为i的元素出现的次数，存入数组C的第i项；</li>
+<li>对所有的计数累加（从C中的第一个元素开始，每一项和前一项相加）；</li>
+<li>反向填充目标数组：将每个元素i放在新数组的第C(i)项，每放一个元素就将C(i)减去1。</li>
+</ul>
+<h5 id="算法图解-7"><a href="#算法图解-7" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+
+
+<h5 id="代码实现-7"><a href="#代码实现-7" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">function <span class="title">countingSort</span><span class="params">(arr, maxValue)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> bucket = <span class="keyword">new</span> Array(maxValue + <span class="number">1</span>),</span><br><span class="line">        sortedIndex = <span class="number">0</span>;</span><br><span class="line">        arrLen = arr.length,</span><br><span class="line">        bucketLen = maxValue + <span class="number">1</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; arrLen; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (!bucket[arr[i]]) &#123;</span><br><span class="line">            bucket[arr[i]] = <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        bucket[arr[i]]++;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; bucketLen; j++) &#123;</span><br><span class="line">        <span class="keyword">while</span>(bucket[j] &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            arr[sortedIndex++] = j;</span><br><span class="line">            bucket[j]--;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="算法分析-7"><a href="#算法分析-7" class="headerlink" title="算法分析"></a>算法分析</h5><p>计数排序是一个稳定的排序算法。当输入的元素是 n 个 0到 k 之间的整数时，时间复杂度是O(n+k)，空间复杂度也是O(n+k)，其排序速度快于任何比较排序算法。当k不是很大并且序列比较集中时，计数排序是一个很有效的排序算法。</p>
+<h4 id="桶排序"><a href="#桶排序" class="headerlink" title="桶排序"></a>桶排序</h4><h5 id="算法思想-8"><a href="#算法思想-8" class="headerlink" title="算法思想"></a>算法思想</h5><p>桶排序是计数排序的升级版。它利用了函数的映射关系，高效与否的关键就在于这个映射函数的确定。桶排序 (Bucket sort)的工作的原理：假设输入数据服从均匀分布，将数据分到有限数量的桶里，每个桶再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排）。</p>
+<p>桶排序的原理是将数组分到有限数量的桶中，再对每个桶子再分别排序（有可能再使用别的排序算法或是以递归方式继续使用桶排序进行排序），最后将各个桶中的数据有序的合并起来。</p>
+<p>排序过程：</p>
+<ol>
+<li>假设待排序的一组数统一的分布在一个范围中，并将这一范围划分成几个子范围，也就是桶</li>
+<li>将待排序的一组数，分档规入这些子桶，并将桶中的数据进行排序</li>
+<li>将各个桶中的数据有序的合并起</li>
+</ol>
+<h5 id="算法图解-8"><a href="#算法图解-8" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现-8"><a href="#代码实现-8" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight java"><table><tr><td class="code"><pre><span class="line"><span class="function">function <span class="title">bucketSort</span><span class="params">(arr, bucketSize)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (arr.length === <span class="number">0</span>) &#123;</span><br><span class="line">      <span class="keyword">return</span> arr;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">var</span> i;</span><br><span class="line">    <span class="keyword">var</span> minValue = arr[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">var</span> maxValue = arr[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">1</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">      <span class="keyword">if</span> (arr[i] &lt; minValue) &#123;</span><br><span class="line">          minValue = arr[i];                <span class="comment">// 输入数据的最小值</span></span><br><span class="line">      &#125; <span class="keyword">else</span> <span class="keyword">if</span> (arr[i] &gt; maxValue) &#123;</span><br><span class="line">          maxValue = arr[i];                <span class="comment">// 输入数据的最大值</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 桶的初始化</span></span><br><span class="line">    <span class="keyword">var</span> DEFAULT_BUCKET_SIZE = <span class="number">5</span>;            <span class="comment">// 设置桶的默认数量为5</span></span><br><span class="line">    bucketSize = bucketSize || DEFAULT_BUCKET_SIZE;</span><br><span class="line">    <span class="keyword">var</span> bucketCount = Math.floor((maxValue - minValue) / bucketSize) + <span class="number">1</span>;  </span><br><span class="line">    <span class="keyword">var</span> buckets = <span class="keyword">new</span> Array(bucketCount);</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; buckets.length; i++) &#123;</span><br><span class="line">        buckets[i] = [];</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// 利用映射函数将数据分配到各个桶中</span></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; arr.length; i++) &#123;</span><br><span class="line">        buckets[Math.floor((arr[i] - minValue) / bucketSize)].push(arr[i]);</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    arr.length = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; buckets.length; i++) &#123;</span><br><span class="line">        insertionSort(buckets[i]);                      <span class="comment">// 对每个桶进行排序，这里使用了插入排序</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">var</span> j = <span class="number">0</span>; j &lt; buckets[i].length; j++) &#123;</span><br><span class="line">            arr.push(buckets[i][j]);                     </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"> </span><br><span class="line">    <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="算法分析-8"><a href="#算法分析-8" class="headerlink" title="算法分析"></a>算法分析</h5><p>桶排序最好情况下使用线性时间O(n)，桶排序的时间复杂度，取决与对各个桶之间数据进行排序的时间复杂度，因为其它部分的时间复杂度都为O(n)。很显然，桶划分的越小，各个桶之间的数据越少，排序所用的时间也会越少。但相应的空间消耗就会增大。</p>
+<h4 id="基数排序"><a href="#基数排序" class="headerlink" title="基数排序"></a>基数排序</h4><h5 id="算法思想-9"><a href="#算法思想-9" class="headerlink" title="算法思想"></a>算法思想</h5><p>基数排序是按照低位先排序，然后收集；再按照高位排序，然后再收集；依次类推，直到最高位。有时候有些属性是有优先级顺序的，先按低优先级排序，再按高优先级排序。最后的次序就是高优先级高的在前，高优先级相同的低优先级高的在前。</p>
+<ul>
+<li>取得数组中的最大数，并取得位数；</li>
+<li>arr为原始数组，从最低位开始取每个位组成radix数组；</li>
+<li>对radix进行计数排序（利用计数排序适用于小范围数的特点）；</li>
+</ul>
+<h5 id="算法图解-9"><a href="#算法图解-9" class="headerlink" title="算法图解"></a>算法图解</h5>
+
+
+<h5 id="代码实现-9"><a href="#代码实现-9" class="headerlink" title="代码实现"></a>代码实现</h5><figure class="highlight python"><table><tr><td class="code"><pre><span class="line">var counter = [];</span><br><span class="line">function radixSort(arr, maxDigit) &#123;</span><br><span class="line">    var mod = <span class="number">10</span>;</span><br><span class="line">    var dev = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span> (var i = <span class="number">0</span>; i &lt; maxDigit; i++, dev *= <span class="number">10</span>, mod *= <span class="number">10</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span>(var j = <span class="number">0</span>; j &lt; arr.length; j++) &#123;</span><br><span class="line">            var bucket = parseInt((arr[j] % mod) / dev);</span><br><span class="line">            <span class="keyword">if</span>(counter[bucket]==null) &#123;</span><br><span class="line">                counter[bucket] = [];</span><br><span class="line">            &#125;</span><br><span class="line">            counter[bucket].push(arr[j]);</span><br><span class="line">        &#125;</span><br><span class="line">        var pos = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(var j = <span class="number">0</span>; j &lt; counter.length; j++) &#123;</span><br><span class="line">            var value = null;</span><br><span class="line">            <span class="keyword">if</span>(counter[j]!=null) &#123;</span><br><span class="line">                <span class="keyword">while</span> ((value = counter[j].shift()) != null) &#123;</span><br><span class="line">                      arr[pos++] = value;</span><br><span class="line">                &#125;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> arr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h5 id="算法分析-9"><a href="#算法分析-9" class="headerlink" title="算法分析"></a>算法分析</h5><p>基数排序基于分别排序，分别收集，所以是稳定的。但基数排序的性能比桶排序要略差，每一次关键字的桶分配都需要O(n)的时间复杂度，而且分配之后得到新的关键字序列又需要O(n)的时间复杂度。假如待排数据可以分为d个关键字，则基数排序的时间复杂度将是O(d*2n) ，当然d要远远小于n，因此基本上还是线性级别的。</p>
+<p>基数排序的空间复杂度为O(n+k)，其中k为桶的数量。一般来说n&gt;&gt;k，因此额外空间需要大概n个左右。</p>
+]]></content>
+      <categories>
+        <category>algorithm</category>
+      </categories>
+      <tags>
+        <tag>algorithm</tag>
+      </tags>
+  </entry>
+</search>
