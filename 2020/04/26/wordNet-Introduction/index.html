@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="WordNet简介与原理什么是WordNet wordNet在线使用地址  wordNet_API  wordNet_可视化  一句话概括WorNet即为：面向英文的词汇数据库，其按照单词的含义构造了单词的网络。WordNet的最大的特点为按照词义构建词集，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="wordNet Introduction">
+<meta property="og:url" content="https://guardingdog.github.io/2020/04/26/wordNet-Introduction/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="WordNet简介与原理什么是WordNet wordNet在线使用地址  wordNet_API  wordNet_可视化  一句话概括WorNet即为：面向英文的词汇数据库，其按照单词的含义构造了单词的网络。WordNet的最大的特点为按照词义构建词集，">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-2bb918806d6a3a21932dbed3514368a9_720w.jpg">
+<meta property="og:image" content="https://images0.cnblogs.com/blog/577482/201411/271433099491914.png">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-41006ed2100aa2b4db229b225f1a232e_720w.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/v2-c5dbed774c162f765bc463d8e304eaa7_r.jpg">
+<meta property="og:image" content="https://pic4.zhimg.com/80/v2-1827c3322b2e806c0d7c39ac1aea170f_720w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-ab25ae65a88e5b69cc1021d465ee0fa2_720w.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-9344743c81376dce4224704602f02ef9_720w.jpg">
+<meta property="article:published_time" content="2020-04-26T11:53:05.000Z">
+<meta property="article:modified_time" content="2021-01-24T09:18:59.919Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="wordnet">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-2bb918806d6a3a21932dbed3514368a9_720w.jpg">
+
+<link rel="canonical" href="https://guardingdog.github.io/2020/04/26/wordNet-Introduction/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>wordNet Introduction | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2020/04/26/wordNet-Introduction/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          wordNet Introduction
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-04-26 19:53:05" itemprop="dateCreated datePublished" datetime="2020-04-26T19:53:05+08:00">2020-04-26</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-24 17:18:59" itemprop="dateModified" datetime="2021-01-24T17:18:59+08:00">2021-01-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Wordnet/" itemprop="url" rel="index"><span itemprop="name">Wordnet</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2020/04/26/wordNet-Introduction/" class="post-meta-item leancloud_visitors" data-flag-title="wordNet Introduction" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2020/04/26/wordNet-Introduction/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/26/wordNet-Introduction/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="WordNet简介与原理"><a href="#WordNet简介与原理" class="headerlink" title="WordNet简介与原理"></a>WordNet简介与原理</h1><h2 id="什么是WordNet"><a href="#什么是WordNet" class="headerlink" title="什么是WordNet"></a>什么是WordNet</h2><blockquote>
+<p><a target="_blank" rel="noopener" href="http://wordnetweb.princeton.edu/perl/webwn">wordNet在线使用地址</a>  <a target="_blank" rel="noopener" href="http://www.nltk.org/howto/wordnet.html">wordNet_API</a>  <a target="_blank" rel="noopener" href="http://wordvis.com/">wordNet_可视化</a></p>
+</blockquote>
+<p>一句话概括WorNet即为：面向<strong>英文</strong>的<strong>词汇</strong>数据库，其按照单词的含义构造了单词的网络。WordNet的最大的特点为<strong>按照词义构建词集</strong>，</p>
+<a id="more"></a>
+
+<p>在WordNet中词性是分类的重要标准，按照词性划分为四类同义词集，分别是动词同义词集、名词同义词集、形容词同义词集与副词同义词集。上述的四种同义词集各自构成了同义词网络。每一个同义词的集合表示一个基本<strong>语义</strong>概念，并且集合之间存在各种关系。</p>
+<p>集合之间的关系包括九类：上下位关系（动词、名词）、蕴含关系（动词）、相似关系（名词）、成员部分关系（名词）、物质部分关系（名词）、部件部分关系（名词）、致使关系（动词）、相关动词关系（动词）、属性关系（形容词）。</p>
+<p>例如名词”Love”的上下位关系为：</p>
+<blockquote>
+<p>entity——&gt;abstract entity——&gt;abstraction——&gt;attribute——&gt;state——&gt;feeling——&gt; emotion——&gt;love;</p>
+</blockquote>
+<h2 id="WordNet的特点"><a href="#WordNet的特点" class="headerlink" title="WordNet的特点"></a>WordNet的特点</h2><h3 id="1-与一般词典的组织结构不同"><a href="#1-与一般词典的组织结构不同" class="headerlink" title="1.与一般词典的组织结构不同"></a>1.与一般词典的组织结构不同</h3><p>它利用<strong>同义词集合</strong>作为基本组织单位，用户可以在同义词集中找到合适的词表示某个已知的基本概念，同时也给出了定义与例句。</p>
+<p>如果将WordNet视为数据库，则Synset就是一条数据的主键，代表了一个词义。Python中Synset展示：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-2bb918806d6a3a21932dbed3514368a9_720w.jpg"></p>
+<p>上图中是Synset基础用法，其通过单词”dog”，寻找包含”dog”的所有同义词集。</p>
+<h3 id="2-同义词集间通过关系构成网络"><a href="#2-同义词集间通过关系构成网络" class="headerlink" title="2.同义词集间通过关系构成网络"></a>2.同义词集间通过关系构成网络</h3><p>WordNet中同义词集并非是独立的，其通过特定的关系类型构建同义词集网络架构。</p>
+
+
+<p>上图是”China”词，在WordNet中涉及的同义词集关系展示。</p>
+<h3 id="3-WordNet中同义词集的单义性"><a href="#3-WordNet中同义词集的单义性" class="headerlink" title="3.WordNet中同义词集的单义性"></a>3.WordNet中同义词集的单义性</h3><p>在WordNet中，大多数的同义词集都有说明性的注释，但一个Synset不等于词典中的一个词条，因为一个Synset只包含一个注释，而在传统词典中的词条是多义词，会有多个解释。</p>
+<p>所以说，“一个Synset等于的是一个词义”这一点必须反复强调。以一条词义为一条数据，是<strong>跨语言</strong>想要成立所必须的条件。</p>
+<h3 id="WordNet-非重要概念"><a href="#WordNet-非重要概念" class="headerlink" title="WordNet 非重要概念"></a>WordNet 非重要概念</h3><p>这一部分内容介绍了WordNet中不太重要的概念，不影响基本使用，但有利于理解。</p>
+<ol>
+<li><p>独立起始概念（Unique Beginner）</p>
+<p>某些同义词集不存在上位词集，那么我们称之为独立起始概念。这个可以认为是语义领域内所有概念的<strong>原始语义元素</strong>。在WordNet中名词体系中存在25个独立起始概念，例如：时间、物质、目的、关系、属性等等。其下位词继承上位词的所有特点，这与编程思想中父子类的关系类似。</p>
+</li>
+<li><p>词典ID（Lexicographer ID）</p>
+<p>每一个同义词集都包含一个唯一的编号。</p>
+</li>
+<li><p>概念链（Concept Chain）</p>
+<p>这里的概念链指的是同义词集间<strong>上下位关系</strong>，构成的概念链条。与上面提到的关系可视化概念类似，但其仅包含<strong>上下位关系</strong>。</p>
+<p><img src="https://images0.cnblogs.com/blog/577482/201411/271433099491914.png"></p>
+<p>上图内容与可视化展示相似，这里不解释。</p>
+</li>
+</ol>
+<h3 id="WordNet文件结构简介"><a href="#WordNet文件结构简介" class="headerlink" title="WordNet文件结构简介"></a>WordNet文件结构简介</h3><p>WordNet语料库中最常用的有两个：omw与wordnet</p>
+<h3 id="omw文件夹"><a href="#omw文件夹" class="headerlink" title="omw文件夹"></a>omw文件夹</h3><p>此文件夹内包含有各国家地区的研究人员基于英文WordNet构建的本国语言的WordNet，目前包含有27个国家与地区，其中cmn(简体中文)和qcn（繁体中文）与中文相关。</p>
+<p>文件夹中有三个文件，分别是<em>citation.bib</em>、<em>LICENSE</em>和<em>wn-data-语言名.tab</em>。</p>
+<h4 id="wn-data-cmn-tab文件"><a href="#wn-data-cmn-tab文件" class="headerlink" title="wn-data-cmn.tab文件"></a>wn-data-cmn.tab文件</h4><p>词条保存在<em>wn-data-语言名.tab</em>文件中。打开后发现，简体中文下的词条一共有79808条，繁体为8069条</p>
+<blockquote>
+<p>数据为两年前，目前中文词条应高于上述数据。</p>
+</blockquote>
+<p>如图：<img src="https://pic3.zhimg.com/80/v2-41006ed2100aa2b4db229b225f1a232e_720w.jpg"></p>
+<p>文件的内容分为三列，第一列为词义的八位十进制序号（offset）（对应于上述的词典ID）和词性（n：名词、v：动词、a：形容词、r：动词）；第二列内容为“语言名：lemma”；第三列是对应语言的词义。</p>
+<p>“00001740-a”的词义共包含有3个具体的词汇，分别是可以+的，有能力+的、能。</p>
+<p>中文简体通过去重之后的词义数量为42312条数据。</p>
+<p>WordNet中原本的此役统计数据为：名词：82115条，动词：13767条，形容词：18156条，副词：3621条，共计：117659条。大约占三分之一。</p>
+<h4 id="wordnet文件"><a href="#wordnet文件" class="headerlink" title="wordnet文件"></a>wordnet文件</h4><p>此文件内包含有wordnet的本体。</p>
+<blockquote>
+<p>wordnet文件夹中一共有18个文件，比较重要的文件有15个。其中四个是data文件，存放四种词性的词的根本内容；四个是index文件，即索引文件；四个是exc文件，对词汇的变形进行对应；还有一个是lexnames文件，存放所有词的45个意向集（即这117659条词义，可以被归为这45个类）。</p>
+</blockquote>
+<p><img src="https://pic4.zhimg.com/v2-c5dbed774c162f765bc463d8e304eaa7_r.jpg"></p>
+<p><strong>data.pos文件</strong></p>
+<p>此文件是一个数据文件，以data.adj中able词条为例子：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-1827c3322b2e806c0d7c39ac1aea170f_720w.jpg"></p>
+<p>上图中表示了”1740”同义词集下的able词条，其内容依次包含：词典ID、词意向集序号、词性、同义词集内词个数、指针个数、指针列表、句型、注释与例句。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-ab25ae65a88e5b69cc1021d465ee0fa2_720w.jpg"></p>
+<p>上图是指针符号列表，用于表示此同义词集与其他同义词集的关系。</p>
+<p><strong>lexnames文件</strong></p>
+<p>WordNet讲英文单词归类为45个意向集，其中名词26个，动词15个，形容词3个，副词1个。</p>
+<p><img src="https://pic2.zhimg.com/80/v2-9344743c81376dce4224704602f02ef9_720w.jpg"></p>
+<h2 id="WordNet-API"><a href="#WordNet-API" class="headerlink" title="WordNet_API"></a>WordNet_API</h2><p>官方提供了WordNet接口用于研究与应用。其提供了基于上述数据库文件的基本使用方式：包括同义词集的获取、同义词集对应关系的获取、意向词集的获取、语义相似度的判断。</p>
+<p>wordNet提供了多种维度的语义相似度接口，一共包含有6种；</p>
+<ol>
+<li><p>基于上下位词的最短路径,输出空间0-1.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.path_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">0.2</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于上下位词的最短路径与最大深度，其计算公式$-\log(p/2d)$.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.lch_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">2.028</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于两同义词深度与最近公共父节点</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.wup_similarity(cat)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">0.857</span>...</span><br></pre></td></tr></table></figure></li>
+<li><p>基于两同义词深度与最近公共父节点的含义</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>dog.res_similarity(cat, brown_ic)  <span class="comment"># doctest: +ELLIPSIS</span></span><br><span class="line"><span class="number">7.911</span>...</span><br></pre></td></tr></table></figure>
+<p>第五种与第六种与上述类似，仅仅是公式不同，这里不再赘述。</p>
+</li>
+</ol>
+<p>可以看到WordNet利用了同义词集、同义词集网络深度等信息实现语义相似度的计算。</p>
+<p>参考地址：</p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://wordnet.princeton.edu/">wordnet官网</a> <br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_30600503/article/details/97794989">wordnet的一些入门性介绍</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/skiffloveblue/article/details/9359427">wordnet词网研究</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/26527203">wordnet思路</a><br><a target="_blank" rel="noopener" href="http://wordnetweb.princeton.edu/perl/webwn">wordNet在线使用地址</a>  <br><a target="_blank" rel="noopener" href="http://www.nltk.org/howto/wordnet.html">wordNet_API</a><br> [wordNet_可视化](</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/wordnet/" rel="tag"><i class="fa fa-tag"></i> wordnet</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/04/06/python-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" rel="prev" title="python-正则表达式">
+      <i class="fa fa-chevron-left"></i> python-正则表达式
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/11/python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="next" title="python内存管理">
+      python内存管理 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#WordNet%E7%AE%80%E4%BB%8B%E4%B8%8E%E5%8E%9F%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">WordNet简介与原理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFWordNet"><span class="nav-number">1.1.</span> <span class="nav-text">什么是WordNet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WordNet%E7%9A%84%E7%89%B9%E7%82%B9"><span class="nav-number">1.2.</span> <span class="nav-text">WordNet的特点</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%8E%E4%B8%80%E8%88%AC%E8%AF%8D%E5%85%B8%E7%9A%84%E7%BB%84%E7%BB%87%E7%BB%93%E6%9E%84%E4%B8%8D%E5%90%8C"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.与一般词典的组织结构不同</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%90%8C%E4%B9%89%E8%AF%8D%E9%9B%86%E9%97%B4%E9%80%9A%E8%BF%87%E5%85%B3%E7%B3%BB%E6%9E%84%E6%88%90%E7%BD%91%E7%BB%9C"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.同义词集间通过关系构成网络</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-WordNet%E4%B8%AD%E5%90%8C%E4%B9%89%E8%AF%8D%E9%9B%86%E7%9A%84%E5%8D%95%E4%B9%89%E6%80%A7"><span class="nav-number">1.2.3.</span> <span class="nav-text">3.WordNet中同义词集的单义性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WordNet-%E9%9D%9E%E9%87%8D%E8%A6%81%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.4.</span> <span class="nav-text">WordNet 非重要概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#WordNet%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AE%80%E4%BB%8B"><span class="nav-number">1.2.5.</span> <span class="nav-text">WordNet文件结构简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omw%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-number">1.2.6.</span> <span class="nav-text">omw文件夹</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#wn-data-cmn-tab%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.6.1.</span> <span class="nav-text">wn-data-cmn.tab文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#wordnet%E6%96%87%E4%BB%B6"><span class="nav-number">1.2.6.2.</span> <span class="nav-text">wordnet文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#WordNet-API"><span class="nav-number">1.3.</span> <span class="nav-text">WordNet_API</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
