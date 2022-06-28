@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="copy from blog, copy from blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go_Learning_Fundamental_format">
+<meta property="og:url" content="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-format/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="copy from blog, copy from blog">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-28T16:21:18.000Z">
+<meta property="article:modified_time" content="2022-06-28T16:22:14.074Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-format/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Go_Learning_Fundamental_format | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-format/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go_Learning_Fundamental_format
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-29 00:21:18 / Modified: 00:22:14" itemprop="dateCreated datePublished" datetime="2022-06-29T00:21:18+08:00">2022-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/06/29/Go-Learning-Fundamental-format/" class="post-meta-item leancloud_visitors" data-flag-title="Go_Learning_Fundamental_format" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/06/29/Go-Learning-Fundamental-format/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/29/Go-Learning-Fundamental-format/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://yourbasic.org/golang/fmt-printf-reference-cheat-sheet/">copy from blog</a>, <a target="_blank" rel="noopener" href="https://zetcode.com/golang/string-format/">copy from blog</a></p>
+</blockquote>
+<a id="more"></a>
+
+<h2 id="Basics"><a href="#Basics" class="headerlink" title="Basics"></a>Basics</h2><p>With the Go <a target="_blank" rel="noopener" href="https://golang.org/pkg/fmt"><code>fmt</code></a> package you can format numbers and strings padded with spaces or zeroes, in different bases, and with optional quotes.</p>
+<p>You submit a <strong>template string</strong> that contains the text you want to format plus some <strong>annotation verbs</strong> that tell the <code>fmt</code> functions how to format the trailing arguments.</p>
+<h3 id="Printf"><a href="#Printf" class="headerlink" title="Printf"></a>Printf</h3><p>In this example, <a target="_blank" rel="noopener" href="https://golang.org/pkg/fmt/#Printf"><code>fmt.Printf</code></a> formats and writes to standard output:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Printf(&quot;Binary: %b\\%b&quot;, 4, 5) &#x2F;&#x2F; Prints &#96;Binary: 100\101&#96;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>the <strong>template string</strong> is <code>&quot;Binary: %b\\%b&quot;</code>,</li>
+<li>the <strong>annotation verb</strong> <code>%b</code> formats a number in binary, and</li>
+<li>the <strong>special value</strong> <code>\\</code> is a backslash.</li>
+</ul>
+<p>As a special case, the verb <code>%%</code>, which consumes no argument, produces a percent sign:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Printf(&quot;%d %%&quot;, 50) &#x2F;&#x2F; Prints &#96;50 %&#96;</span><br></pre></td></tr></table></figure>
+<h3 id="Sprintf-format-without-printing"><a href="#Sprintf-format-without-printing" class="headerlink" title="Sprintf (format without printing)"></a>Sprintf (format without printing)</h3><p>Use <a target="_blank" rel="noopener" href="https://golang.org/pkg/fmt/#Sprintf"><code>fmt.Sprintf</code></a> to format a string without printing it:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s :&#x3D; fmt.Sprintf(&quot;Binary: %b\\%b&quot;, 4, 5) &#x2F;&#x2F; s &#x3D;&#x3D; &#96;Binary: 100\101&#96;</span><br></pre></td></tr></table></figure>
+<h3 id="Find-fmt-errors-with-vet"><a href="#Find-fmt-errors-with-vet" class="headerlink" title="Find fmt errors with vet"></a>Find fmt errors with vet</h3><p>If you try to compile and run this incorrect line of code</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Printf(&quot;Binary: %b\\%b&quot;, 4) &#x2F;&#x2F; An argument to Printf is missing.</span><br></pre></td></tr></table></figure>
+<p>you’ll find that the program will compile, and then print</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Binary: 100\%!b(MISSING)</span><br></pre></td></tr></table></figure>
+<p>To catch this type of errors early, you can use the <a target="_blank" rel="noopener" href="https://golang.org/cmd/vet/">vet command</a> – it can find calls whose arguments do not align with the format string.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ go vet example.go</span><br><span class="line">example.go:8: missing argument for Printf(&quot;%b&quot;): format reads arg 2, have only 1 args</span><br></pre></td></tr></table></figure>
+<h2 id="Basic-syntax"><a href="#Basic-syntax" class="headerlink" title="Basic syntax"></a>Basic syntax</h2><p>The functions take the format string and the list of arguments as parameters.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">%[flags][width][.precision]verb</span><br></pre></td></tr></table></figure>
+<p>The format string has this syntax. The options specified within [] characters are optional.</p>
+<p>The **verb **at the end defines the type and the interpretation of its corresponding argument.</p>
+<ul>
+<li>d - decimal integer</li>
+<li>o - octal integer</li>
+<li>O - octal integer with 0 prefix</li>
+<li>b - binary integer</li>
+<li>x - hexadecimal integer lowercase</li>
+<li>X - hexadecimal integer uppercase</li>
+<li>f - decimal floating point, lowercase</li>
+<li>F - decimal floating point, uppercase</li>
+<li>e - scientific notation (mantissa/exponent), lowercase</li>
+<li>E - scientific notation (mantissa/exponent), uppercase</li>
+<li>g - the shortest representation of %e or %f</li>
+<li>G - the shortest representation of %E or %F</li>
+<li>c - a character represented by the corresponding Unicode code point</li>
+<li>q - a quoted character</li>
+<li>U - Unicode escape sequence</li>
+<li>t - the word true or false</li>
+<li>s - a string</li>
+<li>v - default format</li>
+<li>#v - Go-syntax representation of the value</li>
+<li>T - a Go-syntax representation of the type of the value</li>
+<li>p - pointer address</li>
+<li>% - a double %% prints a single %</li>
+</ul>
+<p>The <strong>flags</strong> is a set of characters that modify the output format. The set of valid flags depends on the conversion character. </p>
+<p>The <strong>width</strong> is a non-negative decimal integer indicating the minimum number of runes to be written to the output. If the value to be printed is shorter than the width, the result is padded with blank spaces. The value is not truncated even if the result is larger.</p>
+<p>For integer conversion characters the <strong>precision</strong> specifies the minimum number of digits to be written. If the value to be written is shorter than this number, the result is padded with leading zeros. For strings it is the maximum number of runes to be printed. For e, E, f and F verbs, it is the number of digits to be printed after the decimal point. For g and G verbs it is the maximum number of significant digits to be printed.</p>
+<h2 id="Cheat-sheet"><a href="#Cheat-sheet" class="headerlink" title="Cheat sheet"></a>Cheat sheet</h2><h3 id="Default-formats-and-type"><a href="#Default-formats-and-type" class="headerlink" title="Default formats and type"></a>Default formats and type</h3><ul>
+<li><strong>Value:</strong> <code>[]int64&#123;0, 1&#125;</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Verb</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">[0 1]</td>
+<td align="left"><code>%v</code></td>
+<td align="left">Default format</td>
+</tr>
+<tr>
+<td align="left">[]int64{0, 1}</td>
+<td align="left"><code>%#v</code></td>
+<td align="left">Go-syntax format</td>
+</tr>
+<tr>
+<td align="left">[]int64</td>
+<td align="left"><code>%T</code></td>
+<td align="left">The type of the value</td>
+</tr>
+</tbody></table>
+<h3 id="Integer-indent-base-sign"><a href="#Integer-indent-base-sign" class="headerlink" title="Integer (indent, base, sign)"></a>Integer (indent, base, sign)</h3><ul>
+<li><strong>Value:</strong> <code>15</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Verb</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">15</td>
+<td align="left"><code>%d</code></td>
+<td align="left">Base 10</td>
+</tr>
+<tr>
+<td align="left">+15</td>
+<td align="left"><code>%+d</code></td>
+<td align="left">Always show sign</td>
+</tr>
+<tr>
+<td align="left">␣␣15</td>
+<td align="left"><code>%4d</code></td>
+<td align="left">Pad with spaces (width 4, right justified)</td>
+</tr>
+<tr>
+<td align="left">15␣␣</td>
+<td align="left"><code>%-4d</code></td>
+<td align="left">Pad with spaces (width 4, left justified)</td>
+</tr>
+<tr>
+<td align="left">0015</td>
+<td align="left"><code>%04d</code></td>
+<td align="left">Pad with zeroes (width 4)</td>
+</tr>
+<tr>
+<td align="left">1111</td>
+<td align="left"><code>%b</code></td>
+<td align="left">Base 2</td>
+</tr>
+<tr>
+<td align="left">17</td>
+<td align="left"><code>%o</code></td>
+<td align="left">Base 8</td>
+</tr>
+<tr>
+<td align="left">f</td>
+<td align="left"><code>%x</code></td>
+<td align="left">Base 16, lowercase</td>
+</tr>
+<tr>
+<td align="left">F</td>
+<td align="left"><code>%X</code></td>
+<td align="left">Base 16, uppercase</td>
+</tr>
+<tr>
+<td align="left">0xf</td>
+<td align="left"><code>%#x</code></td>
+<td align="left">Base 16, with leading 0x</td>
+</tr>
+</tbody></table>
+<h3 id="Character-quoted-Unicode"><a href="#Character-quoted-Unicode" class="headerlink" title="Character (quoted, Unicode)"></a>Character (quoted, Unicode)</h3><ul>
+<li><strong>Value:</strong> <code>65</code>  (Unicode letter A)</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Verb</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">A</td>
+<td align="left"><code>%c</code></td>
+<td align="left">Character</td>
+</tr>
+<tr>
+<td align="left">‘A’</td>
+<td align="left"><code>%q</code></td>
+<td align="left">Quoted character</td>
+</tr>
+<tr>
+<td align="left">U+0041</td>
+<td align="left"><code>%U</code></td>
+<td align="left">Unicode</td>
+</tr>
+<tr>
+<td align="left">U+0041 ‘A’</td>
+<td align="left"><code>%#U</code></td>
+<td align="left">Unicode with character</td>
+</tr>
+</tbody></table>
+<h3 id="Boolean-true-false"><a href="#Boolean-true-false" class="headerlink" title="Boolean (true/false)"></a>Boolean (true/false)</h3><p>Use <code>%t</code> to format a boolean as <code>true</code> or <code>false</code>.</p>
+<h3 id="Pointer-hex"><a href="#Pointer-hex" class="headerlink" title="Pointer (hex)"></a>Pointer (hex)</h3><p>Use <code>%p</code> to format a pointer in base 16 notation with leading <code>0x</code>.</p>
+<h3 id="Float-indent-precision-scientific-notation"><a href="#Float-indent-precision-scientific-notation" class="headerlink" title="Float (indent, precision, scientific notation)"></a>Float (indent, precision, scientific notation)</h3><ul>
+<li><strong>Value:</strong> <code>123.456</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Verb</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1.234560e+02</td>
+<td align="left"><code>%e</code></td>
+<td align="left">Scientific notation</td>
+</tr>
+<tr>
+<td align="left">123.456000</td>
+<td align="left"><code>%f</code></td>
+<td align="left">Decimal point, no exponent</td>
+</tr>
+<tr>
+<td align="left">123.46</td>
+<td align="left"><code>%.2f</code></td>
+<td align="left">Default width, precision 2</td>
+</tr>
+<tr>
+<td align="left">␣␣123.46</td>
+<td align="left"><code>%8.2f</code></td>
+<td align="left">Width 8, precision 2</td>
+</tr>
+<tr>
+<td align="left">123.456</td>
+<td align="left"><code>%g</code></td>
+<td align="left">Exponent as needed, necessary digits only</td>
+</tr>
+</tbody></table>
+<h3 id="String-or-byte-slice-quote-indent-hex"><a href="#String-or-byte-slice-quote-indent-hex" class="headerlink" title="String or byte slice (quote, indent, hex)"></a>String or byte slice (quote, indent, hex)</h3><ul>
+<li><strong>Value:</strong> <code>&quot;café&quot;</code></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="left">Format</th>
+<th align="left">Verb</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">café</td>
+<td align="left"><code>%s</code></td>
+<td align="left">Plain string</td>
+</tr>
+<tr>
+<td align="left">␣␣café</td>
+<td align="left"><code>%6s</code></td>
+<td align="left">Width 6, right justify</td>
+</tr>
+<tr>
+<td align="left">café␣␣</td>
+<td align="left"><code>%-6s</code></td>
+<td align="left">Width 6, left justify</td>
+</tr>
+<tr>
+<td align="left">“café”</td>
+<td align="left"><code>%q</code></td>
+<td align="left">Quoted string</td>
+</tr>
+<tr>
+<td align="left">636166c3a9</td>
+<td align="left"><code>%x</code></td>
+<td align="left">Hex dump of byte values</td>
+</tr>
+<tr>
+<td align="left">63 61 66 c3 a9</td>
+<td align="left"><code>% x</code></td>
+<td align="left">Hex dump with spaces</td>
+</tr>
+</tbody></table>
+<h3 id="Special-values"><a href="#Special-values" class="headerlink" title="Special values"></a>Special values</h3><table>
+<thead>
+<tr>
+<th align="left">Value</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>\a</code></td>
+<td align="left">U+0007 alert or bell</td>
+</tr>
+<tr>
+<td align="left"><code>\b</code></td>
+<td align="left">U+0008 backspace</td>
+</tr>
+<tr>
+<td align="left"><code>\\</code></td>
+<td align="left">U+005c backslash</td>
+</tr>
+<tr>
+<td align="left"><code>\t</code></td>
+<td align="left">U+0009 horizontal tab</td>
+</tr>
+<tr>
+<td align="left"><code>\n</code></td>
+<td align="left">U+000A line feed or newline</td>
+</tr>
+<tr>
+<td align="left"><code>\f</code></td>
+<td align="left">U+000C form feed</td>
+</tr>
+<tr>
+<td align="left"><code>\r</code></td>
+<td align="left">U+000D carriage return</td>
+</tr>
+<tr>
+<td align="left"><code>\v</code></td>
+<td align="left">U+000b vertical tab</td>
+</tr>
+</tbody></table>
+<p>Arbitrary values can be encoded with backslash escapes and can be used in any <code>&quot;&quot;</code> string literal.</p>
+<p>There are four different formats:</p>
+<ul>
+<li><code>\x</code> followed by exactly two hexadecimal digits,</li>
+<li><code>\</code> followed by exactly three octal digits,</li>
+<li><code>\u</code> followed by exactly four hexadecimal digits,</li>
+<li><code>\U</code> followed by exactly eight hexadecimal digits.</li>
+</ul>
+<p>The escapes <code>\u</code> and <code>\U</code> represent Unicode code points.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(&quot;\\caf\u00e9&quot;) &#x2F;&#x2F; Prints \café</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-Interface/" rel="prev" title="Go_Learning_Fundamental_Interface">
+      <i class="fa fa-chevron-left"></i> Go_Learning_Fundamental_Interface
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-Constant/" rel="next" title="Go_Learning_Fundamental_Constant">
+      Go_Learning_Fundamental_Constant <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Basics"><span class="nav-number">1.</span> <span class="nav-text">Basics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Printf"><span class="nav-number">1.1.</span> <span class="nav-text">Printf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Sprintf-format-without-printing"><span class="nav-number">1.2.</span> <span class="nav-text">Sprintf (format without printing)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Find-fmt-errors-with-vet"><span class="nav-number">1.3.</span> <span class="nav-text">Find fmt errors with vet</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Basic-syntax"><span class="nav-number">2.</span> <span class="nav-text">Basic syntax</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cheat-sheet"><span class="nav-number">3.</span> <span class="nav-text">Cheat sheet</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Default-formats-and-type"><span class="nav-number">3.1.</span> <span class="nav-text">Default formats and type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Integer-indent-base-sign"><span class="nav-number">3.2.</span> <span class="nav-text">Integer (indent, base, sign)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Character-quoted-Unicode"><span class="nav-number">3.3.</span> <span class="nav-text">Character (quoted, Unicode)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boolean-true-false"><span class="nav-number">3.4.</span> <span class="nav-text">Boolean (true&#x2F;false)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pointer-hex"><span class="nav-number">3.5.</span> <span class="nav-text">Pointer (hex)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Float-indent-precision-scientific-notation"><span class="nav-number">3.6.</span> <span class="nav-text">Float (indent, precision, scientific notation)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-or-byte-slice-quote-indent-hex"><span class="nav-number">3.7.</span> <span class="nav-text">String or byte slice (quote, indent, hex)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Special-values"><span class="nav-number">3.8.</span> <span class="nav-text">Special values</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>

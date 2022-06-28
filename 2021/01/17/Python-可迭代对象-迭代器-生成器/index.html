@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="在流畅的Python一书中,讲述的有些混乱,这里我自己也只是整理下.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python_可迭代对象,迭代器,生成器">
+<meta property="og:url" content="https://guardingdog.github.io/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="在流畅的Python一书中,讲述的有些混乱,这里我自己也只是整理下.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2021-01-17T15:32:03.000Z">
+<meta property="article:modified_time" content="2021-01-24T09:29:28.535Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Python">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Python_可迭代对象,迭代器,生成器 | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python_可迭代对象,迭代器,生成器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-17 23:32:03" itemprop="dateCreated datePublished" datetime="2021-01-17T23:32:03+08:00">2021-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2021-01-24 17:29:28" itemprop="dateModified" datetime="2021-01-24T17:29:28+08:00">2021-01-24</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Python_可迭代对象,迭代器,生成器" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>在流畅的Python一书中,讲述的有些混乱,这里我自己也只是整理下.</p>
+<a id="more"></a>
+
+<blockquote>
+<p>来自于<a href="%E6%B5%81%E7%95%85%E7%9A%84Python">流畅的Python</a>.</p>
+</blockquote>
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><ul>
+<li>可迭代对象:实现了<strong>iter或者getitem</strong>方法的类实例,使用iter()内置方法可以获取可迭代对象.</li>
+<li>迭代器:一种<strong>惰性</strong>获取数据的方式,也就是一次按需要获得一个数据的方式;</li>
+<li>生成器: <strong>生成器就是迭代器</strong>,所有的生成器都实现了迭代器的”接口”.而生成器能够”凭空”<strong>生成</strong>元素.</li>
+</ul>
+<h2 id="背景知识-序列可以迭代的原因-iter函数"><a href="#背景知识-序列可以迭代的原因-iter函数" class="headerlink" title="背景知识:序列可以迭代的原因:iter函数"></a>背景知识:序列可以迭代的原因:iter函数</h2><p>解释器需要迭代对象x时,会自动调用iter(x)函数.</p>
+<h3 id="内置的iter函数作用"><a href="#内置的iter函数作用" class="headerlink" title="内置的iter函数作用:"></a><strong>内置的iter函数作用:</strong></h3><ol>
+<li><p>检查是否实现了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__iter__方法,如果实现了就调用它,获取一个迭代器.</span><br></pre></td></tr></table></figure></li>
+<li><p>如果没有实现</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__iter__方法,但是实现了__getitem__方法,Python会创建一个迭代器,尝试按顺序(从索引0开始)获取元素.</span><br></pre></td></tr></table></figure></li>
+<li><p>如果尝试失败则抛出TyprError异常,”object is not iterable”.</p>
+</li>
+</ol>
+<h3 id="最简单的例子-实现-iter-函数"><a href="#最简单的例子-实现-iter-函数" class="headerlink" title="最简单的例子:实现 iter 函数"></a><strong>最简单的例子</strong>:实现 iter 函数</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 最简单的可迭代类定义</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> abc</span><br><span class="line">print(<span class="built_in">issubclass</span>(Foo , abc.Iterable))</span><br><span class="line"><span class="comment"># True</span></span><br><span class="line">f = Foo()</span><br><span class="line">print(<span class="built_in">isinstance</span>(f , abc.Iterable))</span><br><span class="line"><span class="comment"># True</span></span><br></pre></td></tr></table></figure>
+<p>上面的例子我们发现当你实现了 iter ,系统已经默认你是Iter对象或者类.</p>
+<p><strong>当你仅实现了 getitem ,则系统并不人为你是可迭代对象或者类</strong>,但是我们已经知道即使只实现 getitem 也会返回一个迭代器.可以看下面的例子.</p>
+<h3 id="实现-getitem-函数的实例"><a href="#实现-getitem-函数的实例" class="headerlink" title="实现 getitem 函数的实例"></a>实现 getitem 函数的实例</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> reprlib</span><br><span class="line"></span><br><span class="line">RE_WORD = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\w+&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> abc</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sentence</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        self.text = text</span><br><span class="line">        self.words = RE_WORD.findall(text)  <span class="comment"># &lt;1&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span>(<span class="params">self, index</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self.words[index]  <span class="comment"># &lt;2&gt;</span></span><br><span class="line"></span><br><span class="line">print(<span class="built_in">issubclass</span>(Sentence , abc.Iterable))</span><br><span class="line"><span class="comment"># False</span></span><br><span class="line">f = Sentence(<span class="string">&quot;as das d&quot;</span>)</span><br><span class="line">print(<span class="built_in">isinstance</span>(f , abc.Iterable))</span><br><span class="line"><span class="comment"># False</span></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> f:</span><br><span class="line">    print(c)</span><br><span class="line"><span class="comment"># as das d</span></span><br></pre></td></tr></table></figure>
+<p>可以看到上面的例子只实现了 getitem ,系统并没有认为其为可迭代对象,<strong>然而却能够进行迭代操作.</strong></p>
+<p><strong>该如何检查对象可迭代?</strong></p>
+<p>从上面的原理与例子看,不能够通过isinstance或者issubclass等内置方法判定是否为可迭代对象,直接通过iter(x)即可.</p>
+<h2 id="可迭代对象与迭代器对比"><a href="#可迭代对象与迭代器对比" class="headerlink" title="可迭代对象与迭代器对比"></a>可迭代对象与迭代器对比</h2><h3 id="定义细节"><a href="#定义细节" class="headerlink" title="定义细节"></a>定义细节</h3><p><strong>两者关系</strong>:Python可以通过可迭代对象获得迭代器</p>
+<p><strong>迭代器:</strong> 迭代器是这样一个对象,其实现了两个方法,</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__next__():返回序列中下一个元素,如果没有则为StopIteration异常</span><br><span class="line">__iter__():迭代器本身也可以迭代</span><br></pre></td></tr></table></figure>
+<p>可迭代对象并不是迭代器.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">可迭代对象有一个__iter__方法,其作用是每次均实例化一个新的迭代器.</span><br><span class="line">而迭代器需要实现上面说的两个方法.</span><br><span class="line">故迭代器可以迭代,但是可迭代对象并不是迭代器.</span><br></pre></td></tr></table></figure>
+<h3 id="迭代器的使用方式"><a href="#迭代器的使用方式" class="headerlink" title="迭代器的使用方式"></a>迭代器的使用方式</h3><p><strong>最常见的for 调用迭代器:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">S = <span class="string">&quot;abc&quot;</span></span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> S:</span><br><span class="line">	print(c)</span><br><span class="line"><span class="comment"># a b c</span></span><br></pre></td></tr></table></figure>
+<p>上面的for循环其实就是使用了迭代器实现的上面的操作.其等价于:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">S = <span class="string">&quot;abc&quot;</span></span><br><span class="line">it = <span class="built_in">iter</span>(S)</span><br><span class="line">print(<span class="built_in">next</span>(it))</span><br><span class="line">print(<span class="built_in">next</span>(it))</span><br><span class="line">print(<span class="built_in">next</span>(it))</span><br><span class="line"><span class="comment"># a b c</span></span><br><span class="line"><span class="comment"># 上面的迭代器是无法还原的</span></span><br></pre></td></tr></table></figure>
+<h3 id="两种可迭代对象的定义方式比较"><a href="#两种可迭代对象的定义方式比较" class="headerlink" title="两种可迭代对象的定义方式比较"></a>两种可迭代对象的定义方式比较</h3><p>我们上面知道了迭代器就是实现了next与iter两个方法的类,那么我们是单独构建迭代器对象还是在可迭代对象内部同时实现相关的方法呢?可以看下面的例子:</p>
+<p><strong>可迭代对象同时实现迭代器在内部:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> reprlib</span><br><span class="line"></span><br><span class="line">RE_WORD = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\w+&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sentence</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        self.text = text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Sentence(%s)&#x27;</span> % reprlib.<span class="built_in">repr</span>(self.text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span>(<span class="params">self</span>):</span></span><br><span class="line">        match = <span class="built_in">next</span>(self.word_iter)  <span class="comment"># &lt;4&gt;</span></span><br><span class="line">        <span class="keyword">return</span> match.group()  <span class="comment"># &lt;5&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br></pre></td></tr></table></figure>
+
+
+<p><strong>单独定义迭代器类</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> reprlib</span><br><span class="line"></span><br><span class="line">RE_WORD = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\w+&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sentence</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        self.text = text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Sentence(%s)&#x27;</span> % reprlib.<span class="built_in">repr</span>(self.text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        word_iter = RE_WORD.finditer(self.text)  <span class="comment"># &lt;1&gt;</span></span><br><span class="line">        <span class="keyword">return</span> SentenceIter(word_iter)  <span class="comment"># &lt;2&gt;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SentenceIter</span>():</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, word_iter</span>):</span></span><br><span class="line">        self.word_iter = word_iter  <span class="comment"># &lt;3&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__next__</span>(<span class="params">self</span>):</span></span><br><span class="line">        match = <span class="built_in">next</span>(self.word_iter)  <span class="comment"># &lt;4&gt;</span></span><br><span class="line">        <span class="keyword">return</span> match.group()  <span class="comment"># &lt;5&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> self</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>很明显单独构建一个迭代器类更加合理,理由之一:为了支持”多种遍历”,必须能从一个可迭代的实例中获取多个独立的迭代器,而且各个迭代器能维护自身的内部状态.</p>
+<h2 id="生成器函数充当迭代器"><a href="#生成器函数充当迭代器" class="headerlink" title="生成器函数充当迭代器"></a>生成器函数充当迭代器</h2><p>上面提供的例子中单独定义了迭代器类,但是我们知道生成器也是迭代器,所以利用生成器也可以定义出可迭代对象.</p>
+<h3 id="生成器函数-关键字-yield"><a href="#生成器函数-关键字-yield" class="headerlink" title="生成器函数:关键字 yield"></a>生成器函数:关键字 yield</h3><p><strong>包含有yield关键字,该函数就是生成器函数.</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">gen_123</span>():</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="number">2</span></span><br><span class="line">    <span class="keyword">yield</span> <span class="number">3</span></span><br><span class="line">print(<span class="built_in">type</span>(gen_123))</span><br><span class="line"><span class="comment"># &lt;class &#x27;function&#x27;&gt;</span></span><br><span class="line">print(<span class="built_in">type</span>(gen_123()))</span><br><span class="line"><span class="comment"># &lt;class &#x27;generator&#x27;&gt;</span></span><br><span class="line">g = gen_123()</span><br><span class="line">print(<span class="built_in">next</span>(g))</span><br><span class="line"><span class="comment"># 1</span></span><br><span class="line">print(<span class="built_in">next</span>(g))</span><br><span class="line"><span class="comment"># 2</span></span><br><span class="line">print(<span class="built_in">next</span>(g))</span><br><span class="line"><span class="comment"># 3</span></span><br></pre></td></tr></table></figure>
+<p>可以看到实例化后,为一个生成器,也就是迭代器.</p>
+<h3 id="生成器函数充当迭代器的应用"><a href="#生成器函数充当迭代器的应用" class="headerlink" title="生成器函数充当迭代器的应用:"></a>生成器函数充当迭代器的应用:</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> reprlib</span><br><span class="line"></span><br><span class="line">RE_WORD = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\w+&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sentence</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        self.text = text  <span class="comment"># &lt;1&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Sentence(%s)&#x27;</span> % reprlib.<span class="built_in">repr</span>(self.text)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">for</span> match <span class="keyword">in</span> RE_WORD.finditer(self.text):  <span class="comment"># &lt;2&gt;</span></span><br><span class="line">            <span class="keyword">yield</span> match.group()  <span class="comment"># &lt;3&gt;</span></span><br><span class="line">S = Sentence(<span class="string">&quot;A D F G H&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> S:</span><br><span class="line">    print(c)</span><br><span class="line"><span class="comment"># A</span></span><br><span class="line"><span class="comment"># D</span></span><br><span class="line"><span class="comment"># F</span></span><br><span class="line"><span class="comment"># G</span></span><br><span class="line"><span class="comment"># H</span></span><br></pre></td></tr></table></figure>
+<p>生成器函数会创建一个生成器对象.并将生成器传给next()函数时,生成器会向前,执行下一个Yield语句,返回产出的值.知道迭代完成.</p>
+<h2 id="惰性实现迭代器"><a href="#惰性实现迭代器" class="headerlink" title="惰性实现迭代器"></a>惰性实现迭代器</h2><p>惰性实现就是不急于实现,生成器就是一种惰性实现.先对于一次性获得所有的元素,惰性实现会减少内存的消耗.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> reprlib</span><br><span class="line"></span><br><span class="line">RE_WORD = re.<span class="built_in">compile</span>(<span class="string">r&#x27;\w+&#x27;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Sentence</span>:</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        self.text = text</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;Sentence(%s)&#x27;</span> % reprlib.<span class="built_in">repr</span>(self.text)</span><br><span class="line"><span class="comment"># re.finditer()返回的是一个迭代器,能够节省大量的内存</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__iter__</span>(<span class="params">self</span>):</span></span><br><span class="line">       <span class="keyword">for</span> match <span class="keyword">in</span> RE_WORD.finditer(self.text):</span><br><span class="line">           <span class="keyword">yield</span> match.group()</span><br><span class="line">S = Sentence(<span class="string">&quot;A B C D E&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> c <span class="keyword">in</span> S:</span><br><span class="line">    print(c)</span><br><span class="line"><span class="comment"># A B C D E</span></span><br></pre></td></tr></table></figure>
+<p>其实这里在书中的意义更像是在过度.</p>
+<h2 id="生成器表达式"><a href="#生成器表达式" class="headerlink" title="生成器表达式"></a>生成器表达式</h2><p>与列表表达式一样,这里可以使用生成式表达式,构造生成器.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(match.group() <span class="keyword">for</span> match <span class="keyword">in</span> re.finditer(self.text))</span><br></pre></td></tr></table></figure>
+<p>这里没有详细的写,也记不住.哟</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>在书中作者还编写了其他的部分,例如标准库中的生成器函数,完整的实例应用以及其他的小细节.我这里仅仅对关于生成器的理论部分进行了论述,理解可迭代对象,迭代器,生成器的关系,以及基本的使用即可.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"><i class="fa fa-tag"></i> Python</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/17/Python-%E5%8F%98%E9%87%8F%E7%90%86%E8%A7%A3/" rel="prev" title="Python_变量理解">
+      <i class="fa fa-chevron-left"></i> Python_变量理解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/17/Python-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96/" rel="next" title="Python_字符串格式化">
+      Python_字符串格式化 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%83%8C%E6%99%AF%E7%9F%A5%E8%AF%86-%E5%BA%8F%E5%88%97%E5%8F%AF%E4%BB%A5%E8%BF%AD%E4%BB%A3%E7%9A%84%E5%8E%9F%E5%9B%A0-iter%E5%87%BD%E6%95%B0"><span class="nav-number">2.</span> <span class="nav-text">背景知识:序列可以迭代的原因:iter函数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E7%BD%AE%E7%9A%84iter%E5%87%BD%E6%95%B0%E4%BD%9C%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">内置的iter函数作用:</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84%E4%BE%8B%E5%AD%90-%E5%AE%9E%E7%8E%B0-iter-%E5%87%BD%E6%95%B0"><span class="nav-number">2.2.</span> <span class="nav-text">最简单的例子:实现 iter 函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0-getitem-%E5%87%BD%E6%95%B0%E7%9A%84%E5%AE%9E%E4%BE%8B"><span class="nav-number">2.3.</span> <span class="nav-text">实现 getitem 函数的实例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E4%B8%8E%E8%BF%AD%E4%BB%A3%E5%99%A8%E5%AF%B9%E6%AF%94"><span class="nav-number">3.</span> <span class="nav-text">可迭代对象与迭代器对比</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89%E7%BB%86%E8%8A%82"><span class="nav-number">3.1.</span> <span class="nav-text">定义细节</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">3.2.</span> <span class="nav-text">迭代器的使用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%A4%E7%A7%8D%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%AE%9A%E4%B9%89%E6%96%B9%E5%BC%8F%E6%AF%94%E8%BE%83"><span class="nav-number">3.3.</span> <span class="nav-text">两种可迭代对象的定义方式比较</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0%E5%85%85%E5%BD%93%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">生成器函数充当迭代器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0-%E5%85%B3%E9%94%AE%E5%AD%97-yield"><span class="nav-number">4.1.</span> <span class="nav-text">生成器函数:关键字 yield</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E5%87%BD%E6%95%B0%E5%85%85%E5%BD%93%E8%BF%AD%E4%BB%A3%E5%99%A8%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">4.2.</span> <span class="nav-text">生成器函数充当迭代器的应用:</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%83%B0%E6%80%A7%E5%AE%9E%E7%8E%B0%E8%BF%AD%E4%BB%A3%E5%99%A8"><span class="nav-number">5.</span> <span class="nav-text">惰性实现迭代器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%99%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-number">6.</span> <span class="nav-text">生成器表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>

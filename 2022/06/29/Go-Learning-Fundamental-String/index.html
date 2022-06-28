@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Reference: blog1, blog2, blog_3, blog_4">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go_Learning_Fundamental_String">
+<meta property="og:url" content="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-String/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="Reference: blog1, blog2, blog_3, blog_4">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-06-28T16:23:47.000Z">
+<meta property="article:modified_time" content="2022-06-28T16:24:18.561Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-String/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Go_Learning_Fundamental_String | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-String/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go_Learning_Fundamental_String
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-29 00:23:47 / Modified: 00:24:18" itemprop="dateCreated datePublished" datetime="2022-06-29T00:23:47+08:00">2022-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/06/29/Go-Learning-Fundamental-String/" class="post-meta-item leancloud_visitors" data-flag-title="Go_Learning_Fundamental_String" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/06/29/Go-Learning-Fundamental-String/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/29/Go-Learning-Fundamental-String/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><strong>Reference</strong>: <a target="_blank" rel="noopener" href="https://zetcode.com/golang/string/">blog1</a>, <a target="_blank" rel="noopener" href="https://go101.org/article/string.html">blog2</a>, <a target="_blank" rel="noopener" href="https://golangbot.com/strings/">blog_3</a>, <a target="_blank" rel="noopener" href="https://www.sohamkamani.com/golang/json/#unmarshaling-raw-json-data">blog_4</a></p>
+<a id="more"></a>
+
+<h2 id="Definition"><a href="#Definition" class="headerlink" title="Definition"></a>Definition</h2><p>A string is <strong>a slice of bytes</strong> in Go. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">string</span> is the set of all strings of <span class="number">8</span>-bit bytes, conventionally but not necessarily representing UTF<span class="number">-8</span>-encoded text. A <span class="keyword">string</span> may be empty, but not <span class="literal">nil</span>. Values of <span class="keyword">string</span> <span class="keyword">type</span> are immutable.</span><br><span class="line">																		--	from <span class="keyword">go</span> compilter</span><br></pre></td></tr></table></figure>
+<h3 id="Base-Data-Structure-of-String-in-Go"><a href="#Base-Data-Structure-of-String-in-Go" class="headerlink" title="Base Data Structure of String in Go"></a>Base Data Structure of String in Go</h3><p>String in Go is C Struct, string is a wrapper of <code>byte</code> sequence. We can realyyy view string as immutable byte slice.</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">type _string <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">	elements *byte <span class="comment">// underlying bytes</span></span><br><span class="line">	len      <span class="keyword">int</span>   <span class="comment">// number of bytes</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="literal-String-Raw-String-Multi-Line-String"><a href="#literal-String-Raw-String-Multi-Line-String" class="headerlink" title="literal String| Raw String | Multi Line String"></a>literal String| Raw String | Multi Line String</h3><p>Go support two styles of string literals, the double-quote style and the back-quote style(raw string literalss).</p>
+<p><strong>Literal String</strong>: created with double quotes, escape sequence is sensitive, such as <code>\n</code>, <code>\r</code>; </p>
+<p><strong>Raw String:</strong> created with back-quote, escape sequence is insensitive.</p>
+<p><strong>Multi Line String:</strong> create with bak-quote with multi line, escape sequence is insensitive.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	literalString := <span class="string">&quot;Literal string is create with double quote \nwhich own escape sequence sensitive feature;&quot;</span></span><br><span class="line">	rawString := <span class="string">`Raw string is create with back-quote \n which own escape sequence insensitive feature;`</span></span><br><span class="line">	multiLineString := <span class="string">`</span></span><br><span class="line"><span class="string">	MultiLine string is create with back-quote</span></span><br><span class="line"><span class="string">	which own multi line sentitive feature						</span></span><br><span class="line"><span class="string">	`</span></span><br><span class="line"></span><br><span class="line">	fmt.Println(literalString)</span><br><span class="line">	fmt.Println(rawString)</span><br><span class="line">	fmt.Println(multiLineString)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Literal string is create with double quote </span></span><br><span class="line"><span class="comment">// which own escape sequence sensitive feature;</span></span><br><span class="line"><span class="comment">// Raw string is create with back-quote \n which own escape sequence insensitive feature;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">//        MultiLine string is create with back-quote</span></span><br><span class="line"><span class="comment">//        which own multi line sentitive feature</span></span><br></pre></td></tr></table></figure>
+<h3 id="Some-Fact-with-String"><a href="#Some-Fact-with-String" class="headerlink" title="Some Fact with String"></a>Some Fact with String</h3><ul>
+<li>String values can be used as constants (along with boolean and all kinds of numeric values).</li>
+<li>Go supports <a target="_blank" rel="noopener" href="https://go101.org/article/basic-types-and-value-literals.html#string-literals">two styles of string literals</a>, the double-quote style (or interpreted literals) and the back-quote style (or raw string literals).</li>
+<li>The zero values of string types are blank strings, which can be represented with <code>&quot;&quot;</code> or ```` in literal.</li>
+<li>Strings can be concatenated with <code>+</code> and <code>+=</code> operators.</li>
+<li>String types are all comparable (by using the <code>==</code> and <code>!=</code> operators). And like integer and floating-point values, two values of the same string type can also be compared with <code>&gt;</code>, <code>&lt;</code>, <code>&gt;=</code> and <code>&lt;=</code> operators. When comparing two strings, their underlying bytes will be compared, one byte by one byte. If one string is a prefix of the other one and the other one is longer, then the other one will be viewed as the larger one.</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> hello = <span class="string">&quot;hello&quot;</span></span><br><span class="line">	<span class="keyword">var</span> world = <span class="string">`World!`</span></span><br><span class="line">	helloWorld := hello + <span class="string">&quot; &quot;</span> + world</span><br><span class="line">	fmt.Println(helloWorld)         <span class="comment">// helloworld</span></span><br><span class="line">	fmt.Println(<span class="string">&quot;hello&quot;</span> == hello)   <span class="comment">// true</span></span><br><span class="line">	fmt.Println(hello &gt; helloWorld) <span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Like Java, the contents (underlying bytes) of string values are immutable. The lengths of string values also can’t be modified separately. An addressable string value can only be overwritten as a whole by assigning another string value to it.</li>
+<li>The built-in <code>string</code>  type has no methods (just like most other built-in types in Go), but we can<ul>
+<li>use functions provided in the <a target="_blank" rel="noopener" href="https://golang.org/pkg/strings/"><code>strings</code> standard package</a> to do all kinds of string manipulations.</li>
+<li>call the built-in <code>len</code> function to get the length of a string (number of bytes stored in the string).</li>
+<li>use the element access syntax <code>aString[i]</code> introduced in <a target="_blank" rel="noopener" href="https://go101.org/article/container.html#element-access">container element accesses</a> to get the *<em>i**</em>th* <code>byte</code> value stored in <code>aString</code>. The expression <code>aString[i]</code> is not addressable. In other words, value <code>aString[i]</code> can’t be modified.</li>
+<li>use <a target="_blank" rel="noopener" href="https://go101.org/article/container.html#subslice">the subslice syntax</a> <code>aString[start:end]</code> to get a substring of <code>aString</code>. Here, <code>start</code> and <code>end</code> are both indexes of bytes stored in <code>aString</code>.</li>
+</ul>
+</li>
+<li>For the standard Go compiler, the destination string variable and source string value in a string assignment will share the same underlying byte sequence in memory. The result of a substring expression <code>aString[start:end]</code> also shares the same underlying byte sequence with the base string <code>aString</code> in memory.</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> hello = <span class="string">&quot;hello&quot;</span></span><br><span class="line">	<span class="keyword">var</span> world = <span class="string">`World!`</span></span><br><span class="line">	helloWorld := hello + <span class="string">&quot; &quot;</span> + world</span><br><span class="line">	fmt.Println(<span class="built_in">len</span>(helloWorld))    <span class="comment">// 12</span></span><br><span class="line">	fmt.Println(helloWorld[<span class="number">0</span>])      <span class="comment">// 104 is byte value of &#x27;h&#x27;</span></span><br><span class="line">	<span class="comment">// helloWorld[0] = &#x27;H&#x27; Error string is immutable</span></span><br><span class="line">	<span class="comment">// fmt.Printf(&amp;helloWorld[0]) Error string is unaddressable</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Operation-With-String"><a href="#Operation-With-String" class="headerlink" title="Operation With String"></a>Operation With String</h2><h3 id="Compare-String-in-Go"><a href="#Compare-String-in-Go" class="headerlink" title="Compare String in Go"></a>Compare String in Go</h3><p>As mentioned above, when comparing two strings, their <strong>underlying bytes</strong> will be compared, <strong>one byte by one byte</strong>, If one string is the prefix of another string, then the longer one viewed as the larger one. While Go compilers make the following optimizations for string comparisons.</p>
+<ul>
+<li>For <code>==</code> and <code>!=</code> comparison, if the length of the compared string is not equal, then the two strings must be not equal.</li>
+<li>If their underlying bytes sequence pointers are equal, then the comparision result is the same as comparing the length of two strings.</li>
+</ul>
+<p>So for two equal strings, the time complexity of comparing them depend on whether or not their underlying byte sequence pointers are equal. If the two are equal, time complexity is <code>O(1)</code>, otherwise is <code>O(n)</code>.</p>
+<p>As above mentioned, for the go standrad Go compiler, in a string value assignment, the destination string value and the source string will share the same underlying byte sequence in memory. So the cost of comparing the two strings becomes very small.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	bs := <span class="built_in">make</span>([]<span class="keyword">byte</span>, <span class="number">1</span>&lt;&lt;<span class="number">26</span>)</span><br><span class="line">    <span class="comment">// s0, s1, s2 are three equal string</span></span><br><span class="line">    <span class="comment">// s0 is the deep copy of bs, s1 is also a deep copy of bs</span></span><br><span class="line">    <span class="comment">// so s0 s1 has different memory address</span></span><br><span class="line">    <span class="comment">// as mentiond, s2 and s1 share the same memory</span></span><br><span class="line">	s0 := <span class="keyword">string</span>(bs)</span><br><span class="line">	s1 := <span class="keyword">string</span>(bs)</span><br><span class="line">	s2 := s1</span><br><span class="line">	startTime := time.Now()</span><br><span class="line">	_ = s0 == s1</span><br><span class="line">	duration := time.Now().Sub(startTime)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Duration for (s0==s1):&quot;</span>, duration)</span><br><span class="line"></span><br><span class="line">	startTime = time.Now()</span><br><span class="line">	_ = s2 == s1</span><br><span class="line">	duration = time.Now().Sub(startTime)</span><br><span class="line">	fmt.Println(<span class="string">&quot;Duration for (s1==s2):&quot;</span>, duration)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Duration for (s0==s1): 15.190255ms</span></span><br><span class="line"><span class="comment">// Duration for (s1==s2): 94ns</span></span><br></pre></td></tr></table></figure>
+<p>1ms is 1000000ns! So please try to avoid comparing two long strings if they don’t share the same underlying byte sequence.</p>
+<h3 id="Loop-Over-String"><a href="#Loop-Over-String" class="headerlink" title="Loop Over  String"></a>Loop Over  String</h3><ul>
+<li>**Classic for : loop over bytes. **</li>
+<li><strong>For range: loops over runes.</strong></li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	name := <span class="string">&quot;Sun清志&quot;</span></span><br><span class="line">	<span class="keyword">for</span> i, char := <span class="keyword">range</span> name &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Index of char %c is %v \n&quot;</span>, char, i)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Print(<span class="string">&quot;--------------- \n&quot;</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(name); i++ &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;index %v  val of name is %c \n&quot;</span>, i, name[i])</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// Index of char S is 0 </span></span><br><span class="line"><span class="comment">// Index of char u is 1 </span></span><br><span class="line"><span class="comment">// Index of char n is 2 </span></span><br><span class="line"><span class="comment">// Index of char 清 is 3 </span></span><br><span class="line"><span class="comment">// Index of char 志 is 6 </span></span><br><span class="line"><span class="comment">/// --------------- </span></span><br><span class="line"><span class="comment">// index 0  val of name is S </span></span><br><span class="line"><span class="comment">// index 1  val of name is u </span></span><br><span class="line"><span class="comment">// index 2  val of name is n </span></span><br><span class="line"><span class="comment">// index 3  val of name is æ </span></span><br><span class="line"><span class="comment">// index 4  val of name is ¸ </span></span><br><span class="line"><span class="comment">// index 5  val of name is </span></span><br><span class="line"><span class="comment">// index 6  val of name is å </span></span><br><span class="line"><span class="comment">// index 7  val of name is ¿ </span></span><br><span class="line"><span class="comment">// index 8  val of name is  </span></span><br></pre></td></tr></table></figure>
+<h3 id="String-Join-String-Split"><a href="#String-Join-String-Split" class="headerlink" title="String Join | String Split"></a>String Join | String Split</h3><p>Besides using the <code>+</code> operator to concatenate strings, we can also use following ways to concatenate strings.</p>
+<ul>
+<li>The <code>Sprintf</code>/<code>Sprint</code>/<code>Sprintln</code> functions in the <code>fmt</code> standard package can be used to concatenate values of any types, including string types.</li>
+<li>Use the <code>Join</code> function in the <code>strings</code> standard package.</li>
+<li>The <code>Buffer</code> type in the <code>bytes</code> standard package (or the built-in <code>copy</code> function) can be used to build byte slices, which afterwards can be converted to string values.</li>
+<li>Since Go 1.10, the <code>Builder</code> type in the <code>strings</code> standard package can be used to build strings. Comparing with <code>bytes.Buffer</code> way, this way avoids making an unnecessary duplicated copy of underlying bytes for the result string.</li>
+</ul>
+<p>The standard Go compiler makes optimizations for string concatenations by using the <code>+</code> operator. So generally, using <code>+</code> operator to concatenate strings is convenient and efficient if the number of the concatenated strings is known at compile time.</p>
+<h3 id="String-Related-Conversion"><a href="#String-Related-Conversion" class="headerlink" title="String Related Conversion"></a>String Related Conversion</h3><h4 id="String-Conversion-With-Byte-And-Rune"><a href="#String-Conversion-With-Byte-And-Rune" class="headerlink" title="String Conversion With Byte And Rune"></a>String Conversion With Byte And Rune</h4><ul>
+<li>a string value can be explicitly converted to byte slice, and vice versa.</li>
+<li>a string value can be explicitly converted to rune slice, and vice versa.</li>
+</ul>
+<p>In a conversion from a rune slice to string, each slice element (a rune value) will be UTF-8 encoded as from one to four bytes and stored in the result string. If a slice rune element value is outside the range of valid Unicode code points, then it will be viewed as <code>0xFFFD</code>, the code point for the Unicode replacement character. <code>0xFFFD</code> will be UTF-8 encoded as three bytes (<code>0xef 0xbf 0xbd</code>).</p>
+<p>When a string is converted to a rune slice, the bytes stored in the string will be viewed as successive UTF-8 encoding byte sequence representations of many Unicode code points. Bad UTF-8 encoding representations will be converted to a rune value <code>0xFFFD</code>.</p>
+<p>When a string is converted to a byte slice, the result byte slice is just a deep copy of the underlying byte sequence of the string. When a byte slice is converted to a string, the underlying byte sequence of the result string is also just a deep copy of the byte slice. A memory allocation is needed to store the deep copy in each of such conversions. The reason why a deep copy is essential is slice elements are mutable but the bytes stored in strings are immutable, so a byte slice and a string can’t share byte elements.</p>
+<p>Please note, for conversions between strings and byte slices,</p>
+<ul>
+<li>illegal UTF-8 encoded bytes are allowed and will keep unchanged.</li>
+<li>the standard Go compiler makes some optimizations for some special cases of such conversions, so that the deep copies are not made. </li>
+</ul>
+<h4 id="Conversion-Between-Byte-And-Rune"><a href="#Conversion-Between-Byte-And-Rune" class="headerlink" title="Conversion Between Byte And Rune"></a>Conversion Between Byte And Rune</h4><p>Conversions between byte slices and rune slices are not supported directly in Go, We can use the following ways to achieve this goal:</p>
+<ul>
+<li>use string values as a hop. This way is convenient but not very efficient, for two deep copies are needed in the process.</li>
+<li>use the functions in <a target="_blank" rel="noopener" href="https://golang.org/pkg/unicode/utf8/">unicode/utf8</a> standard package.</li>
+<li>use <a target="_blank" rel="noopener" href="https://golang.org/pkg/bytes/#Runes">the <code>Runes</code> function in the bytes standard package</a> to convert a <code>[]byte</code> value to a <code>[]rune</code> value. There is not a function in this package to convert a rune slice to byte slice.</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;bytes&quot;</span></span><br><span class="line">	<span class="string">&quot;unicode/utf8&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Runes2Bytes</span><span class="params">(rs []<span class="keyword">rune</span>)</span> []<span class="title">byte</span></span> &#123;</span><br><span class="line">	n := <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> rs &#123;</span><br><span class="line">		n += utf8.RuneLen(r)</span><br><span class="line">	&#125;</span><br><span class="line">	n, bs := <span class="number">0</span>, <span class="built_in">make</span>([]<span class="keyword">byte</span>, n)</span><br><span class="line">	<span class="keyword">for</span> _, r := <span class="keyword">range</span> rs &#123;</span><br><span class="line">		n += utf8.EncodeRune(bs[n:], r)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> bs</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	s := <span class="string">&quot;Color Infection is a fun game.&quot;</span></span><br><span class="line">	bs := []<span class="keyword">byte</span>(s) <span class="comment">// string -&gt; []byte</span></span><br><span class="line">	s = <span class="keyword">string</span>(bs)  <span class="comment">// []byte -&gt; string</span></span><br><span class="line">	rs := []<span class="keyword">rune</span>(s) <span class="comment">// string -&gt; []rune</span></span><br><span class="line">	s = <span class="keyword">string</span>(rs)  <span class="comment">// []rune -&gt; string</span></span><br><span class="line">	rs = bytes.Runes(bs) <span class="comment">// []byte -&gt; []rune</span></span><br><span class="line">	bs = Runes2Bytes(rs) <span class="comment">// []rune -&gt; []byte</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="Compiler-Optimizations-for-Conversions-Between-Strings-and-Byte-Slices"><a href="#Compiler-Optimizations-for-Conversions-Between-Strings-and-Byte-Slices" class="headerlink" title="Compiler Optimizations for Conversions Between Strings and Byte Slices"></a>Compiler Optimizations for Conversions Between Strings and Byte Slices</h4><p>Above has mentioned that the underlying bytes in the conversions between strings and byte slices will be copied. The standard Go compiler makes some optimizations, which are proven to still work in Go Toolchain 1.18, for some special scenarios to avoid the duplicate copies. These scenarios include:</p>
+<ul>
+<li>a conversion (from string to byte slice) which follows the <code>range</code> keyword in a <code>for-range</code> loop.</li>
+<li>a conversion (from byte slice to string) which is used as a map key in map element retrieval indexing syntax.</li>
+<li>a conversion (from byte slice to string) which is used in a comparison.</li>
+<li>a conversion (from byte slice to string) which is used in a string concatenation, and at least one of concatenated string values is a non-blank string constant.</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> str = <span class="string">&quot;world&quot;</span></span><br><span class="line">	<span class="comment">// Here, the []byte(str) conversion will</span></span><br><span class="line">	<span class="comment">// not copy the underlying bytes of str.</span></span><br><span class="line">	<span class="keyword">for</span> i, b := <span class="keyword">range</span> []<span class="keyword">byte</span>(str) &#123;</span><br><span class="line">		fmt.Println(i, <span class="string">&quot;:&quot;</span>, b)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	key := []<span class="keyword">byte</span>&#123;<span class="string">&#x27;k&#x27;</span>, <span class="string">&#x27;e&#x27;</span>, <span class="string">&#x27;y&#x27;</span>&#125;</span><br><span class="line">	m := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;&#125;</span><br><span class="line">	<span class="comment">// The string(key) conversion copys the bytes in key.</span></span><br><span class="line">	m[<span class="keyword">string</span>(key)] = <span class="string">&quot;value&quot;</span></span><br><span class="line">	<span class="comment">// Here, this string(key) conversion doesn&#x27;t copy</span></span><br><span class="line">	<span class="comment">// the bytes in key. The optimization will be still</span></span><br><span class="line">	<span class="comment">// made, even if key is a package-level variable.</span></span><br><span class="line">	fmt.Println(m[<span class="keyword">string</span>(key)]) <span class="comment">// value (very possible)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Note, the last line might not output <code>value</code> if there are data races in evaluating <code>string(key)</code>. However, such data races will never cause panics.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;testing&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> s <span class="keyword">string</span></span><br><span class="line"><span class="keyword">var</span> x = []<span class="keyword">byte</span>&#123;<span class="number">1023</span>: <span class="string">&#x27;x&#x27;</span>&#125;</span><br><span class="line"><span class="keyword">var</span> y = []<span class="keyword">byte</span>&#123;<span class="number">1023</span>: <span class="string">&#x27;y&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fc</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// None of the below 4 conversions will</span></span><br><span class="line">	<span class="comment">// copy the underlying bytes of x and y.</span></span><br><span class="line">	<span class="comment">// Surely, the underlying bytes of x and y will</span></span><br><span class="line">	<span class="comment">// be still copied in the string concatenation.</span></span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">string</span>(x) != <span class="keyword">string</span>(y) &#123;</span><br><span class="line">		s = (<span class="string">&quot; &quot;</span> + <span class="keyword">string</span>(x) + <span class="keyword">string</span>(y))[<span class="number">1</span>:]</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fd</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// Only the two conversions in the comparison</span></span><br><span class="line">	<span class="comment">// will not copy the underlying bytes of x and y.</span></span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">string</span>(x) != <span class="keyword">string</span>(y) &#123;</span><br><span class="line">		<span class="comment">// Please note the difference between the</span></span><br><span class="line">		<span class="comment">// following concatenation and the one in fc.</span></span><br><span class="line">		s = <span class="keyword">string</span>(x) + <span class="keyword">string</span>(y)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(testing.AllocsPerRun(<span class="number">1</span>, fc)) <span class="comment">// 1</span></span><br><span class="line">	fmt.Println(testing.AllocsPerRun(<span class="number">1</span>, fd)) <span class="comment">// 3</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-Constant/" rel="prev" title="Go_Learning_Fundamental_Constant">
+      <i class="fa fa-chevron-left"></i> Go_Learning_Fundamental_Constant
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-Json/" rel="next" title="Go_Learning_Fundamental_Json">
+      Go_Learning_Fundamental_Json <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Definition"><span class="nav-number">1.</span> <span class="nav-text">Definition</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Base-Data-Structure-of-String-in-Go"><span class="nav-number">1.1.</span> <span class="nav-text">Base Data Structure of String in Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#literal-String-Raw-String-Multi-Line-String"><span class="nav-number">1.2.</span> <span class="nav-text">literal String| Raw String | Multi Line String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Some-Fact-with-String"><span class="nav-number">1.3.</span> <span class="nav-text">Some Fact with String</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Operation-With-String"><span class="nav-number">2.</span> <span class="nav-text">Operation With String</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Compare-String-in-Go"><span class="nav-number">2.1.</span> <span class="nav-text">Compare String in Go</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Loop-Over-String"><span class="nav-number">2.2.</span> <span class="nav-text">Loop Over  String</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-Join-String-Split"><span class="nav-number">2.3.</span> <span class="nav-text">String Join | String Split</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#String-Related-Conversion"><span class="nav-number">2.4.</span> <span class="nav-text">String Related Conversion</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#String-Conversion-With-Byte-And-Rune"><span class="nav-number">2.4.1.</span> <span class="nav-text">String Conversion With Byte And Rune</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Conversion-Between-Byte-And-Rune"><span class="nav-number">2.4.2.</span> <span class="nav-text">Conversion Between Byte And Rune</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Compiler-Optimizations-for-Conversions-Between-Strings-and-Byte-Slices"><span class="nav-number">2.4.3.</span> <span class="nav-text">Compiler Optimizations for Conversions Between Strings and Byte Slices</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>

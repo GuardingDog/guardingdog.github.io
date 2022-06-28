@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="Reference: Blog, Blog, Blog, Blog">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go_Learning_Fundamental_Interface">
+<meta property="og:url" content="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Interface/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="Reference: Blog, Blog, Blog, Blog">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://s2.loli.net/2022/01/23/ADpmqL3zXlbwskn.png">
+<meta property="og:image" content="https://s2.loli.net/2022/01/23/EQCzcRdZWB7sl8L.png">
+<meta property="article:published_time" content="2022-06-28T16:20:00.000Z">
+<meta property="article:modified_time" content="2022-06-28T16:20:48.940Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.loli.net/2022/01/23/ADpmqL3zXlbwskn.png">
+
+<link rel="canonical" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Interface/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Go_Learning_Fundamental_Interface | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Interface/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go_Learning_Fundamental_Interface
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-06-29 00:20:00 / Modified: 00:20:48" itemprop="dateCreated datePublished" datetime="2022-06-29T00:20:00+08:00">2022-06-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/06/29/Go-Learning-Fundamental-Interface/" class="post-meta-item leancloud_visitors" data-flag-title="Go_Learning_Fundamental_Interface" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/06/29/Go-Learning-Fundamental-Interface/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/29/Go-Learning-Fundamental-Interface/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <ul>
+<li>Reference: <a target="_blank" rel="noopener" href="https://golangbot.com/interfaces-part-1/">Blog</a>, <a target="_blank" rel="noopener" href="https://golangbot.com/interfaces-part-2/">Blog</a>, <a target="_blank" rel="noopener" href="https://medium.com/rungo/interfaces-in-go-ab1601159b3a">Blog</a>, <a target="_blank" rel="noopener" href="https://golangbyexample.com/interface-in-golang/">Blog</a></li>
+</ul>
+<a id="more"></a>
+
+<h2 id="What-is-Interface"><a href="#What-is-Interface" class="headerlink" title="What is Interface"></a>What is Interface</h2><p>An Interface in go is <strong>a set of method signatures</strong>; </p>
+<h3 id="What’s-method-signature"><a href="#What’s-method-signature" class="headerlink" title="What’s method signature?"></a>What’s method signature?</h3><p>In my view, method signature is the abstract common represent of method; It declare method behavior and do not care abort special implement details;Here is a <strong>animal</strong> interface which include two method signatures: <strong>breathe</strong> , <strong>walk</strong>;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>A method signature would include:</p>
+<ul>
+<li>Name of method;</li>
+<li>Number of arguments and type of each argument;</li>
+<li>Number of return values and type of each return value;</li>
+</ul>
+<h3 id="How-does-struct-implement-a-Interface-in-go"><a href="#How-does-struct-implement-a-Interface-in-go" class="headerlink" title="How does struct implement a Interface in go?"></a>How does struct implement a Interface in go?</h3><p>When a type provides <strong>definition for all the methods in the interface</strong>, it is said to implement the interface; So the implement interface in go is implicit; </p>
+<p>That is also called <strong>duck typing</strong>; In programming duck typing means we do not check type instead we check the only presence os some attributes or methods;</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">If it walks like a duck and quack like a duck then it must be duck</span><br></pre></td></tr></table></figure>
+<h2 id="Declaring-and-implementing-an-interface"><a href="#Declaring-and-implementing-an-interface" class="headerlink" title="Declaring and implementing an interface"></a>Declaring and implementing an interface</h2><p>Like we defined before, any type implement breathe and walk method, It is said to implement a animal interfac; For example we construct a lion struct which implement animal interface; </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">    age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a animal</span><br><span class="line">    a = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">    a.breathe()</span><br><span class="line">    a.walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Lion breathes</span><br><span class="line">Lion walk</span><br></pre></td></tr></table></figure>
+<p>We declare a variable of animal interface type</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a animal</span><br></pre></td></tr></table></figure>
+<p>Then we assign an instance of lion struct to it.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">a = lion&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>Assigning an instance of <strong>lion</strong> struct to a variable of <strong>animal</strong> interface type works because <strong>lion</strong> struct implements both <strong>breathe</strong> and <strong>walk</strong> method of the animal. The type is not checked during this assignment, instead, it is enough to check that the type assigned does implement <strong>breathe</strong> and <strong>walk</strong> method. The concept is similar to duck typing, a <strong>lion</strong> can <strong>breathe</strong> and <strong>walk</strong> like an <strong>animal</strong> and hence it is an <strong>animal</strong>.</p>
+<h2 id="Practical-use-of-Interface"><a href="#Practical-use-of-Interface" class="headerlink" title="Practical use of Interface"></a>Practical use of Interface</h2><p>The above example explain how to create and implement interfaces, but it didn’t really show the practical use of an interface; Instead of <code>animal.breathe()</code>, it would also worked if we use <code>lion.breathe()</code>; Now let’s look at a practical use of interface;</p>
+<p>We will write a simple program that calculates the total expense for a company based on the individual salaries of the employees. For brevity, we have assumed that all expenses are in USD.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SalaryCalculator <span class="keyword">interface</span> &#123;  </span><br><span class="line">    CalculateSalary() <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Permanent <span class="keyword">struct</span> &#123;  </span><br><span class="line">    empId    <span class="keyword">int</span></span><br><span class="line">    basicpay <span class="keyword">int</span></span><br><span class="line">    pf       <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Contract <span class="keyword">struct</span> &#123;  </span><br><span class="line">    empId    <span class="keyword">int</span></span><br><span class="line">    basicpay <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//salary of permanent employee is the sum of basic pay and pf</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Permanent)</span> <span class="title">CalculateSalary</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> p.basicpay + p.pf</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//salary of contract employee is the basic pay alone</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Contract)</span> <span class="title">CalculateSalary</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> c.basicpay</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">total expense is calculated by iterating through the SalaryCalculator slice and summing  </span></span><br><span class="line"><span class="comment">the salaries of the individual employees  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">totalExpense</span><span class="params">(s []SalaryCalculator)</span></span> &#123;  </span><br><span class="line">    expense := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        expense = expense + v.CalculateSalary()</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Total Expense Per Month $%d&quot;</span>, expense)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    pemp1 := Permanent&#123;</span><br><span class="line">        empId:    <span class="number">1</span>,</span><br><span class="line">        basicpay: <span class="number">5000</span>,</span><br><span class="line">        pf:       <span class="number">20</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    pemp2 := Permanent&#123;</span><br><span class="line">        empId:    <span class="number">2</span>,</span><br><span class="line">        basicpay: <span class="number">6000</span>,</span><br><span class="line">        pf:       <span class="number">30</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    cemp1 := Contract&#123;</span><br><span class="line">        empId:    <span class="number">3</span>,</span><br><span class="line">        basicpay: <span class="number">3000</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    employees := []SalaryCalculator&#123;pemp1, pemp2, cemp1&#125;</span><br><span class="line">    totalExpense(employees)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/3DZQH_Xh_Pl">Run in playground</a></p>
+<p>Line no. 7 of the above program declares the <code>SalaryCalculator</code> interface with a single method <code>CalculateSalary() int</code>.</p>
+<p>We have two kinds of employees in the company, <code>Permanent</code> and <code>Contract</code> defined by <a target="_blank" rel="noopener" href="https://golangbot.com/structs/">structs</a> in line no. 11 and 17. The salary of permanent employees is the sum of the <code>basicpay</code> and <code>pf</code> whereas for contract employees it’s just the basic pay <code>basicpay</code>. This is expressed in the corresponding <code>CalculateSalary</code> methods in line. no 23 and 28 respectively. By declaring this method, both <code>Permanent</code> and <code>Contract</code> structs now implement the <code>SalaryCalculator</code> interface.</p>
+<p>The <code>totalExpense</code> <a target="_blank" rel="noopener" href="https://golangbot.com/functions/">function</a> declared in line no.36 expresses the beauty of interfaces. This method takes a <a target="_blank" rel="noopener" href="https://golangbot.com/arrays-and-slices/">slice</a> of SalaryCalculator interface <code>[]SalaryCalculator</code> as a parameter. In line no. 59 we pass a slice that contains both <code>Permanent</code> and <code>Contract</code> types to the <code>totalExpense</code> function. The <code>totalExpense</code> function calculates the expense by calling the <code>CalculateSalary</code> method of the corresponding type. This is done in line. no 39.</p>
+<p>The program outputs</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Total Expense Per Month $14050  </span><br></pre></td></tr></table></figure>
+<p>The biggest advantage of this is that <code>totalExpense</code> can be extended to any new employee type without any code changes. Let’s say the company adds a new type of employee <code>Freelancer</code> with a different salary structure. This <code>Freelancer</code> can just be passed in the slice argument to <code>totalExpense</code> without even a single line of code change to the <code>totalExpense</code> function. This method will do what it’s supposed to do as <code>Freelancer</code> will also implement the <code>SalaryCalculator</code> interface :).</p>
+<p>Let’s modify this program and add the new <code>Freelancer</code> employee. Salary for the Freelancer is the product of rate per hour and total no of hours worked.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SalaryCalculator <span class="keyword">interface</span> &#123;  </span><br><span class="line">    CalculateSalary() <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Permanent <span class="keyword">struct</span> &#123;  </span><br><span class="line">    empId    <span class="keyword">int</span></span><br><span class="line">    basicpay <span class="keyword">int</span></span><br><span class="line">    pf       <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Contract <span class="keyword">struct</span> &#123;  </span><br><span class="line">    empId    <span class="keyword">int</span></span><br><span class="line">    basicpay <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Freelancer <span class="keyword">struct</span> &#123;  </span><br><span class="line">    empId       <span class="keyword">int</span></span><br><span class="line">    ratePerHour <span class="keyword">int</span></span><br><span class="line">    totalHours  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//salary of permanent employee is sum of basic pay and pf</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Permanent)</span> <span class="title">CalculateSalary</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> p.basicpay + p.pf</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//salary of contract employee is the basic pay alone</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Contract)</span> <span class="title">CalculateSalary</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> c.basicpay</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//salary of freelancer</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f Freelancer)</span> <span class="title">CalculateSalary</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> f.ratePerHour * f.totalHours</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">total expense is calculated by iterating through the SalaryCalculator slice and summing  </span></span><br><span class="line"><span class="comment">the salaries of the individual employees  </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">totalExpense</span><span class="params">(s []SalaryCalculator)</span></span> &#123;  </span><br><span class="line">    expense := <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> _, v := <span class="keyword">range</span> s &#123;</span><br><span class="line">        expense = expense + v.CalculateSalary()</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Total Expense Per Month $%d&quot;</span>, expense)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    pemp1 := Permanent&#123;</span><br><span class="line">        empId:    <span class="number">1</span>,</span><br><span class="line">        basicpay: <span class="number">5000</span>,</span><br><span class="line">        pf:       <span class="number">20</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    pemp2 := Permanent&#123;</span><br><span class="line">        empId:    <span class="number">2</span>,</span><br><span class="line">        basicpay: <span class="number">6000</span>,</span><br><span class="line">        pf:       <span class="number">30</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    cemp1 := Contract&#123;</span><br><span class="line">        empId:    <span class="number">3</span>,</span><br><span class="line">        basicpay: <span class="number">3000</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    freelancer1 := Freelancer&#123;</span><br><span class="line">        empId:       <span class="number">4</span>,</span><br><span class="line">        ratePerHour: <span class="number">70</span>,</span><br><span class="line">        totalHours:  <span class="number">120</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    freelancer2 := Freelancer&#123;</span><br><span class="line">        empId:       <span class="number">5</span>,</span><br><span class="line">        ratePerHour: <span class="number">100</span>,</span><br><span class="line">        totalHours:  <span class="number">100</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    employees := []SalaryCalculator&#123;pemp1, pemp2, cemp1, freelancer1, freelancer2&#125;</span><br><span class="line">    totalExpense(employees)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/J48P5g8ArLn">Run in playground</a></p>
+<p>We have added the <code>Freelancer</code> struct in line no. 22 and declared the <code>CalculateSalary</code> method in line no. 39. No other code change is required in the <code>totalExpense</code> method since <code>Freelancer</code> struct also implements the <code>SalaryCalculator</code> interface. We added a couple of <code>Freelancer</code> employees in the <code>main</code> method. This program prints,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Total Expense Per Month $32450  </span><br></pre></td></tr></table></figure>
+<h2 id="Interface-are-implemented-implicitly"><a href="#Interface-are-implemented-implicitly" class="headerlink" title="Interface are implemented implicitly"></a>Interface are implemented implicitly</h2><p>There is no explicit declaration that a type implements an interface. In fact, in Go there doesn’t exist any <strong>“implements”</strong> keyword similar to Java. A type implements an interface if it implements all the methods of the interface.</p>
+<p>As seen above, It is correct to define a variable of an interface type and we can assign any concrete type value to this variable if the concrete type implements all the methods of the interface.</p>
+<p>There is no explicit declaration that says that <strong>lion</strong> struct implements the <strong>animal</strong> interface. During compilation, go notices that <strong>lion</strong> struct implements all methods of <strong>animal</strong> interface hence it is allowed. Any other type which implements all methods of the <strong>animal</strong> interface becomes of that interface type.</p>
+<p>Let’s see a more complex example of another type implementing the animal interface.</p>
+<p>If we define a <strong>dog</strong> struct and it implements the <strong>breathe</strong> and <strong>walk</strong> method then it will also be an animal.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">     age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">     age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a animal</span><br><span class="line">    </span><br><span class="line">    a = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">    a.breathe()</span><br><span class="line">    a.walk()</span><br><span class="line">  </span><br><span class="line">    a = dog&#123;age: <span class="number">5</span>&#125;</span><br><span class="line">    a.breathe()</span><br><span class="line">    a.walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Lion breathes</span><br><span class="line">Lion walk</span><br><span class="line">Dog breathes</span><br><span class="line">Dog walk</span><br></pre></td></tr></table></figure>
+<p>Both <strong>lion</strong> and <strong>dog</strong> implement the breathe and walk method hence they are of animal type and can correctly be assigned to a variable of interface type.</p>
+<p>The <strong>animal</strong> interface variable a was assigned a <strong>lion</strong> instance first and then the same variable was assigned a <strong>dog</strong> instance. So the type which interface variable refers to is dynamic. It dynamically holds a reference to the underlying type.</p>
+<p>Two important points to note:</p>
+<ul>
+<li>The interface static check is done during compile time – means that if a type doesn’t implement all the methods of an interface, then assigning the type instance to a variable of that interface type will raise an error during compile time. Eg. on deleting the walk method defined on lion struct, below error will be raised during the assignment</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cannot use lion literal (<span class="keyword">type</span> lion) as <span class="keyword">type</span> animal in assignment:</span><br></pre></td></tr></table></figure>
+<ul>
+<li>The correct method based on the type of instance is called at run time – means that the method of either lion or dog is called depending upon whether interface variable refers to an instance of lion or dog. If it refers to an instance of lion, then lion’s method is called and if it refers to an instance of dog, then dog’s method is called. That is also proven from the output. This is a way to achieve runtime polymorphism in Go.</li>
+</ul>
+<p>It is also to be noted that the methods defined by the type, should match the entire signature of methods in the interface ie., it should match</p>
+<ul>
+<li><p>Name of the method</p>
+</li>
+<li><p>Number of arguments and type of each argument</p>
+</li>
+<li><p>Number of return values and type of each return value</p>
+</li>
+</ul>
+<p>Imagine that <strong>animal</strong> interface has another method <strong>speed</strong> which returns the int value of speed of the animal</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">    speed() <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>If the <strong>lion</strong> struct has <strong>speed</strong> method as below which does not return the int value, then the <strong>lion</strong> struct will not implement <strong>animal</strong> interface</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">speed</span><span class="params">()</span></span></span><br></pre></td></tr></table></figure>
+<p>Below compilation error will be raised on assigning the lion instance to a variable of type animal</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cannot use lion literal (<span class="keyword">type</span> lion) as <span class="keyword">type</span> animal in assignment:</span><br><span class="line">        lion does not implement animal (wrong <span class="keyword">type</span> <span class="keyword">for</span> speed method)</span><br><span class="line">                have speed()</span><br><span class="line">                want speed() <span class="keyword">int</span></span><br></pre></td></tr></table></figure>
+<p>So in essence, method signatures are important while implementing an interface</p>
+<h2 id="Interface-as-argument-to-a-function"><a href="#Interface-as-argument-to-a-function" class="headerlink" title="Interface as argument to a function"></a>Interface as argument to a function</h2><p>A function can accept an argument of an interface type. Any type which implements that interface can be passed as that argument to that function. For example, in the below code, we have <strong>callBreathe</strong> and <strong>callWalk</strong> function which accept an argument of <strong>animal</strong> interface type. Both <strong>lion</strong> and <strong>dog</strong> instance can be passed to this function. We create an instance of both lion and dog type and pass it to the function.</p>
+<p>It works similarly to the assignment we discussed above. During compilation no type is checked while calling the function, instead, it is enough to check that the type passed to the function does implement <strong>breathe</strong> and <strong>walk</strong> method.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">     age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">     age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	l := lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">	callBreathe(l)</span><br><span class="line">	callWalk(l)</span><br><span class="line"></span><br><span class="line">	d := dog&#123;age: <span class="number">5</span>&#125;</span><br><span class="line">	callBreathe(d)</span><br><span class="line">	callWalk(d)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">callBreathe</span><span class="params">(a animal)</span></span> &#123;</span><br><span class="line">	a.breathe()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">callWalk</span><span class="params">(a animal)</span></span> &#123;</span><br><span class="line">	a.breathe()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Lion breathes</span><br><span class="line">Lion walk</span><br><span class="line">Dog breathes</span><br><span class="line">Dog walk</span><br></pre></td></tr></table></figure>
+<p>In the above code, we have <strong>callBreathe</strong> and <strong>callWalk</strong> function which accept an argument of <strong>animal</strong> interface type. Both <strong>lion</strong> and <strong>dog</strong> instance can be passed to this function. We create an instance of both <strong>lion</strong> and <strong>dog</strong> type and pass it to the function. During compilation no type is checked while calling the function, instead, it is enough to check that the type passed to the function does implement <strong>breathe</strong> and <strong>walk</strong> method.</p>
+<h2 id="Non-struct-Custom-Type-Implementing-an-interface"><a href="#Non-struct-Custom-Type-Implementing-an-interface" class="headerlink" title="Non-struct Custom Type Implementing an interface"></a>Non-struct Custom Type Implementing an interface</h2><p>So far we have only seen examples of struct type implementing an interface. It is also perfectly ok for any non-struct custom type to implement an interface. Let’s see an example</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> cat <span class="keyword">string</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c cat)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Cat breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c cat)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Cat walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a animal</span><br><span class="line"></span><br><span class="line">	a = cat(<span class="string">&quot;smokey&quot;</span>)</span><br><span class="line">	a.breathe()</span><br><span class="line">	a.walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Cat breathes</span><br><span class="line">Cat walk</span><br></pre></td></tr></table></figure>
+<p>The above program illustrates the concept that any custom type can also implement an interface. The <strong>cat</strong> is of string type and it implements the <strong>breathe</strong> and <strong>walk</strong> method hence it is correct to assign an instance of <strong>cat</strong> type to a variable of <strong>animal</strong> type.</p>
+<h2 id="Interface-inner-representation"><a href="#Interface-inner-representation" class="headerlink" title="Interface inner representation"></a>Interface inner representation</h2><p>Like any other variable, an interface variable is represented by a type and value. Interface value, in turn under the hood, consists of two tuple</p>
+<ul>
+<li>Underlying Type</li>
+<li>Underlying Value</li>
+</ul>
+<p>See below diagram which illustrates what we mentioned above</p>
+<p><img src="https://s2.loli.net/2022/01/23/ADpmqL3zXlbwskn.png" alt="image-20220123183736969"></p>
+<p>For eg in case of lion struct implementing the animal interface would be like below</p>
+<p><img src="https://s2.loli.net/2022/01/23/EQCzcRdZWB7sl8L.png" alt="image-20220123183750961"></p>
+<p>Golang provides format identifiers to print the underlying type and underlying value represented by the interface value.</p>
+<ul>
+<li><p>%T can be used to print the concrete type of the interface value</p>
+</li>
+<li><p>%v can be used to print the concrete value of the interface value.</p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">    age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> a animal</span><br><span class="line">    a = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Underlying Type: %T\n&quot;</span>, a)</span><br><span class="line">    fmt.Printf(<span class="string">&quot;Underlying Value: %v\n&quot;</span>, a)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Concrete Type: main.lion</span><br><span class="line">Concrete Value: &#123;<span class="number">10</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>An interface can be embedded in other interface as well as it can be embedded in a struct. Let’s look at each one by one</p>
+<h2 id="Empty-Interface"><a href="#Empty-Interface" class="headerlink" title="Empty Interface"></a>Empty Interface</h2><p><strong>An interface that has zero methods is called an empty interface. It is represented as <code>interface&#123;&#125;</code>.</strong> Since the empty interface has zero methods, all types implement the empty interface.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">describe</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    fmt.Printf(<span class="string">&quot;Type = %T, value = %v\n&quot;</span>, i, i)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    s := <span class="string">&quot;Hello World&quot;</span></span><br><span class="line">    describe(s)</span><br><span class="line">    i := <span class="number">55</span></span><br><span class="line">    describe(i)</span><br><span class="line">    strt := <span class="keyword">struct</span> &#123;</span><br><span class="line">        name <span class="keyword">string</span></span><br><span class="line">    &#125;&#123;</span><br><span class="line">        name: <span class="string">&quot;Naveen R&quot;</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    describe(strt)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/Fm5KescoJb">Run in playground</a></p>
+<p>In the program above, in line no.7, the <code>describe(i interface&#123;&#125;)</code> function takes an empty interface as an argument and hence any type can be passed.</p>
+<p>We pass <code>string</code>, <code>int</code> and <code>struct</code> to the <code>describe</code> function in line nos. 13, 15 and 21 respectively. This program prints,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Type &#x3D; string, value &#x3D; Hello World  </span><br><span class="line">Type &#x3D; int, value &#x3D; 55  </span><br><span class="line">Type &#x3D; struct &#123; name string &#125;, value &#x3D; &#123;Naveen R&#125;  </span><br></pre></td></tr></table></figure>
+<h2 id="Type-assertion"><a href="#Type-assertion" class="headerlink" title="Type assertion"></a>Type assertion</h2><h3 id="Type-assertion-1"><a href="#Type-assertion-1" class="headerlink" title="Type assertion"></a>Type assertion</h3><p>Type assertion is used to extract the underlying value of the interface.</p>
+<p><strong>i.(T)</strong> is the syntax which is used to get the underlying value of interface <code>i</code> whose concrete type is <code>T</code>.</p>
+<p>A program is worth a thousand words 😀. Let’s write one for type assertion.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assert</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    s := i.(<span class="keyword">int</span>) <span class="comment">//get the underlying int value from i</span></span><br><span class="line">    fmt.Println(s)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> s <span class="keyword">interface</span>&#123;&#125; = <span class="number">56</span></span><br><span class="line">    assert(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/YstKXEeSBL">Run in playground</a></p>
+<p>The concrete type of <code>s</code> in line no. 12 is <code>int</code>. We use the syntax <code>i.(int)</code> in line no. 8 to fetch the underlying int value of i. This program prints <code>56</code>.</p>
+<p>What will happen if the concrete type in the above program is not int? Well, let’s find out.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assert</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    s := i.(<span class="keyword">int</span>) </span><br><span class="line">    fmt.Println(s)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> s <span class="keyword">interface</span>&#123;&#125; = <span class="string">&quot;Steven Paul&quot;</span></span><br><span class="line">    assert(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/88KflSceHK">Run in playground</a></p>
+<p>In the program above we pass <code>s</code> of concrete type <code>string</code> to the <code>assert</code> function which tries to extract a int value from it. This program will panic with the message <code>panic: interface conversion: interface &#123;&#125; is string, not int</code>.</p>
+<p>To solve the above problem, we can use the syntax</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">v, ok :&#x3D; i.(T)  </span><br></pre></td></tr></table></figure>
+<p>If the concrete type of <code>i</code> is <code>T</code> then <code>v</code> will have the underlying value of <code>i</code> and <code>ok</code> will be true.</p>
+<p>If the concrete type of <code>i</code> is not <code>T</code> then <code>ok</code> will be false and <code>v</code> will have the zero value of type <code>T</code> and <strong>the program will not panic</strong>.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">assert</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    v, ok := i.(<span class="keyword">int</span>)</span><br><span class="line">    fmt.Println(v, ok)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> s <span class="keyword">interface</span>&#123;&#125; = <span class="number">56</span></span><br><span class="line">    assert(s)</span><br><span class="line">    <span class="keyword">var</span> i <span class="keyword">interface</span>&#123;&#125; = <span class="string">&quot;Steven Paul&quot;</span></span><br><span class="line">    assert(i)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/0sB-KlVw8A">Run in playground</a></p>
+<p>When <code>Steven Paul</code> is passed to the <code>assert</code> function, <code>ok</code> will be false since the concrete type of <code>i</code> is not <code>int</code> and <code>v</code> will have the value 0 which is the zero value of <code>int</code>. This program will print,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">56 true  </span><br><span class="line">0 false  </span><br></pre></td></tr></table></figure>
+<h2 id="Type-switch"><a href="#Type-switch" class="headerlink" title="Type switch"></a>Type switch</h2><p><strong>A type switch is used to compare the concrete type of an interface against multiple types specified in various case statements. It is similar to <a target="_blank" rel="noopener" href="https://golangbot.com/switch/">switch case</a>. The only difference being the cases specify types and not values as in normal switch.</strong></p>
+<p>The syntax for type switch is similar to Type assertion. In the syntax <code>i.(T)</code> for Type assertion, the type <code>T</code> should be replaced by the keyword <code>type</code> for type switch. Let’s see how this works in the program below.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findType</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    <span class="keyword">switch</span> i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">string</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;I am a string and my value is %s\n&quot;</span>, i.(<span class="keyword">string</span>))</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;I am an int and my value is %d\n&quot;</span>, i.(<span class="keyword">int</span>))</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Unknown type\n&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    findType(<span class="string">&quot;Naveen&quot;</span>)</span><br><span class="line">    findType(<span class="number">77</span>)</span><br><span class="line">    findType(<span class="number">89.98</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/XYPDwOvoCh">Run in playground</a></p>
+<p>In line no. 8 of the above program, <code>switch i.(type)</code> specifies a type switch. Each of the case statements compare the concrete type of <code>i</code> to a specific type. If any case matches, the corresponding statement is printed. This program outputs,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">I am a string and my value is Naveen  </span><br><span class="line">I am an int and my value is 77  </span><br><span class="line">Unknown type  </span><br></pre></td></tr></table></figure>
+<p><em>89.98</em> in line no. 20 is of type <code>float64</code> and does not match any of the cases and hence <code>Unknown type</code> is printed in the last line.</p>
+<p><strong>It is also possible to compare a type to an interface. If we have a type and if that type implements an interface, it is possible to compare this type with the interface it implements.</strong></p>
+<p>Let’s write a program for more clarity.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Describer <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Describe()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;  </span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">    age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span> <span class="title">Describe</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Printf(<span class="string">&quot;%s is %d years old&quot;</span>, p.name, p.age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">findType</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;  </span><br><span class="line">    <span class="keyword">switch</span> v := i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> Describer:</span><br><span class="line">        v.Describe()</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;unknown type\n&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    findType(<span class="string">&quot;Naveen&quot;</span>)</span><br><span class="line">    p := Person&#123;</span><br><span class="line">        name: <span class="string">&quot;Naveen R&quot;</span>,</span><br><span class="line">        age:  <span class="number">25</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    findType(p)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/o6aHzIz4wC">Run in playground</a></p>
+<p>In the program above, the <code>Person</code> struct implements the <code>Describer</code> interface. In the case statement in line no. 19, <code>v</code> is compared to the <code>Describer</code> interface type. <code>p</code> implements <code>Describer</code> and hence this case is satisfied and <code>Describe()</code> method is called.</p>
+<p>This program prints</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unknown type  </span><br><span class="line">Naveen R is 25 years old  </span><br></pre></td></tr></table></figure>
+<p>This brings us to the end of Interfaces Part I. We will continue our discussion about interfaces in Part II. Please leave your valuable feedback in the comments.</p>
+<h2 id="Compare-with-pointer-receiver-and-value-receiver"><a href="#Compare-with-pointer-receiver-and-value-receiver" class="headerlink" title="Compare with pointer receiver and value receiver"></a>Compare with pointer receiver and value receiver</h2><p>All the example interfaces we discussed in <a target="_blank" rel="noopener" href="https://golangbot.com/interfaces-part-1/">part 1</a> were implemented using value receivers. It is also possible to implement interfaces using pointer receivers. There is a subtlety to be noted while implementing interfaces using pointer receivers. Lets understand that using the following program.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Describer <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Describe()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span> &#123;  </span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">    age  <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p Person)</span> <span class="title">Describe</span><span class="params">()</span></span> &#123; <span class="comment">//implemented using value receiver  </span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;%s is %d years old\n&quot;</span>, p.name, p.age)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Address <span class="keyword">struct</span> &#123;  </span><br><span class="line">    state   <span class="keyword">string</span></span><br><span class="line">    country <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *Address)</span> <span class="title">Describe</span><span class="params">()</span></span> &#123; <span class="comment">//implemented using pointer receiver  </span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;State %s Country %s&quot;</span>, a.state, a.country)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> d1 Describer</span><br><span class="line">    p1 := Person&#123;<span class="string">&quot;Sam&quot;</span>, <span class="number">25</span>&#125;</span><br><span class="line">    d1 = p1</span><br><span class="line">    d1.Describe()</span><br><span class="line">    p2 := Person&#123;<span class="string">&quot;James&quot;</span>, <span class="number">32</span>&#125;</span><br><span class="line">    d1 = &amp;p2</span><br><span class="line">    d1.Describe()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> d2 Describer</span><br><span class="line">    a := Address&#123;<span class="string">&quot;Washington&quot;</span>, <span class="string">&quot;USA&quot;</span>&#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* compilation error if the following line is</span></span><br><span class="line"><span class="comment">       uncommented</span></span><br><span class="line"><span class="comment">       cannot use a (type Address) as type Describer</span></span><br><span class="line"><span class="comment">       in assignment: Address does not implement</span></span><br><span class="line"><span class="comment">       Describer (Describe method has pointer</span></span><br><span class="line"><span class="comment">       receiver)</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    <span class="comment">//d2 = a</span></span><br><span class="line"></span><br><span class="line">    d2 = &amp;a <span class="comment">//This works since Describer interface</span></span><br><span class="line">    <span class="comment">//is implemented by Address pointer in line 22</span></span><br><span class="line">    d2.Describe()</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/IzspYiAQ82">Run in playground</a></p>
+<p>In the program above, the <code>Person</code> struct implements the <code>Describer</code> interface using value receiver in line no. 13.</p>
+<p>As we have already learnt during our discussion about <a target="_blank" rel="noopener" href="https://golangbot.com/methods#valuereceiversinmethodsvsvalueargumentsinfunctions">methods</a>, methods with value receivers accept both pointer and value receivers. <em>It is legal to call a value method on anything which is a value or whose value can be dereferenced.</em></p>
+<p><em>p1</em> is a value of type <code>Person</code> and it is assigned to <code>d1</code> in line no. 29. <code>Person</code> implements the <code>Describer</code> interface and hence line no. 30 will print <code>Sam is 25 years old</code>.</p>
+<p>Similarly <code>d1</code> is assigned to <code>&amp;p2</code> in line no. 32 and hence line no. 33 will print <code>James is 32 years old</code>. Awesome :).</p>
+<p>The <code>Address</code> struct implements the <code>Describer</code> interface using pointer receiver in line no. 22.</p>
+<p>If line. no 45 of the program above is uncommented, we will get the compilation error <strong>main.go:42: cannot use a (type Address) as type Describer in assignment: Address does not implement Describer (Describe method has pointer receiver)</strong>. This is because, the <code>Describer</code> interface is implemented using a Address Pointer receiver in line 22 and we are trying to assign <code>a</code> which is a value type and it has not implemented the <code>Describer</code> interface. This will definitely surprise you since we learnt earlier that <a target="_blank" rel="noopener" href="https://golangbot.com/methods/#pointerreceiversinmethodsvspointerargumentsinfunctions">methods</a> with pointer receivers will accept both pointer and value receivers. Then why isn’t the code in line no. 45 working.</p>
+<p><strong>The reason is that it is legal to call a pointer-valued method on anything that is already a pointer or whose address can be taken. The concrete value stored in an interface is not addressable and hence it is not possible for the compiler to automatically take the address of <code>a</code> in line no. 45 and hence this code fails.</strong></p>
+<p>Line no. 47 works because we are assigning the address of a <code>&amp;a</code> to <code>d2</code>.</p>
+<p>The rest of the program is self explanatory. This program will print,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Sam is 25 years old  </span><br><span class="line">James is 32 years old  </span><br><span class="line">State Washington Country USA  </span><br></pre></td></tr></table></figure>
+<h2 id="Multiple-Interface"><a href="#Multiple-Interface" class="headerlink" title="Multiple Interface"></a>Multiple Interface</h2><p>A type can implement more than one interface. Lets see how this is done in the following program.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (  </span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SalaryCalculator <span class="keyword">interface</span> &#123;  </span><br><span class="line">    DisplaySalary()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> LeaveCalculator <span class="keyword">interface</span> &#123;  </span><br><span class="line">    CalculateLeavesLeft() <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Employee <span class="keyword">struct</span> &#123;  </span><br><span class="line">    firstName <span class="keyword">string</span></span><br><span class="line">    lastName <span class="keyword">string</span></span><br><span class="line">    basicPay <span class="keyword">int</span></span><br><span class="line">    pf <span class="keyword">int</span></span><br><span class="line">    totalLeaves <span class="keyword">int</span></span><br><span class="line">    leavesTaken <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e Employee)</span> <span class="title">DisplaySalary</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    fmt.Printf(<span class="string">&quot;%s %s has salary $%d&quot;</span>, e.firstName, e.lastName, (e.basicPay + e.pf))</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e Employee)</span> <span class="title">CalculateLeavesLeft</span><span class="params">()</span> <span class="title">int</span></span> &#123;  </span><br><span class="line">    <span class="keyword">return</span> e.totalLeaves - e.leavesTaken</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    e := Employee &#123;</span><br><span class="line">        firstName: <span class="string">&quot;Naveen&quot;</span>,</span><br><span class="line">        lastName: <span class="string">&quot;Ramanathan&quot;</span>,</span><br><span class="line">        basicPay: <span class="number">5000</span>,</span><br><span class="line">        pf: <span class="number">200</span>,</span><br><span class="line">        totalLeaves: <span class="number">30</span>,</span><br><span class="line">        leavesTaken: <span class="number">5</span>,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> s SalaryCalculator = e</span><br><span class="line">    s.DisplaySalary()</span><br><span class="line">    <span class="keyword">var</span> l LeaveCalculator = e</span><br><span class="line">    fmt.Println(<span class="string">&quot;\nLeaves left =&quot;</span>, l.CalculateLeavesLeft())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/DJxS5zxBcV">Run in playground</a></p>
+<p>The program above has two interfaces <code>SalaryCalculator</code> and <code>LeaveCalculator</code> declared in lines 7 and 11 respectively.</p>
+<p>The <code>Employee</code> struct defined in line no. 15 provides implementations for the <code>DisplaySalary</code> method of <code>SalaryCalculator</code> interface in line no. 24 and the <code>CalculateLeavesLeft</code> method of <code>LeaveCalculator</code> interface interface in line no. 28. Now <code>Employee</code> implements both <code>SalaryCalculator</code> and <code>LeaveCalculator</code> interfaces.</p>
+<p>In line no. 41 we assign <code>e</code> to a variable of type <code>SalaryCalculator</code> interface and in line no. 43 we assign the same variable <code>e</code> to a variable of type <code>LeaveCalculator</code>. This is possible since <code>e</code> which of type <code>Employee</code> implements both <code>SalaryCalculator</code> and <code>LeaveCalculator</code> interfaces.</p>
+<p>This program outputs,</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Naveen Ramanathan has salary $5200  </span><br><span class="line">Leaves left &#x3D; 25  </span><br></pre></td></tr></table></figure>
+<h2 id="Embedding-Interfaces"><a href="#Embedding-Interfaces" class="headerlink" title="Embedding Interfaces"></a>Embedding Interfaces</h2><p>An interface can be embedded in other interface as well as it can be embedded in a struct. Let’s look at each one by one</p>
+<h3 id="Embedding-interface-in-other-interface"><a href="#Embedding-interface-in-other-interface" class="headerlink" title="Embedding interface in other interface"></a>Embedding interface in other interface</h3><p>An interface can embed any number of interfaces in it as well as it can be embedded in any interface. All the methods of the embedded interface become part of the embedding interface. It is a way of creating a new interface by merging some small interfaces. Let’s understand it with an example</p>
+<p>Assume we have an interface <strong>animal</strong> as below</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Let’s say there is another interface named <strong>human</strong> which embeds the <strong>animal</strong> interface</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> human <span class="keyword">interface</span> &#123;</span><br><span class="line">    animal</span><br><span class="line">    speak()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>So if any type needs to implement the <strong>human</strong> interface, then it has to define</p>
+<ul>
+<li><p><strong>breathe()</strong> and <strong>walk()</strong> method of animal interfaces animal is embedded in human</p>
+</li>
+<li><p><strong>speak()</strong> method of human interface</p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> human <span class="keyword">interface</span> &#123;</span><br><span class="line">	animal</span><br><span class="line">	speak()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> employee <span class="keyword">struct</span> &#123;</span><br><span class="line">	name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e employee)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Employee breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e employee)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Employee walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e employee)</span> <span class="title">speak</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Employee speaks&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> h human</span><br><span class="line"></span><br><span class="line">	h = employee&#123;name: <span class="string">&quot;John&quot;</span>&#125;</span><br><span class="line">	h.breathe()</span><br><span class="line">	h.walk()</span><br><span class="line">	h.speak()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Employee breathes</span><br><span class="line">Employee walk</span><br><span class="line">Employee speaks</span><br></pre></td></tr></table></figure>
+<p>As an other example, the ReaderWriter interface of the <strong>io</strong> package of golang (<a target="_blank" rel="noopener" href="https://golang.org/pkg/io/#ReadWriter">https://golang.org/pkg/io/#ReadWriter</a>) embeds two other interfaces</p>
+<ul>
+<li><p>The reader interface – <a target="_blank" rel="noopener" href="https://golang.org/pkg/io/#Reader">https://golang.org/pkg/io/#Reader</a></p>
+</li>
+<li><p>The writer interface  – <a target="_blank" rel="noopener" href="https://golang.org/pkg/io/#Writer">https://golang.org/pkg/io/#Writer</a></p>
+</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> ReadWriter <span class="keyword">interface</span> &#123;</span><br><span class="line">    Reader</span><br><span class="line">    Writer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Embedding-interface-in-a-struct"><a href="#Embedding-interface-in-a-struct" class="headerlink" title="Embedding interface in a struct"></a>Embedding interface in a struct</h3><p>An interface can be embedded in a struct as well. All the methods of the embedded interface can be called via that struct. How these methods will be called will depend upon whether the embedded interface is a named field or an unnamed/anonymous field. </p>
+<ul>
+<li><p>If the embedded interface is a named field, then interface methods has to be called via the named interface name</p>
+</li>
+<li><p>If the embedded interface is unnamed/anonymous field then interface methods can be referred directly or via the interface name</p>
+</li>
+</ul>
+<p>Let’s see a program illustrating above points</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">    breathe()</span><br><span class="line">    walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">    age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> pet1 <span class="keyword">struct</span> &#123;</span><br><span class="line">    a    animal</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> pet2 <span class="keyword">struct</span> &#123;</span><br><span class="line">    animal</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    d := dog&#123;age: <span class="number">5</span>&#125;</span><br><span class="line">    p1 := pet1&#123;name: <span class="string">&quot;Milo&quot;</span>, a: d&#125;</span><br><span class="line"></span><br><span class="line">    fmt.Println(p1.name)</span><br><span class="line">    <span class="comment">// p1.breathe()</span></span><br><span class="line">    <span class="comment">// p1.walk()</span></span><br><span class="line">    p1.a.breathe()</span><br><span class="line">    p1.a.walk()</span><br><span class="line"></span><br><span class="line">    p2 := pet2&#123;name: <span class="string">&quot;Oscar&quot;</span>, animal: d&#125;</span><br><span class="line">    fmt.Println(p1.name)</span><br><span class="line">    p2.breathe()</span><br><span class="line">    p2.walk()</span><br><span class="line">    p1.a.breathe()</span><br><span class="line">    p1.a.walk()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Milo</span><br><span class="line">Dog breathes</span><br><span class="line">Dod walk</span><br><span class="line"></span><br><span class="line">Oscar</span><br><span class="line">Dog breathes</span><br><span class="line">Dog walk</span><br><span class="line">Dog breathes</span><br><span class="line">Dog walk</span><br></pre></td></tr></table></figure>
+<p>We declared two struct <strong>pet1</strong> and <strong>pet2</strong>. <strong>pet1</strong> struct has named <strong>animal</strong> interface in it</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> pet1 <span class="keyword">struct</span> &#123;</span><br><span class="line">    a    animal</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>pet2</strong> has unnamed/anonymous <strong>animal</strong> interface embedded</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> pet2 <span class="keyword">struct</span> &#123;</span><br><span class="line">    animal</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>For an instance of <strong>pet1</strong> struct we call the <strong>breathe()</strong> and <strong>walk()</strong> method like this</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p1.a.breathe()</span><br><span class="line">p1.a.walk()</span><br></pre></td></tr></table></figure>
+<p>Directly calling these methods with raise compilation error</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">p1.breathe()</span><br><span class="line">p1.walk()</span><br><span class="line">p1.breathe undefined (<span class="keyword">type</span> pet1 has no field or method breathe)</span><br><span class="line">p1.walk undefined (<span class="keyword">type</span> pet1 has no field or method walk)</span><br></pre></td></tr></table></figure>
+<p>For an instance of <strong>pet2</strong> struct we can call the <strong>breathe()</strong> and <strong>walk()</strong> method like directly</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p2.breathe()</span><br><span class="line">p2.walk()</span><br></pre></td></tr></table></figure>
+<p>We can directly access the methods of embedded interface if the embedded interface is anonymous or unnamed.</p>
+<p>Below is also valid and another way fo called methods of unnamed/anonymous embedded interface</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p2.animal.breathe()</span><br><span class="line">p2.animal.walk()</span><br></pre></td></tr></table></figure>
+<p>Also note that while creating the instance of either the <strong>pet1</strong> or <strong>pet2</strong> struct, the embedded interface i.e <strong>animal</strong> is initialised with a type implementing it i.e <strong>dog</strong> .</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">p1 := pet1&#123;name: <span class="string">&quot;Milo&quot;</span>, a: d&#125;</span><br><span class="line">p2 := pet2&#123;name: <span class="string">&quot;Oscar&quot;</span>, animal: d&#125;</span><br></pre></td></tr></table></figure>
+<p>If we don’t initialise the embedded interface <strong>animal</strong>, then it will be intialised with the zero value of the interface which is nil. Calling <strong>breathe()</strong> and <strong>walk()</strong> method on such an instance of <strong>pet1</strong> or <strong>pet2</strong> struct will create a panic.</p>
+<h2 id="Access-Undelying-Variable-of-Interface"><a href="#Access-Undelying-Variable-of-Interface" class="headerlink" title="Access Undelying Variable of Interface"></a>Access Undelying Variable of Interface</h2><p>The underlying variable can be accessed in two ways</p>
+<ul>
+<li><p>Type Assertion</p>
+</li>
+<li><p>Type Switch</p>
+</li>
+</ul>
+<h3 id="Type-assertion-2"><a href="#Type-assertion-2" class="headerlink" title="Type assertion"></a>Type assertion</h3><p>Type assertion provides a way to access the underlying variable inside the interface value of the interface by asserting the correct type of underlying value. Below is the syntax for that where <strong>i</strong> is an interface.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val := i.(&#123;<span class="keyword">type</span>&#125;)</span><br></pre></td></tr></table></figure>
+<p>The above statement is asserting that the type of underlying value in the interface is of type {type}. If this is true then the underlying value is assigned to <strong>val.</strong> If not then the above statement panics.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a animal</span><br><span class="line"></span><br><span class="line">	a = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">	<span class="built_in">print</span>(a)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">print</span><span class="params">(a animal)</span></span> &#123;</span><br><span class="line">	l := a.(lion)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;Age: %d\n&quot;</span>, l.age)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//d := a.(dog)</span></span><br><span class="line">	<span class="comment">//fmt.Printf(&quot;Age: %d\n&quot;, d.age)</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Age: <span class="number">10</span></span><br></pre></td></tr></table></figure>
+<p>This is how we assert the variable <strong>a</strong> of type <strong>animal</strong> to have underlying type as <strong>lion</strong>.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">l := a.(lion)</span><br></pre></td></tr></table></figure>
+<p>Below line will create a panic as underlying type is <strong>lion</strong> and not <strong>dog</strong>. Uncomment the line to check it out</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//d := a.(dog)</span></span><br></pre></td></tr></table></figure>
+<p>Type assertion provides another way to get the underlying value and which also prevents a panic. The syntax for that is</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">val, ok := i.()</span><br></pre></td></tr></table></figure>
+<p>In this case type assertion returns two values, the first value is the same as discussed above, the other value is boolean indicating whether the type assertion was correct or not. This value is</p>
+<ul>
+<li><p>true if the type assertion is correct meaning the type asserted is same as the underlying type</p>
+</li>
+<li><p>false if the type assertion fails.</p>
+</li>
+</ul>
+<p>So the second is a good way of doing type assertion since it prevents a panic. Let’s see an example</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a animal</span><br><span class="line"></span><br><span class="line">	a = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">	<span class="built_in">print</span>(a)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">print</span><span class="params">(a animal)</span></span> &#123;</span><br><span class="line">	l, ok := a.(lion)</span><br><span class="line">	<span class="keyword">if</span> ok &#123;</span><br><span class="line">		fmt.Println(l)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;a is not of type lion&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	d, ok := a.(dog)</span><br><span class="line">	<span class="keyword">if</span> ok &#123;</span><br><span class="line">		fmt.Println(d)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;a is not of type lion&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output:</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;<span class="number">10</span>&#125;</span><br><span class="line">a is not of <span class="keyword">type</span> lion</span><br></pre></td></tr></table></figure>
+<p>Let’s move on to type switch now.</p>
+<h3 id="Type-switch-1"><a href="#Type-switch-1" class="headerlink" title="Type switch"></a>Type switch</h3><p>Type switch enables us to do above type assertion in series. See below code example for the same</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span> &#123;</span><br><span class="line">	breathe()</span><br><span class="line">	walk()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> lion <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(l lion)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Lion walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span> &#123;</span><br><span class="line">	age <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">breathe</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog breathes&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d dog)</span> <span class="title">walk</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Dog walk&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> a animal</span><br><span class="line"></span><br><span class="line">	x = lion&#123;age: <span class="number">10</span>&#125;</span><br><span class="line">	<span class="built_in">print</span>(x)</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">print</span><span class="params">(a animal)</span></span> &#123;</span><br><span class="line">	<span class="keyword">switch</span> v := a.(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> lion:</span><br><span class="line">		fmt.Println(<span class="string">&quot;Type: lion&quot;</span>)</span><br><span class="line">	<span class="keyword">case</span> dog:</span><br><span class="line">		fmt.Println(<span class="string">&quot;Type: dog&quot;</span>)</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Unknown Type %T&quot;</span>, v)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>Output:</strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Type: lion</span><br></pre></td></tr></table></figure>
+<p>In the code above, using the type switch we determine the type of value contained in interface variable x is <strong>lion</strong> or <strong>dog</strong> or some other type. It is also ok to add more different types in case statement</p>
+<h2 id="Zero-Interface"><a href="#Zero-Interface" class="headerlink" title="Zero Interface"></a>Zero Interface</h2><p>The zero value of a interface is nil. A nil interface has both its underlying value and as well as concrete type as nil.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Describer <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Describe()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> d1 Describer</span><br><span class="line">    <span class="keyword">if</span> d1 == <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">&quot;d1 is nil and has type %T value %v\n&quot;</span>, d1, d1)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/vwYHC6Y78H">Run in playground</a></p>
+<p><em>d1</em> in the above program is <code>nil</code> and this program will output</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d1 is nil and has type &lt;nil&gt; value &lt;nil&gt;  </span><br></pre></td></tr></table></figure>
+<p>If we try to call a method on the <code>nil</code> interface, the program will panic since the <code>nil</code> interface neither has a underlying value nor a concrete type.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Describer <span class="keyword">interface</span> &#123;  </span><br><span class="line">    Describe()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;  </span><br><span class="line">    <span class="keyword">var</span> d1 Describer</span><br><span class="line">    d1.Describe()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="https://play.golang.org/p/rM-rY0uGTI">Run in playground</a></p>
+<p>Since <code>d1</code> in the program above is <code>nil</code>, this program will panic with runtime error <strong>panic: runtime error: invalid memory address or nil pointer dereference<br>[signal SIGSEGV: segmentation violation code=0xffffffff addr=0x0 pc=0xc8527]</strong></p>
+<h2 id="Interface-comparison"><a href="#Interface-comparison" class="headerlink" title="Interface comparison"></a>Interface comparison</h2><h2 id="Conclusion"><a href="#Conclusion" class="headerlink" title="Conclusion"></a>Conclusion</h2>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-Allocation/" rel="prev" title="Go_Learning_Fundamental_Allocation">
+      <i class="fa fa-chevron-left"></i> Go_Learning_Fundamental_Allocation
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/06/29/Go-Learning-Fundamental-format/" rel="next" title="Go_Learning_Fundamental_format">
+      Go_Learning_Fundamental_format <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#What-is-Interface"><span class="nav-number">1.</span> <span class="nav-text">What is Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#What%E2%80%99s-method-signature"><span class="nav-number">1.1.</span> <span class="nav-text">What’s method signature?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#How-does-struct-implement-a-Interface-in-go"><span class="nav-number">1.2.</span> <span class="nav-text">How does struct implement a Interface in go?</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Declaring-and-implementing-an-interface"><span class="nav-number">2.</span> <span class="nav-text">Declaring and implementing an interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Practical-use-of-Interface"><span class="nav-number">3.</span> <span class="nav-text">Practical use of Interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interface-are-implemented-implicitly"><span class="nav-number">4.</span> <span class="nav-text">Interface are implemented implicitly</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interface-as-argument-to-a-function"><span class="nav-number">5.</span> <span class="nav-text">Interface as argument to a function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Non-struct-Custom-Type-Implementing-an-interface"><span class="nav-number">6.</span> <span class="nav-text">Non-struct Custom Type Implementing an interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interface-inner-representation"><span class="nav-number">7.</span> <span class="nav-text">Interface inner representation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Empty-Interface"><span class="nav-number">8.</span> <span class="nav-text">Empty Interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Type-assertion"><span class="nav-number">9.</span> <span class="nav-text">Type assertion</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-assertion-1"><span class="nav-number">9.1.</span> <span class="nav-text">Type assertion</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Type-switch"><span class="nav-number">10.</span> <span class="nav-text">Type switch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compare-with-pointer-receiver-and-value-receiver"><span class="nav-number">11.</span> <span class="nav-text">Compare with pointer receiver and value receiver</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Multiple-Interface"><span class="nav-number">12.</span> <span class="nav-text">Multiple Interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Embedding-Interfaces"><span class="nav-number">13.</span> <span class="nav-text">Embedding Interfaces</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding-interface-in-other-interface"><span class="nav-number">13.1.</span> <span class="nav-text">Embedding interface in other interface</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Embedding-interface-in-a-struct"><span class="nav-number">13.2.</span> <span class="nav-text">Embedding interface in a struct</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Access-Undelying-Variable-of-Interface"><span class="nav-number">14.</span> <span class="nav-text">Access Undelying Variable of Interface</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-assertion-2"><span class="nav-number">14.1.</span> <span class="nav-text">Type assertion</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-switch-1"><span class="nav-number">14.2.</span> <span class="nav-text">Type switch</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Zero-Interface"><span class="nav-number">15.</span> <span class="nav-text">Zero Interface</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Interface-comparison"><span class="nav-number">16.</span> <span class="nav-text">Interface comparison</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Conclusion"><span class="nav-number">17.</span> <span class="nav-text">Conclusion</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">90</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
