@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本部分内容基于CentOS 7 进行整理, 仅为记录;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker 初次使用">
+<meta property="og:url" content="https://guardingdog.github.io/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="本部分内容基于CentOS 7 进行整理, 仅为记录;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2022-11-19T09:03:05.000Z">
+<meta property="article:modified_time" content="2022-11-19T09:37:04.351Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Docker">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Docker 初次使用 | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker 初次使用
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2022-11-19 17:03:05 / Modified: 17:37:04" itemprop="dateCreated datePublished" datetime="2022-11-19T17:03:05+08:00">2022-11-19</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Docker/" itemprop="url" rel="index"><span itemprop="name">Docker</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/" class="post-meta-item leancloud_visitors" data-flag-title="Docker 初次使用" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本部分内容基于<code>CentOS 7</code> 进行整理, 仅为记录;</p>
+<a id="more"></a>
+
+<h2 id="运维视角的使用"><a href="#运维视角的使用" class="headerlink" title="运维视角的使用"></a>运维视角的使用</h2><h3 id="安装docker"><a href="#安装docker" class="headerlink" title="安装docker"></a>安装<code>docker</code></h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install docker</span><br></pre></td></tr></table></figure>
+<p>出现<code>Complemte!</code> 表示则说明已安装成功;</p>
+<h3 id="查看Docker-版本"><a href="#查看Docker-版本" class="headerlink" title="查看Docker 版本"></a>查看<code>Docker</code> 版本</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker version</span><br></pre></td></tr></table></figure>
+<p>发现<code>docker daemon</code> 并没有启动而<code>docker client</code>已启动, 那么需要启动<code>docker daemon</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Client:</span><br><span class="line"> Version:         1.13.1</span><br><span class="line"> API version:     1.26</span><br><span class="line"> Package version:</span><br><span class="line">Cannot connect to the Docker daemon at unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;docker.sock. Is the docker daemon running?</span><br></pre></td></tr></table></figure>
+<h3 id="启动docker-daemon-并置为系统启动"><a href="#启动docker-daemon-并置为系统启动" class="headerlink" title="启动docker daemon 并置为系统启动"></a>启动<code>docker daemon</code> 并置为系统启动</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker.service</span><br><span class="line">systemctl enable docker.service</span><br></pre></td></tr></table></figure>
+<h3 id="再次查看Docker-版本"><a href="#再次查看Docker-版本" class="headerlink" title="再次查看Docker 版本"></a>再次查看<code>Docker</code> 版本</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker version</span><br><span class="line">Client:</span><br><span class="line"> Version:         1.13.1</span><br><span class="line"> API version:     1.26</span><br><span class="line"> Package version: docker-1.13.1-209.git7d71120.el7.centos.x86_64</span><br><span class="line"> Go version:      go1.10.3</span><br><span class="line"> Git commit:      7d71120&#x2F;1.13.1</span><br><span class="line"> Built:           Wed Mar  2 15:25:43 2022</span><br><span class="line"> OS&#x2F;Arch:         linux&#x2F;amd64</span><br><span class="line"></span><br><span class="line">Server:</span><br><span class="line"> Version:         1.13.1</span><br><span class="line"> API version:     1.26 (minimum version 1.12)</span><br><span class="line"> Package version: docker-1.13.1-209.git7d71120.el7.centos.x86_64</span><br><span class="line"> Go version:      go1.10.3</span><br><span class="line"> Git commit:      7d71120&#x2F;1.13.1</span><br><span class="line"> Built:           Wed Mar  2 15:25:43 2022</span><br><span class="line"> OS&#x2F;Arch:         linux&#x2F;amd64</span><br><span class="line"> Experimental:    false</span><br></pre></td></tr></table></figure>
+<p>发现<code>docker daemon , docker client</code> 均已启动;</p>
+<h3 id="拉取CentOS-镜像"><a href="#拉取CentOS-镜像" class="headerlink" title="拉取CentOS 镜像"></a>拉取<code>CentOS</code> 镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker pull centos</span><br><span class="line">或者 </span><br><span class="line">docker image pull centos</span><br></pre></td></tr></table></figure>
+<h3 id="查看镜像"><a href="#查看镜像" class="headerlink" title="查看镜像"></a>查看镜像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker images</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker.io&#x2F;ubuntu    latest              27941809078c        4 weeks ago         77.8 MB</span><br><span class="line">docker.io&#x2F;centos    latest              5d0da3dc9764        9 months ago        231 MB</span><br><span class="line"></span><br><span class="line">[root@VM-0-13-centos ~]# docker image ls</span><br><span class="line">REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE</span><br><span class="line">docker.io&#x2F;ubuntu    latest              27941809078c        4 weeks ago         77.8 MB</span><br><span class="line">docker.io&#x2F;centos    latest              5d0da3dc9764        9 months ago        231 MB</span><br></pre></td></tr></table></figure>
+<p>两个命令均可以查看<code>docker</code> 镜像, 发现目前已经有两个镜像了, 均是刚拉取的镜像, 这里仅以<code>centos</code>作为示例;</p>
+<h3 id="启动镜像获得容器"><a href="#启动镜像获得容器" class="headerlink" title="启动镜像获得容器"></a>启动镜像获得容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker run -it centos:latest &#x2F;bin&#x2F;bash</span><br><span class="line">[root@a99489e5262c &#x2F;]#</span><br><span class="line">----------------</span><br><span class="line">使用 docker container run -it centos:latest &#x2F;bin&#x2F;bash 是一样的;</span><br></pre></td></tr></table></figure>
+<p>发现已经进入了容器的控制台;</p>
+<h3 id="查看下容器内进程"><a href="#查看下容器内进程" class="headerlink" title="查看下容器内进程"></a>查看下容器内进程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@a99489e5262c &#x2F;]# ps -elf</span><br><span class="line">F S UID        PID  PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD</span><br><span class="line">4 S root         1     0  0  80   0 -  3009 do_wai 09:58 ?        00:00:00 &#x2F;bin&#x2F;bash</span><br><span class="line">4 R root        14     1  0  80   0 - 11163 -      10:02 ?        00:00:00 ps -elf</span><br></pre></td></tr></table></figure>
+<p>发现目前有两个进程在运行, 一个是启动容器<code>/bin/bash</code>的进程, 一个是用来查看进程的进程 <code>ps -elf</code></p>
+<h3 id="回退到Host-主机"><a href="#回退到Host-主机" class="headerlink" title="回退到Host 主机"></a>回退到<code>Host</code> 主机</h3><p><code>Ctrl+PQ</code>, 这样返回并不会关闭进程;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@a99489e5262c &#x2F;]# [root@VM-0-13-centos ~]#</span><br></pre></td></tr></table></figure>
+<h3 id="查看容器列表"><a href="#查看容器列表" class="headerlink" title="查看容器列表"></a>查看容器列表</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker container ls</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">a99489e5262c        centos:latest       &quot;&#x2F;bin&#x2F;bash&quot;         7 minutes ago       Up 7 minutes                            gracious_colden</span><br></pre></td></tr></table></figure>
+<p>发现刚才启动的容器,确实在列表中;</p>
+<h3 id="查看Host的进程"><a href="#查看Host的进程" class="headerlink" title="查看Host的进程"></a>查看<code>Host</code>的进程</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br></pre></td><td class="code"><pre><span class="line">l</span><br><span class="line">[root@VM-0-13-centos ~]# ps -elf</span><br><span class="line">F S UID        PID  PPID  C PRI  NI ADDR SZ WCHAN  STIME TTY          TIME CMD</span><br><span class="line">4 S root         1     0  0  80   0 - 31438 ep_pol 17:16 ?        00:00:02 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd --switched-root --system --deserialize 22</span><br><span class="line">1 S root         2     0  0  80   0 -     0 kthrea 17:16 ?        00:00:00 [kthreadd]</span><br><span class="line">1 S root         4     2  0  60 -20 -     0 worker 17:16 ?        00:00:00 [kworker&#x2F;0:0H]</span><br><span class="line">1 S root         6     2  0  80   0 -     0 smpboo 17:16 ?        00:00:00 [ksoftirqd&#x2F;0]</span><br><span class="line">1 S root         7     2  0 -40   - -     0 smpboo 17:16 ?        00:00:00 [migration&#x2F;0]</span><br><span class="line">1 S root         8     2  0  80   0 -     0 rcu_gp 17:16 ?        00:00:00 [rcu_bh]</span><br><span class="line">1 S root         9     2  0  80   0 -     0 rcu_gp 17:16 ?        00:00:00 [rcu_sched]</span><br><span class="line">1 S root        10     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [lru-add-drain]</span><br><span class="line">5 S root        11     2  0 -40   - -     0 smpboo 17:16 ?        00:00:00 [watchdog&#x2F;0]</span><br><span class="line">5 S root        12     2  0 -40   - -     0 smpboo 17:16 ?        00:00:00 [watchdog&#x2F;1]</span><br><span class="line">1 S root        13     2  0 -40   - -     0 smpboo 17:16 ?        00:00:00 [migration&#x2F;1]</span><br><span class="line">1 S root        14     2  0  80   0 -     0 smpboo 17:16 ?        00:00:00 [ksoftirqd&#x2F;1]</span><br><span class="line">1 S root        16     2  0  60 -20 -     0 worker 17:16 ?        00:00:00 [kworker&#x2F;1:0H]</span><br><span class="line">5 S root        18     2  0  80   0 -     0 devtmp 17:16 ?        00:00:00 [kdevtmpfs]</span><br><span class="line">1 S root        19     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [netns]</span><br><span class="line">1 S root        20     2  0  80   0 -     0 watchd 17:16 ?        00:00:00 [khungtaskd]</span><br><span class="line">1 S root        21     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [writeback]</span><br><span class="line">1 S root        22     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kintegrityd]</span><br><span class="line">1 S root        23     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [bioset]</span><br><span class="line">1 S root        24     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [bioset]</span><br><span class="line">1 S root        25     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [bioset]</span><br><span class="line">1 S root        26     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kblockd]</span><br><span class="line">1 S root        27     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [md]</span><br><span class="line">1 S root        28     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [edac-poller]</span><br><span class="line">1 S root        29     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [watchdogd]</span><br><span class="line">1 S root        36     2  0  80   0 -     0 kswapd 17:16 ?        00:00:00 [kswapd0]</span><br><span class="line">1 S root        37     2  0  85   5 -     0 ksm_sc 17:16 ?        00:00:00 [ksmd]</span><br><span class="line">1 S root        38     2  0  99  19 -     0 khugep 17:16 ?        00:00:00 [khugepaged]</span><br><span class="line">1 S root        39     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [crypto]</span><br><span class="line">1 S root        47     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kthrotld]</span><br><span class="line">1 S root        48     2  0  80   0 -     0 worker 17:16 ?        00:00:00 [kworker&#x2F;u4:1]</span><br><span class="line">1 S root        49     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kmpath_rdacd]</span><br><span class="line">1 S root        50     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kaluad]</span><br><span class="line">1 S root        51     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [kpsmoused]</span><br><span class="line">1 S root        52     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [ipv6_addrconf]</span><br><span class="line">1 S root        65     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [deferwq]</span><br><span class="line">1 S root       108     2  0  80   0 -     0 kaudit 17:16 ?        00:00:00 [kauditd]</span><br><span class="line">1 S root       238     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [ata_sff]</span><br><span class="line">1 S root       241     2  0  80   0 -     0 scsi_e 17:16 ?        00:00:00 [scsi_eh_0]</span><br><span class="line">1 S root       242     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [scsi_tmf_0]</span><br><span class="line">1 S root       243     2  0  80   0 -     0 scsi_e 17:16 ?        00:00:00 [scsi_eh_1]</span><br><span class="line">1 S root       244     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [scsi_tmf_1]</span><br><span class="line">1 S root       248     2  0  60 -20 -     0 worker 17:16 ?        00:00:00 [kworker&#x2F;0:1H]</span><br><span class="line">1 S root       252     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [ttm_swap]</span><br><span class="line">1 S root       272     2  0  60 -20 -     0 worker 17:16 ?        00:00:00 [kworker&#x2F;1:1H]</span><br><span class="line">1 S root       273     2  0  80   0 -     0 kjourn 17:16 ?        00:00:00 [jbd2&#x2F;vda1-8]</span><br><span class="line">1 S root       274     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [ext4-rsv-conver]</span><br><span class="line">4 S root       363     1  0  80   0 - 26239 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd-journald</span><br><span class="line">4 S root       385     1  0  80   0 - 31210 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;lvmetad -f</span><br><span class="line">4 S root       396     1  0  80   0 - 11424 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd-udevd</span><br><span class="line">1 S root       513     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [nfit]</span><br><span class="line">1 S root       633     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [rpciod]</span><br><span class="line">1 S root       634     2  0  60 -20 -     0 rescue 17:16 ?        00:00:00 [xprtiod]</span><br><span class="line">5 S root       636     1  0  76  -4 - 13883 ep_pol 17:16 ?        00:00:00 &#x2F;sbin&#x2F;auditd</span><br><span class="line">4 S root       638   636  0  72  -8 - 21139 futex_ 17:16 ?        00:00:00 &#x2F;sbin&#x2F;audispd</span><br><span class="line">4 S root       640   638  0  76  -4 - 13911 unix_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;sedispatch</span><br><span class="line">4 S polkitd    658     1  0  80   0 - 153610 poll_s 17:16 ?       00:00:00 &#x2F;usr&#x2F;lib&#x2F;polkit-1&#x2F;polkitd --no-debug</span><br><span class="line">4 S root       659     1  0  80   0 -  6654 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;lib&#x2F;systemd&#x2F;systemd-logind</span><br><span class="line">5 S rpc        668     1  0  80   0 - 17320 poll_s 17:16 ?        00:00:00 &#x2F;sbin&#x2F;rpcbind -w</span><br><span class="line">4 S dbus       672     1  0  80   0 - 15151 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;bin&#x2F;dbus-daemon --system --address&#x3D;systemd: --nofork --nopidfile --syst</span><br><span class="line">1 S root       674     1  0  80   0 -  1097 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;acpid</span><br><span class="line">5 S ntp        679     1  0  80   0 - 12345 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;ntpd -u ntp:ntp -g</span><br><span class="line">4 S libstor+   685     1  0  80   0 -  2145 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;bin&#x2F;lsmd -d</span><br><span class="line">4 S avahi      686     1  0  80   0 - 15573 poll_s 17:16 ?        00:00:00 avahi-daemon: running [VM-0-13-centos.local]</span><br><span class="line">1 S avahi      690   686  0  80   0 - 15541 unix_s 17:16 ?        00:00:00 avahi-daemon: chroot helper</span><br><span class="line">1 S root       696     1  0  80   0 - 28853 do_wai 17:16 ?        00:00:00 &#x2F;bin&#x2F;bash &#x2F;usr&#x2F;sbin&#x2F;ksmtuned</span><br><span class="line">1 S root       697     1  0  80   0 - 50358 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;gssproxy -D</span><br><span class="line">1 S root       982     1  0  80   0 - 25726 poll_s 17:16 ?        00:00:00 &#x2F;sbin&#x2F;dhclient -H VM-0-13-centos -q -lf &#x2F;var&#x2F;lib&#x2F;dhclient&#x2F;dhclient--eth0.lea</span><br><span class="line">4 S root      1055     1  0  80   0 - 146513 poll_s 17:16 ?       00:00:00 &#x2F;usr&#x2F;bin&#x2F;python2 -Es &#x2F;usr&#x2F;sbin&#x2F;tuned -l -P</span><br><span class="line">4 S root      1076     1  0  80   0 - 185430 poll_s 17:16 ?       00:00:00 &#x2F;usr&#x2F;sbin&#x2F;rsyslogd -n</span><br><span class="line">4 S root      1090     1  0  80   0 - 251084 poll_s 17:16 ?       00:00:00 &#x2F;usr&#x2F;sbin&#x2F;libvirtd</span><br><span class="line">4 S root      1099     1  0  80   0 -  6477 hrtime 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;atd -f</span><br><span class="line">4 S root      1111     1  0  80   0 - 31598 hrtime 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;crond -n</span><br><span class="line">4 S root      1278     1  0  80   0 - 27552 n_tty_ 17:16 ttyS0    00:00:00 &#x2F;sbin&#x2F;agetty --keep-baud 115200,38400,9600 ttyS0 vt220</span><br><span class="line">4 S root      1279     1  0  80   0 - 27552 n_tty_ 17:16 tty1     00:00:00 &#x2F;sbin&#x2F;agetty --noclear tty1 linux</span><br><span class="line">1 S root      1314     1  0  80   0 -  7268 ep_pol 17:16 ?        00:00:00 &#x2F;usr&#x2F;local&#x2F;qcloud&#x2F;tat_agent&#x2F;tat_agent</span><br><span class="line">4 S root      1580     1  0  80   0 - 28231 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;sshd -D</span><br><span class="line">5 S nobody    1592     1  0  80   0 - 13475 poll_s 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;dnsmasq --conf-file&#x3D;&#x2F;var&#x2F;lib&#x2F;libvirt&#x2F;dnsmasq&#x2F;default.conf --leasef</span><br><span class="line">1 S root      1593  1592  0  80   0 - 13468 pipe_w 17:16 ?        00:00:00 &#x2F;usr&#x2F;sbin&#x2F;dnsmasq --conf-file&#x3D;&#x2F;var&#x2F;lib&#x2F;libvirt&#x2F;dnsmasq&#x2F;default.conf --leasef</span><br><span class="line">4 S root      1598  1580  0  80   0 - 39852 poll_s 17:16 ?        00:00:00 sshd: root@pts&#x2F;0</span><br><span class="line">0 S root      1608     1  0  80   0 - 247139 do_wai 17:16 ?       00:00:00 &#x2F;usr&#x2F;local&#x2F;qcloud&#x2F;YunJing&#x2F;YDLive&#x2F;YDLive</span><br><span class="line">1 S root      1628     1  0  80   0 - 24351 hrtime 17:17 ?        00:00:00 &#x2F;usr&#x2F;local&#x2F;qcloud&#x2F;stargate&#x2F;bin&#x2F;sgagent -d</span><br><span class="line">1 S root      1644     1  0  80   0 - 38850 poll_s 17:17 ?        00:00:00 barad_agent</span><br><span class="line">1 S root      1650  1644  0  80   0 - 41227 poll_s 17:17 ?        00:00:01 barad_agent</span><br><span class="line">1 S root      1651  1644  0  80   0 - 134822 poll_s 17:17 ?       00:00:08 barad_agent</span><br><span class="line">4 S root      1661  1608  0  80   0 - 251552 ep_pol 17:17 ?       00:00:12 &#x2F;usr&#x2F;local&#x2F;qcloud&#x2F;YunJing&#x2F;YDEyes&#x2F;YDService</span><br><span class="line">0 S root      1801  1661  0  80   0 - 254192 futex_ 17:18 ?       00:00:00 &#x2F;bin&#x2F;sh -c sleep 100</span><br><span class="line">4 S root      1846  1580  0  80   0 - 39775 poll_s 17:18 ?        00:00:00 sshd: root@notty</span><br><span class="line">4 S root      1853  1846  0  80   0 - 18063 poll_s 17:18 ?        00:00:00 &#x2F;usr&#x2F;libexec&#x2F;openssh&#x2F;sftp-server</span><br><span class="line">4 S root      1867  1598  0  80   0 - 29333 n_tty_ 17:18 pts&#x2F;0    00:00:00 -bash</span><br><span class="line">4 S root      1939     1  0  80   0 - 102654 poll_s 17:18 ?       00:00:00 &#x2F;usr&#x2F;libexec&#x2F;packagekitd</span><br><span class="line">4 S root      2242  1580  0  80   0 - 38684 poll_s 17:20 ?        00:00:00 sshd: root@notty</span><br><span class="line">4 S root      2244  2242  0  80   0 - 28322 do_wai 17:20 ?        00:00:00 bash</span><br><span class="line">0 S root      2300  2244  0  80   0 - 28321 do_wai 17:20 ?        00:00:00 sh &#x2F;root&#x2F;.vscode-server&#x2F;bin&#x2F;4af164ea3a06f701fe3e89a2bcbb421d2026b68f&#x2F;bin&#x2F;cod</span><br><span class="line">0 S root      2312  2300  0  80   0 - 231839 ep_pol 17:20 ?       00:00:00 &#x2F;root&#x2F;.vscode-server&#x2F;bin&#x2F;4af164ea3a06f701fe3e89a2bcbb421d2026b68f&#x2F;node &#x2F;root</span><br><span class="line">0 S root      2367  2312  0  80   0 - 157627 ep_pol 17:20 ?       00:00:00 &#x2F;root&#x2F;.vscode-server&#x2F;bin&#x2F;4af164ea3a06f701fe3e89a2bcbb421d2026b68f&#x2F;node &#x2F;root</span><br><span class="line">4 S root      2885     1  0  80   0 - 204900 do_wai 17:22 ?       00:00:09 &#x2F;usr&#x2F;bin&#x2F;dockerd-current --add-runtime docker-runc&#x3D;&#x2F;usr&#x2F;libexec&#x2F;docker&#x2F;docke</span><br><span class="line">4 S root      2893  2885  0  80   0 - 80069 futex_ 17:22 ?        00:00:01 &#x2F;usr&#x2F;bin&#x2F;docker-containerd-current -l unix:&#x2F;&#x2F;&#x2F;var&#x2F;run&#x2F;docker&#x2F;libcontainerd&#x2F;d</span><br><span class="line">1 S root      5538     2  0  80   0 -     0 worker 17:37 ?        00:00:00 [kworker&#x2F;1:0]</span><br><span class="line">1 S root      5564     2  0  80   0 -     0 worker 17:37 ?        00:00:00 [kworker&#x2F;u4:0]</span><br><span class="line">4 S root      6971  1580  0  80   0 - 39850 poll_s 17:47 ?        00:00:00 sshd: root@pts&#x2F;1</span><br><span class="line">4 S root      6973  1580  0  80   0 - 39775 poll_s 17:47 ?        00:00:00 sshd: root@notty</span><br><span class="line">4 S root      6975  6971  0  80   0 - 29151 n_tty_ 17:47 pts&#x2F;1    00:00:00 -bash</span><br><span class="line">4 S root      7015  6973  0  80   0 - 18063 poll_s 17:47 ?        00:00:00 &#x2F;usr&#x2F;libexec&#x2F;openssh&#x2F;sftp-server</span><br><span class="line">1 S root      7421     2  0  80   0 -     0 worker 17:50 ?        00:00:00 [kworker&#x2F;0:2]</span><br><span class="line">4 R root      7859  1580  0  80   0 - 39850 -      17:53 ?        00:00:00 sshd: root@pts&#x2F;2</span><br><span class="line">4 S root      7861  1580  0  80   0 - 39775 poll_s 17:53 ?        00:00:00 sshd: root@notty</span><br><span class="line">4 S root      7863  7859  0  80   0 - 29151 do_wai 17:53 pts&#x2F;2    00:00:00 -bash</span><br><span class="line">4 S root      7905  7861  0  80   0 - 18063 poll_s 17:53 ?        00:00:00 &#x2F;usr&#x2F;libexec&#x2F;openssh&#x2F;sftp-server</span><br><span class="line">1 S root      8224     2  0  80   0 -     0 worker 17:55 ?        00:00:00 [kworker&#x2F;0:0]</span><br><span class="line">0 S root      8674  2893  0  80   0 - 68577 futex_ 17:58 ?        00:00:00 &#x2F;usr&#x2F;bin&#x2F;docker-containerd-shim-current a99489e5262c774cc07629fdd3fffc2a9732</span><br><span class="line">4 S root      8691  8674  0  80   0 -  3009 poll_s 17:58 pts&#x2F;3    00:00:00 &#x2F;bin&#x2F;bash</span><br><span class="line">1 S root      9005     2  0  80   0 -     0 worker 18:00 ?        00:00:00 [kworker&#x2F;1:2]</span><br><span class="line">1 S root      9742     2  0  80   0 -     0 worker 18:05 ?        00:00:00 [kworker&#x2F;0:1]</span><br><span class="line">0 S root      9785  2244  0  80   0 - 27014 hrtime 18:05 ?        00:00:00 sleep 180</span><br><span class="line">0 S root      9951   696  0  80   0 - 27014 hrtime 18:06 ?        00:00:00 sleep 60</span><br><span class="line">0 R root     10085  7863  0  80   0 - 38869 -      18:07 pts&#x2F;2    00:00:00 ps -elf</span><br></pre></td></tr></table></figure>
+<p>发现<code>Host</code> 的进程比容器内多得多;</p>
+<h3 id="连接到运行中的容器中"><a href="#连接到运行中的容器中" class="headerlink" title="连接到运行中的容器中"></a>连接到运行中的容器中</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker container exec -it gracious_colden bash</span><br><span class="line">[root@a99489e5262c &#x2F;]#</span><br></pre></td></tr></table></figure>
+<h3 id="回退到Host"><a href="#回退到Host" class="headerlink" title="回退到Host"></a>回退到<code>Host</code></h3><p>这里依旧没有直接退出, 用的<code>Ctrl+PQ</code></p>
+<h3 id="再次查看容器状态"><a href="#再次查看容器状态" class="headerlink" title="再次查看容器状态"></a>再次查看容器状态</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@a99489e5262c &#x2F;]# [root@VM-0-13-centos ~]# docker container ls</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line">a99489e5262c        centos:latest       &quot;&#x2F;bin&#x2F;bash&quot;         14 minutes ago      Up 14 minutes                           gracious_colden</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="关闭容器"><a href="#关闭容器" class="headerlink" title="关闭容器"></a>关闭容器</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@VM-0-13-centos ~]# docker container stop gracious_colden</span><br><span class="line">gracious_colden</span><br><span class="line">[root@VM-0-13-centos ~]# docker container ls</span><br><span class="line">CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES</span><br><span class="line"></span><br><span class="line">[root@VM-0-13-centos ~]#</span><br></pre></td></tr></table></figure>
+<p>通过<code>docker container stop </code> 或 <code>docker container rm</code>, 命令是一样效果; 再次查看容器状态,发现已经没有了;</p>
+<h2 id="开发视角的使用"><a href="#开发视角的使用" class="headerlink" title="开发视角的使用"></a>开发视角的使用</h2><p>本部分内容,会根据应用代码中的<code>Docerfile</code>将应用容器化,并使用容器的方式运行;代码来源于<code>Docker Deep Dive</code> 的配套资源;</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Docker/" rel="tag"><i class="fa fa-tag"></i> Docker</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/07/09/Docker-%E5%88%9D%E8%AF%86/" rel="prev" title="Docker 初识">
+      <i class="fa fa-chevron-left"></i> Docker 初识
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/19/Docker-%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/" rel="next" title="Docker 学习路线">
+      Docker 学习路线 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E7%BB%B4%E8%A7%86%E8%A7%92%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">1.</span> <span class="nav-text">运维视角的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%89%E8%A3%85docker"><span class="nav-number">1.1.</span> <span class="nav-text">安装docker</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BDocker-%E7%89%88%E6%9C%AC"><span class="nav-number">1.2.</span> <span class="nav-text">查看Docker 版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8docker-daemon-%E5%B9%B6%E7%BD%AE%E4%B8%BA%E7%B3%BB%E7%BB%9F%E5%90%AF%E5%8A%A8"><span class="nav-number">1.3.</span> <span class="nav-text">启动docker daemon 并置为系统启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%8D%E6%AC%A1%E6%9F%A5%E7%9C%8BDocker-%E7%89%88%E6%9C%AC"><span class="nav-number">1.4.</span> <span class="nav-text">再次查看Docker 版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8B%89%E5%8F%96CentOS-%E9%95%9C%E5%83%8F"><span class="nav-number">1.5.</span> <span class="nav-text">拉取CentOS 镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E9%95%9C%E5%83%8F"><span class="nav-number">1.6.</span> <span class="nav-text">查看镜像</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E9%95%9C%E5%83%8F%E8%8E%B7%E5%BE%97%E5%AE%B9%E5%99%A8"><span class="nav-number">1.7.</span> <span class="nav-text">启动镜像获得容器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E4%B8%8B%E5%AE%B9%E5%99%A8%E5%86%85%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.8.</span> <span class="nav-text">查看下容器内进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E5%88%B0Host-%E4%B8%BB%E6%9C%BA"><span class="nav-number">1.9.</span> <span class="nav-text">回退到Host 主机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E5%88%97%E8%A1%A8"><span class="nav-number">1.10.</span> <span class="nav-text">查看容器列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8BHost%E7%9A%84%E8%BF%9B%E7%A8%8B"><span class="nav-number">1.11.</span> <span class="nav-text">查看Host的进程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%88%B0%E8%BF%90%E8%A1%8C%E4%B8%AD%E7%9A%84%E5%AE%B9%E5%99%A8%E4%B8%AD"><span class="nav-number">1.12.</span> <span class="nav-text">连接到运行中的容器中</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9E%E9%80%80%E5%88%B0Host"><span class="nav-number">1.13.</span> <span class="nav-text">回退到Host</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%8D%E6%AC%A1%E6%9F%A5%E7%9C%8B%E5%AE%B9%E5%99%A8%E7%8A%B6%E6%80%81"><span class="nav-number">1.14.</span> <span class="nav-text">再次查看容器状态</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E9%97%AD%E5%AE%B9%E5%99%A8"><span class="nav-number">1.15.</span> <span class="nav-text">关闭容器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E8%A7%86%E8%A7%92%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.</span> <span class="nav-text">开发视角的使用</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
