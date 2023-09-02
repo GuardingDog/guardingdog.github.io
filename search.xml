@@ -8280,4 +8280,60 @@
         <tag>Go</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Go_Learning_Fundamental_Text_Normalization</title>
+    <url>/2023/09/03/Go-Learning-Fundamental-Text-Normalization/</url>
+    <content><![CDATA[<p>Refs: <a href="https://go.dev/blog/normalization">Text normalization in Go - The Go Programming Language</a></p>
+<h2 id="Prior-knowledge"><a href="#Prior-knowledge" class="headerlink" title="Prior knowledge"></a>Prior knowledge</h2><p>Before learning this part, we should know  some theoretical knowledge about <a href="https://en.wikipedia.org/wiki/Unicode_equivalence">Unicode equivalence - Wikipedia</a>.</p>
+<a id="more"></a>
+
+<ul>
+<li><p><code>canoically equivalent</code>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">canonically equivalent are assumed to have the same appearance and meaning when printed or displayed. For example, the code point U+006E (the Latin lowercase &quot;n&quot;) followed by U+0303 (the combining tilde &quot;◌̃&quot;) is defined by Unicode to be canonically equivalent to the single code point U+00F1 (the lowercase letter &quot;ñ&quot; of the Spanish alphabet). Therefore, those sequences should be displayed in the same manner, should be treated in the same way by applications such as alphabetizing names or searching, and may be substituted for each other.</span><br><span class="line">-- wiki</span><br></pre></td></tr></table></figure></li>
+<li><p><code>compatible equivalent</code>:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">Sequences that are defined as compatible are assumed to have possibly distinct appearances, but the same meaning in some contexts. Thus, for example, the code point U+FB00 (the typographic ligature &quot;ﬀ&quot;) is defined to be compatible—but not canonically equivalent—to the sequence U+0066 U+0066 (two Latin &quot;f&quot; letters). Compatible sequences may be treated the same way in some applications (such as sorting and indexing), but not in others; and may be substituted for each other in some situations, but not in others. Sequences that are canonically equivalent are also compatible, but the opposite is not necessarily true.</span><br><span class="line">-- wiki</span><br></pre></td></tr></table></figure></li>
+<li><p><code>Composing, Decoposing</code>:</p>
+<ul>
+<li>The former replaces runes that can combine into a single rune with this single rune.</li>
+<li>The latter breaks runes apart into their components.</li>
+</ul>
+</li>
+</ul>
+<h2 id="Key-Points"><a href="#Key-Points" class="headerlink" title="Key Points"></a>Key Points</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Composing</th>
+<th>Decomposing</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Canonical</td>
+<td><code>NFC</code></td>
+<td><code>NFD</code></td>
+</tr>
+<tr>
+<td>Compatibility</td>
+<td><code>NFKC</code></td>
+<td><code>NFKD</code></td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Difference-With-NFC-NFD"><a href="#Difference-With-NFC-NFD" class="headerlink" title="Difference With NFC, NFD"></a>Difference With NFC, NFD</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;golang.org/x/text/unicode/norm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;é&quot;</span></span><br><span class="line">	nfc := norm.NFC.String(str) <span class="comment">// NFC 形式</span></span><br><span class="line">	nfd := norm.NFD.String(str) <span class="comment">// NFD 形式</span></span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC String RESULT IS: % s\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD String RESULT IS: % s\n&quot;</span>, nfd) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Bytes RESULT IS: % x\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD Bytes RESULT IS: % x\n&quot;</span>, nfd)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Rune RESULT IS: % +q\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD Rune RESULT IS: % +q\n&quot;</span>, nfd) </span><br><span class="line"></span><br><span class="line">	<span class="comment">// 检查是否相等</span></span><br><span class="line">	fmt.Println(nfc == nfd) <span class="comment">// 输出：false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut:</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">NFC String RESULT IS: é</span><br><span class="line">NFD String RESULT IS: é</span><br><span class="line">NFC Bytes RESULT IS: c3 a9</span><br><span class="line">NFD Bytes RESULT IS: 65 cc 81</span><br><span class="line">NFC Rune RESULT IS: &quot;\u00e9&quot;</span><br><span class="line">NFD Rune RESULT IS: &quot;e\u0301&quot;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<p>From above we know that, both <code>NFC, NFD</code>, their string format is equal. While they hold difference byte sequence. <code>NFC: \xc3\xa9</code>, <code>NFD: \x65\xcc\x81</code>.</p>
+<p>In this example, we used the letter “e” with an accent. By applying the normalization transformation to this string in the form of NFC and NFD, we can see the difference in the output. The NFC form combines the accent into a single character “e”, while the NFD form decomposes it into two characters “e”. At the same time, we can also compare the results of NFC and NFD forms to determine whether they are equal.</p>
+<h3 id="Difference-With-NFC-NFKC"><a href="#Difference-With-NFC-NFKC" class="headerlink" title="Difference With NFC, NFKC"></a>Difference With NFC, NFKC</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;golang.org/x/text/unicode/norm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;㎡&quot;</span></span><br><span class="line">	nfc := norm.NFC.String(str)   <span class="comment">// NFC 形式</span></span><br><span class="line">	nfkc := norm.NFKC.String(str) <span class="comment">// NFKC 形式</span></span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC String RESULT IS: % s\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC String RESULT IS: % s\n&quot;</span>, nfkc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Bytes RESULT IS: % x\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC Bytes RESULT IS: % x\n&quot;</span>, nfkc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Rune RESULT IS: % +q\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC Rune RESULT IS: % +q\n&quot;</span>, nfkc)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 检查是否相等</span></span><br><span class="line">	fmt.Println(nfc == nfkc) <span class="comment">// 输出：false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut:</code></p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">NFC String RESULT IS: ㎡</span><br><span class="line">NFKC String RESULT IS: m2</span><br><span class="line">NFC Bytes RESULT IS: e3 8e a1</span><br><span class="line">NFKC Bytes RESULT IS: 6d 32</span><br><span class="line">NFC Rune RESULT IS: &quot;\u33a1&quot;</span><br><span class="line">NFKC Rune RESULT IS: &quot;m2&quot;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<p>In this example, we use the special character “㎡”, which is the unit for square meters. Through the string for NFC and NFKC forms of normalized transformation, we can see the change of the output. The NFC form leaves it as is, while the NFKC form converts it to “m²”, even though the superscript 2 is used to denote the square.</p>
+<p>Thus, it can be seen that in some cases the strings of the form NFC and NFKC are not equal.</p>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
 </search>

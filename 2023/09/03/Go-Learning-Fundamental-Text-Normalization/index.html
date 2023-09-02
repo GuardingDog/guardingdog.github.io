@@ -20,20 +20,20 @@
     var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="reference: TDD, Effective Go. Go Chinese Docs">
+  <meta name="description" content="Refs: Text normalization in Go - The Go Programming Language Prior knowledgeBefore learning this part, we should know  some theoretical knowledge about Unicode equivalence - Wikipedia.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="GO_Learning_Fundamental_Integers">
-<meta property="og:url" content="https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Integers/index.html">
+<meta property="og:title" content="Go_Learning_Fundamental_Text_Normalization">
+<meta property="og:url" content="https://guardingdog.github.io/2023/09/03/Go-Learning-Fundamental-Text-Normalization/index.html">
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
-<meta property="og:description" content="reference: TDD, Effective Go. Go Chinese Docs">
+<meta property="og:description" content="Refs: Text normalization in Go - The Go Programming Language Prior knowledgeBefore learning this part, we should know  some theoretical knowledge about Unicode equivalence - Wikipedia.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2022-06-28T16:06:57.000Z">
-<meta property="article:modified_time" content="2022-06-28T16:08:38.227Z">
+<meta property="article:published_time" content="2023-09-02T17:28:03.000Z">
+<meta property="article:modified_time" content="2023-09-02T17:28:33.684Z">
 <meta property="article:author" content="GuardingDog">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Integers/">
+<link rel="canonical" href="https://guardingdog.github.io/2023/09/03/Go-Learning-Fundamental-Text-Normalization/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>GO_Learning_Fundamental_Integers | QingZhi's Blog</title>
+  <title>Go_Learning_Fundamental_Text_Normalization | QingZhi's Blog</title>
   
 
 
@@ -197,7 +197,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Integers/">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2023/09/03/Go-Learning-Fundamental-Text-Normalization/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -210,7 +210,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          GO_Learning_Fundamental_Integers
+          Go_Learning_Fundamental_Text_Normalization
         </h1>
 
         <div class="post-meta">
@@ -221,7 +221,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2022-06-29 00:06:57 / Modified: 00:08:38" itemprop="dateCreated datePublished" datetime="2022-06-29T00:06:57+08:00">2022-06-29</time>
+              <time title="Created: 2023-09-03 01:28:03 / Modified: 01:28:33" itemprop="dateCreated datePublished" datetime="2023-09-03T01:28:03+08:00">2023-09-03</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -234,7 +234,7 @@
             </span>
 
           
-            <span id="/2022/06/29/GO-Learning-Fundamental-Integers/" class="post-meta-item leancloud_visitors" data-flag-title="GO_Learning_Fundamental_Integers" title="Views">
+            <span id="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/" class="post-meta-item leancloud_visitors" data-flag-title="Go_Learning_Fundamental_Text_Normalization" title="Views">
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
               </span>
@@ -249,8 +249,8 @@
       </span>
       <span class="post-meta-item-text">Valine: </span>
     
-    <a title="valine" href="/2022/06/29/GO-Learning-Fundamental-Integers/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2022/06/29/GO-Learning-Fundamental-Integers/" itemprop="commentCount"></span>
+    <a title="valine" href="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/" itemprop="commentCount"></span>
     </a>
   </span>
   
@@ -265,47 +265,52 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <ul>
-<li>reference: <a target="_blank" rel="noopener" href="https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/integers">TDD</a>, <a target="_blank" rel="noopener" href="https://golang.google.cn/doc/effective_go">Effective Go</a>. <a target="_blank" rel="noopener" href="https://www.topgoer.com/go%E5%9F%BA%E7%A1%80/%E5%9F%BA%E6%9C%AC%E7%B1%BB%E5%9E%8B.html">Go Chinese Docs</a></li>
-</ul>
+        <p>Refs: <a target="_blank" rel="noopener" href="https://go.dev/blog/normalization">Text normalization in Go - The Go Programming Language</a></p>
+<h2 id="Prior-knowledge"><a href="#Prior-knowledge" class="headerlink" title="Prior knowledge"></a>Prior knowledge</h2><p>Before learning this part, we should know  some theoretical knowledge about <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unicode_equivalence">Unicode equivalence - Wikipedia</a>.</p>
 <a id="more"></a>
 
-<p>Control structures</p>
-<p>In Go language, there is only <code>if , for , switch</code> as control structure while no <code>do, while</code> loop. </p>
 <ul>
-<li>Same with other language: <code>break,continue</code> statements is the same as others</li>
-<li>Different :<ul>
-<li>in <code>switch</code> structure, <code>type</code> is optional label</li>
-<li><code>select</code></li>
+<li><p><code>canoically equivalent</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">canonically equivalent are assumed to have the same appearance and meaning when printed or displayed. For example, the code point U+006E (the Latin lowercase &quot;n&quot;) followed by U+0303 (the combining tilde &quot;◌̃&quot;) is defined by Unicode to be canonically equivalent to the single code point U+00F1 (the lowercase letter &quot;ñ&quot; of the Spanish alphabet). Therefore, those sequences should be displayed in the same manner, should be treated in the same way by applications such as alphabetizing names or searching, and may be substituted for each other.</span><br><span class="line">-- wiki</span><br></pre></td></tr></table></figure></li>
+<li><p><code>compatible equivalent</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Sequences that are defined as compatible are assumed to have possibly distinct appearances, but the same meaning in some contexts. Thus, for example, the code point U+FB00 (the typographic ligature &quot;ﬀ&quot;) is defined to be compatible—but not canonically equivalent—to the sequence U+0066 U+0066 (two Latin &quot;f&quot; letters). Compatible sequences may be treated the same way in some applications (such as sorting and indexing), but not in others; and may be substituted for each other in some situations, but not in others. Sequences that are canonically equivalent are also compatible, but the opposite is not necessarily true.</span><br><span class="line">-- wiki</span><br></pre></td></tr></table></figure></li>
+<li><p><code>Composing, Decoposing</code>:</p>
+<ul>
+<li>The former replaces runes that can combine into a single rune with this single rune.</li>
+<li>The latter breaks runes apart into their components.</li>
 </ul>
 </li>
 </ul>
-<p><strong>Syntax</strong> in Go: No need parentheses while the body must always be brace-delimited.</p>
-<h3 id="if"><a href="#if" class="headerlink" title="if"></a>if</h3><ul>
-<li><p>Ordinary syntan: Writting simple <code>if</code> in multiple lines.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> x &gt; <span class="number">0</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li><p>Intersting syntax: <code>if</code> with initialization statement</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> err := file.Chmod(<span class="number">0664</span>); err != <span class="literal">nil</span> &#123;</span><br><span class="line">    log.Print(err)</span><br><span class="line">    <span class="keyword">return</span> err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
-<li></li>
-</ul>
-<h3 id="for"><a href="#for" class="headerlink" title="for"></a>for</h3><p>There are three forms in <code>for</code> syntaxs:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Like a C for</span></span><br><span class="line"><span class="keyword">for</span> init; condition; post &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Like a C while</span></span><br><span class="line"><span class="keyword">for</span> condition &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Like a C for(;;)</span></span><br><span class="line"><span class="keyword">for</span> &#123; &#125;</span><br></pre></td></tr></table></figure>
-<h4 id="for-with-range"><a href="#for-with-range" class="headerlink" title="for with range:"></a><strong>for with range:</strong></h4><p>range statements is a good way to loop array, slice, map, channel, the syntax is :</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key, value := <span class="keyword">range</span> oldMap &#123;</span><br><span class="line">    newMap[key] = value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>If you only need the first item in the range (the key or index), drop the second:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> key := <span class="keyword">range</span> m &#123;</span><br><span class="line">    <span class="keyword">if</span> key.expired() &#123;</span><br><span class="line">        <span class="built_in">delete</span>(m, key)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>If you only need the second item in the range (the value), use the <em>blank identifier</em>, an underscore, to discard the first:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sum := <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> _, value := <span class="keyword">range</span> array &#123;</span><br><span class="line">    sum += value</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>Range does more work for <code>string</code>:Breaking out individual Unicode code points by parsing the UTF-8. Erroneous encodings consume one byte and produce the replacement rune U+FFFD.</li>
-</ul>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> pos, char := <span class="keyword">range</span> <span class="string">&quot;日本\x80語&quot;</span> &#123; <span class="comment">// \x80 is an illegal UTF-8 encoding</span></span><br><span class="line">    fmt.Printf(<span class="string">&quot;character %#U starts at byte position %d\n&quot;</span>, char, pos)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//character U+65E5 &#x27;日&#x27; starts at byte position 0</span></span><br><span class="line"><span class="comment">//character U+672C &#x27;本&#x27; starts at byte position 3</span></span><br><span class="line"><span class="comment">//character U+FFFD &#x27;�&#x27; starts at byte position 6</span></span><br><span class="line"><span class="comment">//character U+8A9E &#x27;語&#x27; starts at byte position 7</span></span><br></pre></td></tr></table></figure>
-<h3 id="switch"><a href="#switch" class="headerlink" title="switch"></a>switch</h3><p>switch has the same mwaning as other language. In go language, if the <code>switch</code> has no expression it switches on <code>true</code>. It’s therefore possible—and idiomatic—to write an <code>if</code>-<code>else</code>-<code>if</code>-<code>else</code> chain as a <code>switch</code>.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">unhex</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="title">byte</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;0&#x27;</span> &lt;= c &amp;&amp; c &lt;= <span class="string">&#x27;9&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> c - <span class="string">&#x27;0&#x27;</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;a&#x27;</span> &lt;= c &amp;&amp; c &lt;= <span class="string">&#x27;f&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> c - <span class="string">&#x27;a&#x27;</span> + <span class="number">10</span></span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27;A&#x27;</span> &lt;= c &amp;&amp; c &lt;= <span class="string">&#x27;F&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> c - <span class="string">&#x27;A&#x27;</span> + <span class="number">10</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>There is no automatic fall through, but cases can be presented in comma-separated lists.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">shouldEscape</span><span class="params">(c <span class="keyword">byte</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> c &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="string">&#x27; &#x27;</span>, <span class="string">&#x27;?&#x27;</span>, <span class="string">&#x27;&amp;&#x27;</span>, <span class="string">&#x27;=&#x27;</span>, <span class="string">&#x27;#&#x27;</span>, <span class="string">&#x27;+&#x27;</span>, <span class="string">&#x27;%&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="Type-switch"><a href="#Type-switch" class="headerlink" title="Type switch"></a>Type switch</h4><p>A switch can also be used to discover the dynamic type of an interface variable. Such a <em>type switch</em> uses the syntax of a type assertion with the keyword <code>type</code> inside the parentheses. If the switch declares a variable in the expression, the variable will have the corresponding type in each clause. It’s also idiomatic to reuse the name in such cases, in effect declaring a new variable with the same name but a different type in each case.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> t <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">t = functionOfSomeType()</span><br><span class="line"><span class="keyword">switch</span> t := t.(<span class="keyword">type</span>) &#123;</span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;unexpected type %T\n&quot;</span>, t)     <span class="comment">// %T prints whatever type t has</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">bool</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;boolean %t\n&quot;</span>, t)             <span class="comment">// t has type bool</span></span><br><span class="line"><span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;integer %d\n&quot;</span>, t)             <span class="comment">// t has type int</span></span><br><span class="line"><span class="keyword">case</span> *<span class="keyword">bool</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;pointer to boolean %t\n&quot;</span>, *t) <span class="comment">// t has type *bool</span></span><br><span class="line"><span class="keyword">case</span> *<span class="keyword">int</span>:</span><br><span class="line">    fmt.Printf(<span class="string">&quot;pointer to integer %d\n&quot;</span>, *t) <span class="comment">// t has type *int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Key-Points"><a href="#Key-Points" class="headerlink" title="Key Points"></a>Key Points</h2><table>
+<thead>
+<tr>
+<th></th>
+<th>Composing</th>
+<th>Decomposing</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Canonical</td>
+<td><code>NFC</code></td>
+<td><code>NFD</code></td>
+</tr>
+<tr>
+<td>Compatibility</td>
+<td><code>NFKC</code></td>
+<td><code>NFKD</code></td>
+</tr>
+</tbody></table>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><h3 id="Difference-With-NFC-NFD"><a href="#Difference-With-NFC-NFD" class="headerlink" title="Difference With NFC, NFD"></a>Difference With NFC, NFD</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;golang.org/x/text/unicode/norm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;é&quot;</span></span><br><span class="line">	nfc := norm.NFC.String(str) <span class="comment">// NFC 形式</span></span><br><span class="line">	nfd := norm.NFD.String(str) <span class="comment">// NFD 形式</span></span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC String RESULT IS: % s\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD String RESULT IS: % s\n&quot;</span>, nfd) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Bytes RESULT IS: % x\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD Bytes RESULT IS: % x\n&quot;</span>, nfd)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Rune RESULT IS: % +q\n&quot;</span>, nfc) </span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFD Rune RESULT IS: % +q\n&quot;</span>, nfd) </span><br><span class="line"></span><br><span class="line">	<span class="comment">// 检查是否相等</span></span><br><span class="line">	fmt.Println(nfc == nfd) <span class="comment">// 输出：false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut:</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NFC String RESULT IS: é</span><br><span class="line">NFD String RESULT IS: é</span><br><span class="line">NFC Bytes RESULT IS: c3 a9</span><br><span class="line">NFD Bytes RESULT IS: 65 cc 81</span><br><span class="line">NFC Rune RESULT IS: &quot;\u00e9&quot;</span><br><span class="line">NFD Rune RESULT IS: &quot;e\u0301&quot;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<p>From above we know that, both <code>NFC, NFD</code>, their string format is equal. While they hold difference byte sequence. <code>NFC: \xc3\xa9</code>, <code>NFD: \x65\xcc\x81</code>.</p>
+<p>In this example, we used the letter “e” with an accent. By applying the normalization transformation to this string in the form of NFC and NFD, we can see the difference in the output. The NFC form combines the accent into a single character “e”, while the NFD form decomposes it into two characters “e”. At the same time, we can also compare the results of NFC and NFD forms to determine whether they are equal.</p>
+<h3 id="Difference-With-NFC-NFKC"><a href="#Difference-With-NFC-NFKC" class="headerlink" title="Difference With NFC, NFKC"></a>Difference With NFC, NFKC</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;golang.org/x/text/unicode/norm&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	str := <span class="string">&quot;㎡&quot;</span></span><br><span class="line">	nfc := norm.NFC.String(str)   <span class="comment">// NFC 形式</span></span><br><span class="line">	nfkc := norm.NFKC.String(str) <span class="comment">// NFKC 形式</span></span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC String RESULT IS: % s\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC String RESULT IS: % s\n&quot;</span>, nfkc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Bytes RESULT IS: % x\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC Bytes RESULT IS: % x\n&quot;</span>, nfkc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFC Rune RESULT IS: % +q\n&quot;</span>, nfc)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;NFKC Rune RESULT IS: % +q\n&quot;</span>, nfkc)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 检查是否相等</span></span><br><span class="line">	fmt.Println(nfc == nfkc) <span class="comment">// 输出：false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut:</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NFC String RESULT IS: ㎡</span><br><span class="line">NFKC String RESULT IS: m2</span><br><span class="line">NFC Bytes RESULT IS: e3 8e a1</span><br><span class="line">NFKC Bytes RESULT IS: 6d 32</span><br><span class="line">NFC Rune RESULT IS: &quot;\u33a1&quot;</span><br><span class="line">NFKC Rune RESULT IS: &quot;m2&quot;</span><br><span class="line">false</span><br></pre></td></tr></table></figure>
+<p>In this example, we use the special character “㎡”, which is the unit for square meters. Through the string for NFC and NFKC forms of normalized transformation, we can see the change of the output. The NFC form leaves it as is, while the NFKC form converts it to “m²”, even though the superscript 2 is used to denote the square.</p>
+<p>Thus, it can be seen that in some cases the strings of the form NFC and NFKC are not equal.</p>
+
     </div>
 
     
@@ -344,13 +349,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2022/06/29/Go-Learning-Fundamental-initialization/" rel="prev" title="# Go_Learning_Fundamental_initialization">
-      <i class="fa fa-chevron-left"></i> # Go_Learning_Fundamental_initialization
+    <a href="/2023/09/02/Go-Learning-Fundamental-String-2/" rel="prev" title="Go_Learning_Fundamental_String_2">
+      <i class="fa fa-chevron-left"></i> Go_Learning_Fundamental_String_2
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2022/06/29/GO-Learning-Fundamental-Type/" rel="next" title="GO_Learning_Fundamental_Type">
-      GO_Learning_Fundamental_Type <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -410,7 +412,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#if"><span class="nav-number">1.</span> <span class="nav-text">if</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#for"><span class="nav-number">2.</span> <span class="nav-text">for</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#for-with-range"><span class="nav-number">2.1.</span> <span class="nav-text">for with range:</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#switch"><span class="nav-number">3.</span> <span class="nav-text">switch</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Type-switch"><span class="nav-number">3.1.</span> <span class="nav-text">Type switch</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Prior-knowledge"><span class="nav-number">1.</span> <span class="nav-text">Prior knowledge</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-Points"><span class="nav-number">2.</span> <span class="nav-text">Key Points</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Example"><span class="nav-number">3.</span> <span class="nav-text">Example</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Difference-With-NFC-NFD"><span class="nav-number">3.1.</span> <span class="nav-text">Difference With NFC, NFD</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Difference-With-NFC-NFKC"><span class="nav-number">3.2.</span> <span class="nav-text">Difference With NFC, NFKC</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
