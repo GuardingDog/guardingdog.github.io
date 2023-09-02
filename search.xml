@@ -290,6 +290,8 @@
 <p>[Python包样例][<a href="https://github.com/pypa/sampleproject]">https://github.com/pypa/sampleproject]</a></p>
 <p>[子包、数据文件与依赖包参数情况][[<a href="http://www.wbh-doc.com.s3.amazonaws.com/Python-OpenSource-Project-Developer-Guide/appendix%20-%20setup%20script.html]">http://www.wbh-doc.com.s3.amazonaws.com/Python-OpenSource-Project-Developer-Guide/appendix%20-%20setup%20script.html]</a></p>
 </blockquote>
+<a id="more"></a>
+
 <h2 id="1-Setup-Args"><a href="#1-Setup-Args" class="headerlink" title="1. Setup() Args"></a>1. Setup() Args</h2><blockquote>
 <p>参数详解</p>
 </blockquote>
@@ -433,12 +435,14 @@
   <entry>
     <title>Python2包管理工具对比</title>
     <url>/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/</url>
-    <content><![CDATA[<h1 id="Python包管理"><a href="#Python包管理" class="headerlink" title="Python包管理"></a>Python包管理</h1><blockquote>
+    <content><![CDATA[<blockquote>
 <p>参考地址：<a href="https://blog.zengrong.net/post/python_packaging/">Python 包管理工具解惑</a></p>
 <blockquote>
 <p>参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。</p>
 </blockquote>
 </blockquote>
+<a id="more"></a>
+
 <h2 id="1-疑惑问题"><a href="#1-疑惑问题" class="headerlink" title="1.  疑惑问题"></a>1.  疑惑问题</h2><blockquote>
 <p>python 包管理我本身一直未曾仔细研究，处于混沌的状态。目前只知道pip,conda等包管理工具。</p>
 </blockquote>
@@ -465,7 +469,7 @@
 </ul>
 </li>
 <li><p>wheel与Egg的关系</p>
-<a id="more"></a>
+<!-- more -->
 
 </li>
 </ol>
@@ -2173,8 +2177,7 @@
   <entry>
     <title>Python_python2的编码问题</title>
     <url>/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</url>
-    <content><![CDATA[<p>python2编码问题详解</p>
-<!-- more  -->
+    <content><![CDATA[<!-- more  -->
 
 <blockquote>
 <p>最近在调试python2过程中经常出现编码的问题，尤其是将python3程序重构为python2程序过程中出现的问题。</p>
@@ -8222,6 +8225,59 @@
       </categories>
       <tags>
         <tag>Docker</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go_Learning_Fundamental_String_2</title>
+    <url>/2023/09/02/Go-Learning-Fundamental-String-2/</url>
+    <content><![CDATA[<p>Refs: <a href="https://go.dev/blog/strings">Strings, bytes, runes and characters in Go - The Go Programming Language</a></p>
+<h2 id="Prior-knowledge"><a href="#Prior-knowledge" class="headerlink" title="Prior knowledge"></a>Prior knowledge</h2><p>Before learning this part, we should know  some theoretical knowledge about <a href="https://guardingdog.github.io/2020/04/02/Pyhton-%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/">utf-8 unicode</a> and some <a href="https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-String/">basic usage</a> of string in Go.</p>
+<a id="more"></a>
+
+<h2 id="Key-Points"><a href="#Key-Points" class="headerlink" title="Key Points"></a>Key Points</h2><p>Here is the key points of this post.</p>
+<ul>
+<li>A string holds arbitrary bytes.</li>
+<li>A string literal ,without byte-level escapes, always hold valid <code>UTF-8</code> sequence;</li>
+<li>Go source code is always <code>UTF-8</code>.</li>
+</ul>
+<h2 id="A-string-holds-arbitrary-bytes"><a href="#A-string-holds-arbitrary-bytes" class="headerlink" title="A string holds arbitrary bytes."></a>A string holds arbitrary bytes.</h2><p>Strings is effect read-only slice of bytes in Go. Let’s start with <code>A string holds arbitrary bytes.</code> </p>
+<p>Here is a example. I create a sting literal with byte-level escapes, like <code>\xbd\xb2\x3d\xbc\x20\xe2\xad\x90</code>. And the flag <code>\xNN</code> note a string with peculiar byte values. </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">const</span> sample = <span class="string">&quot;\xbd\xb2\x3d\xbc\x20\xe2\xad\x90&quot;</span></span><br></pre></td></tr></table></figure>
+<p>Print this <code>sample</code> with different format, like this:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">const</span> sample = <span class="string">&quot;\xbd\xb2\x3d\xbc\x20\xe2\xad\x90&quot;</span></span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;Print as string: %s \n&quot;</span>, sample)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Print(<span class="string">&quot;Print as Byte loop: &quot;</span>)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="built_in">len</span>(sample); i++ &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;%x &quot;</span>, sample[i])</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">	fmt.Printf(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;Printf with quota: %q\n\n&quot;</span>, sample)</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;Printf with plus quota: %+q\n&quot;</span>, sample)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Print as string: ��=� ⭐ </span><br><span class="line"></span><br><span class="line">Print as Byte loop: bd b2 3d bc 20 e2 ad 90 </span><br><span class="line"></span><br><span class="line">Printf with quota: &quot;\xbd\xb2=\xbc ⭐&quot;</span><br><span class="line"></span><br><span class="line">Printf with plus quota: &quot;\xbd\xb2=\xbc \u2b50&quot;</span><br></pre></td></tr></table></figure>
+<p><code>Explain:</code></p>
+<ul>
+<li><p>Because of the <code>sample</code> contain not valid <code>UTF-8</code> bytes, directly print <code>    fmt.Printf(&quot;Print as string: %s \n&quot;, sample)</code> is a mess <code>��=� ⭐</code> result. </p>
+</li>
+<li><p>To find out what string really hold on, i split it apart and examine each byte with <code>%x</code> flag. This byte to byte level output is <code>bd b2 3d bc 20 e2 ad 90</code>. This result is equal to the declaration statement <code>const sample = &quot;\xbd\xb2\x3d\xbc\x20\xe2\xad\x90&quot;</code> .</p>
+</li>
+<li><p>There’s more. The <code>%q</code> verb could escape any non-printable byte sequence in a string, So the output <code>&quot;\xbd\xb2=\xbc ⭐&quot;</code> is clear. If we check this output, we will find one <code>Equal ASCII</code> sign, one <code>Space ASCII</code> sign and one <code>Yello Star Unicode</code> sign.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">the yello star ⭐ has Unicode value U+2B50, encode with utf-8 bytes: e2 ad 90.</span><br></pre></td></tr></table></figure></li>
+<li><p>The <code>%+q</code> verb could escape not only non-printable sequence, but also any non-ASCII bytes. It will exposes the Unicode values of properly formatted <code>UTF-8</code> format. <code>&quot;\xbd\xb2=\xbc \u2b50&quot;</code></p>
+</li>
+</ul>
+<p>So  we got that: <strong>A string holds arbitrary bytes.</strong> is only a bunch of bytes. which means with ransom bytes mostly combine a invalid <code>utf-8</code> sequence like example above.</p>
+<h2 id="String-literals-always-hold-valid-utf-8-sequence"><a href="#String-literals-always-hold-valid-utf-8-sequence" class="headerlink" title="String literals always hold valid utf-8 sequence"></a>String literals always hold valid <code>utf-8</code> sequence</h2><p>A string literal ,without byte-level escapes, always hold valid <code>UTF-8</code> sequence; We know that when we store a character in a string, it will store as byte to byte format. Let’s we what happened with a example:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import &quot;fmt&quot;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	const yelloStar &#x3D; &#96;⭐&#96;</span><br><span class="line"></span><br><span class="line">	fmt.Printf(&quot;plain string: &quot;)</span><br><span class="line">	fmt.Printf(&quot;%s&quot;, yelloStar)</span><br><span class="line">	fmt.Printf(&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">	fmt.Printf(&quot;quoted string: &quot;)</span><br><span class="line">	fmt.Printf(&quot;%+q&quot;, yelloStar)</span><br><span class="line">	fmt.Printf(&quot;\n&quot;)</span><br><span class="line"></span><br><span class="line">	fmt.Printf(&quot;hex bytes: &quot;)</span><br><span class="line">	for i :&#x3D; 0; i &lt; len(yelloStar); i++ &#123;</span><br><span class="line">		fmt.Printf(&quot;%x &quot;, yelloStar[i])</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(&quot;\n&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>OutPut:</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">plain string: ⭐</span><br><span class="line">quoted string: &quot;\u2b50&quot;</span><br><span class="line">hex bytes: e2 ad 90 </span><br></pre></td></tr></table></figure>
+<p><code>Explain:</code></p>
+<ul>
+<li><p>The Unicode value of character <code>⭐</code> is <code>\u2b50</code>, present as bytes <code>e2 ad 90</code>(<code>Utf-8</code>). </p>
+</li>
+<li><p>Because of Go’s encoding format is <code>utf-8</code>, when the source code is written, the text editor (<code>VS Code, typora ...</code>) would place the <code>UTF-8</code> encoding of the symbol <code>⭐</code> into the source text.</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">In short, Go source code is UTF-8, so *the source code for the string literal is UTF-8 text*. If that string literal contains no escape sequences, which a raw string cannot, the constructed string will hold exactly the source text between the quotes. Thus by definition and by construction the raw string will always contain a valid UTF-8 representation of its contents. Similarly, unless it contains UTF-8-breaking escapes like those from the previous section, a regular string literal will also always contain valid UTF-8.</span><br></pre></td></tr></table></figure></li>
+<li><p>To summarize, strings can contain arbitrary bytes, but when constructed from string literals, those bytes are (almost always) <code>UTF-8</code>.</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
       </tags>
   </entry>
 </search>

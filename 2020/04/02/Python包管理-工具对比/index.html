@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="Python包管理 参考地址：Python 包管理工具解惑  参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。   1.  疑惑问题 python 包管理我本身一直未曾仔细研究，处于混沌的状态。目前只知道pip,conda等包管理工具。  目前存在的问题有：  如何私有发布自己的模块  如何共有发布模块(发布到PyPI)  各种包管理工具的差异与用法">
+  <meta name="description" content="参考地址：Python 包管理工具解惑  参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python2包管理工具对比">
 <meta property="og:url" content="https://guardingdog.github.io/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/index.html">
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
-<meta property="og:description" content="Python包管理 参考地址：Python 包管理工具解惑  参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。   1.  疑惑问题 python 包管理我本身一直未曾仔细研究，处于混沌的状态。目前只知道pip,conda等包管理工具。  目前存在的问题有：  如何私有发布自己的模块  如何共有发布模块(发布到PyPI)  各种包管理工具的差异与用法">
+<meta property="og:description" content="参考地址：Python 包管理工具解惑  参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-04-02T10:56:05.000Z">
-<meta property="article:modified_time" content="2021-01-24T09:14:01.670Z">
+<meta property="article:modified_time" content="2023-09-02T11:31:16.346Z">
 <meta property="article:author" content="GuardingDog">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
@@ -227,7 +227,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-24 17:14:01" itemprop="dateModified" datetime="2021-01-24T17:14:01+08:00">2021-01-24</time>
+                <time title="Modified: 2023-09-02 19:31:16" itemprop="dateModified" datetime="2023-09-02T19:31:16+08:00">2023-09-02</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -275,12 +275,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Python包管理"><a href="#Python包管理" class="headerlink" title="Python包管理"></a>Python包管理</h1><blockquote>
+        <blockquote>
 <p>参考地址：<a target="_blank" rel="noopener" href="https://blog.zengrong.net/post/python_packaging/">Python 包管理工具解惑</a></p>
 <blockquote>
 <p>参考地址中作者详尽的调研并解释了相关问题，相对于其他博客内容，此篇内容系统性更强，这需要学习。</p>
 </blockquote>
 </blockquote>
+<a id="more"></a>
+
 <h2 id="1-疑惑问题"><a href="#1-疑惑问题" class="headerlink" title="1.  疑惑问题"></a>1.  疑惑问题</h2><blockquote>
 <p>python 包管理我本身一直未曾仔细研究，处于混沌的状态。目前只知道pip,conda等包管理工具。</p>
 </blockquote>
@@ -307,7 +309,7 @@
 </ul>
 </li>
 <li><p>wheel与Egg的关系</p>
-<a id="more"></a>
+<!-- more -->
 
 </li>
 </ol>
@@ -493,7 +495,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Python%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-number">1.</span> <span class="nav-text">Python包管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%96%91%E6%83%91%E9%97%AE%E9%A2%98"><span class="nav-number">1.1.</span> <span class="nav-text">1.  疑惑问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Python%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.2.</span> <span class="nav-text">2. Python包管理工具学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-distutils"><span class="nav-number">1.2.1.</span> <span class="nav-text">2.1 distutils</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-setuptools-%E5%92%8C-distribute"><span class="nav-number">1.2.2.</span> <span class="nav-text">2.2  setuptools 和 distribute</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-setuptools"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">2.2.1 setuptools</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-distribute"><span class="nav-number">1.2.3.</span> <span class="nav-text">2.2.2 distribute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-distutil2%E5%92%8Cdislib"><span class="nav-number">1.2.4.</span> <span class="nav-text">2.3 distutil2和dislib</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="nav-number">1.3.</span> <span class="nav-text">3.打包文件格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Eggs"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 Eggs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Wheel"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 Wheel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97"><span class="nav-number">1.4.</span> <span class="nav-text">4.发布模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BB%93%E8%AE%BA"><span class="nav-number">1.5.</span> <span class="nav-text">5.结论</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E7%96%91%E6%83%91%E9%97%AE%E9%A2%98"><span class="nav-number">1.</span> <span class="nav-text">1.  疑惑问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Python%E5%8C%85%E7%AE%A1%E7%90%86%E5%B7%A5%E5%85%B7%E5%AD%A6%E4%B9%A0"><span class="nav-number">2.</span> <span class="nav-text">2. Python包管理工具学习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-distutils"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 distutils</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-setuptools-%E5%92%8C-distribute"><span class="nav-number">2.2.</span> <span class="nav-text">2.2  setuptools 和 distribute</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-setuptools"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 setuptools</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-distribute"><span class="nav-number">2.3.</span> <span class="nav-text">2.2.2 distribute</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-distutil2%E5%92%8Cdislib"><span class="nav-number">2.4.</span> <span class="nav-text">2.3 distutil2和dislib</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%89%93%E5%8C%85%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">3.打包文件格式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Eggs"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 Eggs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Wheel"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Wheel</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%91%E5%B8%83%E6%A8%A1%E5%9D%97"><span class="nav-number">4.</span> <span class="nav-text">4.发布模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E7%BB%93%E8%AE%BA"><span class="nav-number">5.</span> <span class="nav-text">5.结论</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -509,7 +511,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">100</span>
+          <span class="site-state-item-count">101</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
@@ -563,7 +565,7 @@
 <div class="copyright">
   
   &copy; 2020 – 
-  <span itemprop="copyrightYear">2022</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
