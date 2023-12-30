@@ -1,0 +1,1092 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://guardingdog.github.io/2023/12/30/Go-tool-pprof/</loc>
+    
+    <lastmod>2023-12-30</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2023/09/03/Go-Learning-Fundamental-Text-Normalization/</loc>
+    
+    <lastmod>2023-09-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</loc>
+    
+    <lastmod>2023-09-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%B7%A5%E5%85%B7%E5%AF%B9%E6%AF%94/</loc>
+    
+    <lastmod>2023-09-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-setup%E5%87%BD%E6%95%B0%E8%AF%A6%E8%A7%A3/</loc>
+    
+    <lastmod>2023-09-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2023/09/02/Go-Learning-Fundamental-String-2/</loc>
+    
+    <lastmod>2023-09-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E9%95%9C%E5%83%8F%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%AE%B9%E5%99%A8%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%AD%A6%E4%B9%A0%E8%B7%AF%E7%BA%BF/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E6%95%B0%E6%8D%AE%E7%AE%A1%E7%90%86/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E7%BD%91%E7%BB%9C%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%AE%89%E5%85%A8/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0%E6%9C%BA%E5%88%B6/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/11/19/Docker-%E5%88%9D%E6%AC%A1%E4%BD%BF%E7%94%A8/</loc>
+    
+    <lastmod>2022-11-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/07/09/Docker-%E5%88%9D%E8%AF%86/</loc>
+    
+    <lastmod>2022-07-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Data-Structure/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamental-Learning-Defer-Function-Call/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Label-in-Go-Land/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamental-Learning-Basic-Control-Flow/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamentall-Learning-Package-import/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamental-Learning-Build-In-Type-And-Literal-Value/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamental-Learning-Keyword-Identifiers/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Fundamental-Learning-Operators/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Json/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-String/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Constant/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-format/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Interface/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Allocation/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Array-Slice-Map/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Reflection/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Channel/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Concurrency-Goroutine/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Dependency-Injection/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Pointer/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Struct/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Type/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Integers/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-initialization/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Init/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/29/GO-Learning-Package-Definition/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/28/GO-Learning-HOW-TO-SET-UP-GO-PROJECT/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/06/28/GO-Learning-TDD-introduction/</loc>
+    
+    <lastmod>2022-06-28</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/05/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-%E5%AE%8C%E5%85%A8%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA/</loc>
+    
+    <lastmod>2022-05-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/05/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%81%8D%E5%8E%86%E9%A1%BA%E5%BA%8F%E7%9A%84%E8%AE%A8%E8%AE%BA/</loc>
+    
+    <lastmod>2022-05-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2022/05/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92-%E8%83%8C%E5%8C%85%E9%97%AE%E9%A2%98-01%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA/</loc>
+    
+    <lastmod>2022-05-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/09/25/Go-Learning-Effective-Go-Docs/</loc>
+    
+    <lastmod>2021-09-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/05/22/JSON-XML-YAML/</loc>
+    
+    <lastmod>2021-05-23</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/05/22/JSON-Simple-Research/</loc>
+    
+    <lastmod>2021-05-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/05/22/XML-Simple-Research/</loc>
+    
+    <lastmod>2021-05-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/05/22/YAML-Simple-Research/</loc>
+    
+    <lastmod>2021-05-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E6%9C%80%E5%B0%8F%E7%94%9F%E6%88%90%E6%A0%91-Minimum-Spanning-Tree/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%89%8D%E7%BC%80%E6%A0%91/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95%E6%80%BB%E7%BB%93/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%9B%9E%E6%BA%AF%E6%B3%95/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%AE%97%E6%B3%95/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E4%BA%8C%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E4%B8%89%E7%A7%8D%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%A0%86%E6%8E%92%E5%BA%8F%E7%AE%80%E4%BB%8B%E4%B8%8E%E7%94%A8%E5%A4%84/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92%E2%80%94%E2%80%94%E8%82%A1%E7%A5%A8%E4%B8%93%E9%A2%98%E8%A7%A3%E6%B3%95/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/B%E6%A0%91/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/24/%E5%B9%B6%E6%9F%A5%E9%9B%86/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%AD%97%E7%AC%A6%E4%B8%B2%E6%A0%BC%E5%BC%8F%E5%8C%96/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E8%A3%85%E9%A5%B0%E5%99%A8/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%80%BC%E4%BC%A0%E9%80%92%E4%B8%8E%E5%BC%95%E7%94%A8%E4%BC%A0%E9%80%92/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E9%B8%AD%E5%AD%90%E7%B1%BB%E5%9E%8B/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%BA%8F%E5%88%97/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%8D%8F%E7%A8%8B/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E6%96%87%E6%9C%AC%E4%B8%8E%E5%AD%97%E8%8A%82%E5%BA%8F%E5%88%97/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E7%89%B9%E6%AE%8A%E6%96%B9%E6%B3%95/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E7%A7%81%E6%9C%89%E5%B1%9E%E6%80%A7%E4%B8%8E%E5%8F%97%E4%BF%9D%E6%8A%A4%E7%9A%84%E5%B1%9E%E6%80%A7/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E4%B8%8A%E4%B8%8B%E6%96%87%E7%AE%A1%E7%90%86%E5%99%A8/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%88%87%E7%89%87%E5%8E%9F%E7%90%86/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E6%B5%85%E5%A4%8D%E5%88%B6%E4%B8%8E%E6%B7%B1%E5%A4%8D%E5%88%B6/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E7%B1%BB%E5%8F%98%E9%87%8F%E4%B8%8E%E5%AE%9E%E4%BE%8B%E5%8F%98%E9%87%8F/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%8F%AF%E8%BF%AD%E4%BB%A3%E5%AF%B9%E8%B1%A1-%E8%BF%AD%E4%BB%A3%E5%99%A8-%E7%94%9F%E6%88%90%E5%99%A8/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E6%9E%84%E9%80%A0Python%E9%A3%8E%E6%A0%BC%E7%B1%BB/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E6%96%B9%E6%B3%95%E7%9A%84%E7%A7%8D%E7%B1%BB/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%BD%93%E5%87%BD%E6%95%B0%E5%8F%82%E6%95%B0%E4%B8%BA%E5%BC%95%E7%94%A8%E6%97%B6/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-%E5%8F%98%E9%87%8F%E7%90%86%E8%A7%A3/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-python-Call-Graph%E5%AD%A6%E4%B9%A0/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-OrderDict/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-new%E4%B8%8Einit/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-metaclasses/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-Logging/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-heapq%E7%B1%BB/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-else%E5%9D%97/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-dict%E4%B8%8Eset/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-del%E4%B8%8E%E5%BC%B1%E5%BC%95%E7%94%A8/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/17/Python-Counter/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2021/01/11/python%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/26/wordNet-Introduction/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/06/python-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/03/%E8%AF%AD%E8%A8%80%E6%98%AF%E7%AA%97/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/Python%E5%8C%85%E7%AE%A1%E7%90%86-%E5%AE%9E%E4%BE%8B%E6%93%8D%E4%BD%9C/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/Python2-%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/2020/04/02/Pyhton-%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/</loc>
+    
+    <lastmod>2021-01-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/guestbook/index.html</loc>
+    
+    <lastmod>2021-01-11</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/WordNet-Introduction/index.html</loc>
+    
+    <lastmod>2020-04-26</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/404.html</loc>
+    
+    <lastmod>2020-04-02</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/index.html</loc>
+    
+    <lastmod>2020-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/index.html</loc>
+    
+    <lastmod>2020-04-01</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+
+  <url>
+    <loc>https://guardingdog.github.io/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/Python/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/wordnet/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/regex/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/memory/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/Algorithm/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/Go/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/tags/Docker/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Technology/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Technology/Python/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Technology/Neural-Network/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/life/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Technology/Wordnet/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Technology/Algorithm/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Go/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://guardingdog.github.io/categories/Docker/</loc>
+    <lastmod>2023-12-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+</urlset>
