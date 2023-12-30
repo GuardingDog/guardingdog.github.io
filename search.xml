@@ -8336,4 +8336,534 @@
         <tag>Go</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Go tool pprof</title>
+    <url>/2023/12/30/Go-tool-pprof/</url>
+    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在项目中进行了大数据量下的性能测试, 在寻找性能瓶颈过程中,利用<code>go tool pprof</code>工具, 解决了内存大量申请释放, 业务逻辑等问题;</p>
+<p>本文主要分为三部分:</p>
+<ul>
+<li><p><code>go tool pprof</code> 的介绍;</p>
+</li>
+<li><p><code>go tool pprof</code> 的使用方式的介绍;</p>
+</li>
+<li><p>项目实践检验</p>
+</li>
+</ul>
+<a id="more"></a>
+
+<h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p> 为何需要性能分析?</p>
+<p>性能分析与优化是程序迭代过程中不可避免的步骤, 其好处不限于: 提高程序效率, 减少资源利用, 支持系统可扩展性, 提升用户体验等等. 在网络上, 对于性能优化的必要性讨论很多, 理解各有千秋, 例如<a href="https://zhuanlan.zhihu.com/p/373874739">知乎博主</a>认为是由于服务在扩展, 架构需重构, 服务需压测等原因; </p>
+<p>总而言之, 有编码的地方, 就有BUG, 就有可优化空间; 就需要利用性能分析工具, 解决 业务逻辑问题, 内存申请过大问题, 内存泄露问题, 协程泄露问题…</p>
+<p>性能分析工具五花八门, <a href="https://zhuanlan.zhihu.com/p/373874739">引用自</a>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">vmstat、iostat、 mpstat、netstat、 sar 、top：查看系统、程序信息等</span><br><span class="line">gprof、perf、perf top：定位到具体函数、调用等</span><br><span class="line">strace、ltrace：系统调用、函数调用、库函数调用等</span><br><span class="line">pstack、ptree、pmap：堆栈信息</span><br><span class="line">dmesg：系统 log 信息</span><br></pre></td></tr></table></figure>
+<p>对于<code>go</code>程序, 推荐使用<code>go</code>标准工具: <code>go tool pprof</code>, 进行性能分析, 问题定位; 这也是本文的主角:<code>go tool pprof</code>;</p>
+<h2 id="定义-go-tool-pprof"><a href="#定义-go-tool-pprof" class="headerlink" title="定义: go tool pprof"></a>定义: go tool pprof</h2><h3 id="现状"><a href="#现状" class="headerlink" title="现状:"></a>现状:</h3><p><code>go</code>在2011年<a href="https://go.dev/blog/pprof">go blog pprof</a> 初次介绍了<code>go tool pprof</code>工具的基本使用方式, 提供了<code>CPU, Memory</code>性能分析指导. 经过了多次迭代优化: 内置了火焰图, 扩展了可分析范围, 例如: </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="comment">//  cpu          </span></span><br><span class="line"><span class="comment">//	goroutine    - stack traces of all current goroutines</span></span><br><span class="line"><span class="comment">//	heap         - a sampling of memory allocations of live objects</span></span><br><span class="line"><span class="comment">//	allocs       - a sampling of all past memory allocations</span></span><br><span class="line"><span class="comment">//	threadcreate - stack traces that led to the creation of new OS threads</span></span><br><span class="line"><span class="comment">//	block        - stack traces that led to blocking on synchronization primitives</span></span><br><span class="line"><span class="comment">//	mutex        - stack traces of holders of contended mutexes</span></span><br><span class="line">截取自: runtime/pprof/pprof.<span class="keyword">go</span> 注释内容</span><br></pre></td></tr></table></figure>
+<p>借助于<code>go tool pprof</code> , 编码人员可以有效分析性能瓶颈, 提升性能表现. </p>
+<p>PS: 随着工具的成熟, 在<code>go 1.21</code> 版本, <a href="https://go.dev/blog/pgo">Go Official Intro About PGO</a>, <code>go</code>已经初步通过<code>FDO</code>流程的方式实现<code>Go</code>编译器自动优化代码性能表现;</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>其定义为:</p>
+<blockquote>
+<p><code>pprof is a tool for visualization and analysis of profiling data.</code></p>
+<blockquote>
+<p> <a href="https://github.com/google/pprof">https://github.com/google/pprof</a></p>
+</blockquote>
+</blockquote>
+<p><code>pprof</code> 是用于分析<code>profiling data</code>并生成可视化报告的工具;</p>
+<p>定义解释:</p>
+<p><code>这一部分可以不看</code></p>
+<p>什么是<code>profiling data</code>?</p>
+<ul>
+<li><p>主观的说<code>profiling data</code> 指的是程序的性能状态数据, 直译为<code>配置文件</code>, 为了防止误解, 本文选择使用<code>profiling data</code>原文标识;</p>
+<p>PS: <code>profiling</code> 的理解各异, 其直译为<code>画像, 轮廓</code>, <a href="https://zhuanlan.zhihu.com/p/51559344">有人</a>称其为<code>当前应用状态的画像</code>, <a href="https://zhuanlan.zhihu.com/p/373874739">有人</a>称其为<code>prof文件</code>, <a href="https://zhuanlan.zhihu.com/p/141640004">有人</a>称其为<code>采样文件</code>. 在我看来, 上面的理解都对, <code>profiling data</code> 就是<code>runtime/pprof</code>经过采样后获得应用状态样本集合;</p>
+</li>
+<li><p>客观的说:</p>
+<blockquote>
+<p>profile.proto is a protocol buffer that describes a set of callstacks and symbolization information. A common usage is to represent a set of sampled callstacks from statistical profiling. The format is described on the proto/profile.proto file. For details on protocol buffers, see <a href="https://developers.google.com/protocol-buffers">https://developers.google.com/protocol-buffers</a></p>
+<p>pprof operates on data in the profile.proto format. Each profile is a collection of samples, where each sample is associated to a point in a location hierarchy, one or more numeric values, and a set of labels. Often these profiles represents data collected through statistical sampling of a program, so each sample describes a program call stack and a number or value of samples collected at a location. pprof is agnostic to the profile semantics, so other uses are possible. The interpretation of the reports generated by pprof depends on the semantics defined by the source of the profile.</p>
+<blockquote>
+<p><a href="https://github.com/google/pprof/blob/main/doc/README.md">https://github.com/google/pprof/blob/main/doc/README.md</a></p>
+</blockquote>
+</blockquote>
+<p><code>profiling data</code> 是程序调用栈的信息集合,也是样本的集合, 其符合<code>profile.proto</code>格式. 每一个样本都指向了一个<code>location hierarchy</code>, 其包含有一系列的标签及对应的值(数字/字符串). </p>
+<ul>
+<li>这里有一个疑问点: 什么是<code>location hierarchy</code>, 直译为<code>位置层次结构</code>.我个人理解为: 调用栈结构, 例如:<ul>
+<li>在<code>CPU Profile</code>采样过程中, 其指代的通过<code>程序计数器 PC</code>获得的调用栈情况, 其衡量指标为: 每个函数的时间开销等;</li>
+<li>在<code>Heap Profile</code> 采样过程中, 气质带通过<code>内存分配器</code>获得的调用情况, 其衡量指标为: 内存分配大小等;</li>
+</ul>
+</li>
+</ul>
+<p>细致的解释, 我这里暂时没有去梳理, 可以参考相关文章, <a href="https://github.com/google/pprof/blob/main/doc/README.md">Google About Pprof README</a>, <a href="https://developers.google.com/protocol-buffers">Google About Protocol-buffers</a>.</p>
+</li>
+</ul>
+<h3 id="细节"><a href="#细节" class="headerlink" title="细节:"></a>细节:</h3><p>这一部分内容， 可看可不看， 不影响使用<code>pprof</code>的核心功能；</p>
+<h4 id="profiling-data-文件内容"><a href="#profiling-data-文件内容" class="headerlink" title="profiling data 文件内容"></a><code>profiling data</code> 文件内容</h4><p>上一部分有讲到<code>profiling data</code>包含有<code>location hierarchy</code>, 其构成了<code>samples</code>. 每一个<code>location</code> 包含有两类值：</p>
+<ul>
+<li><code>flat</code>： <code>location</code>本身的值，例如对于<code>cpu time </code>就是函数本身的执行时间；</li>
+<li><code>cum</code>: <code>location</code>本身及<code>child location</code>的值的合， 例如对于<code>cpu time</code>就是函数与其子函数的执行时间合；</li>
+</ul>
+<p>上面的提到的<code>flat</code>, <code>cum</code>可以说贯通了<code>pprof</code>命令中， 就像是砖块与水泥， 可以搭建出各种需求的建筑物；</p>
+<h4 id="pprof-命令功能点梳理"><a href="#pprof-命令功能点梳理" class="headerlink" title="pprof 命令功能点梳理"></a><code>pprof</code> 命令功能点梳理</h4><p>通过<code>go tool pprof</code> 命令的<code>details</code>部分， 可以看到官方梳理的功能点；</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@sangfor ~]# go tool pprof</span><br><span class="line">...</span><br><span class="line">Details:</span><br><span class="line">  Output formats (select at most one):</span><br><span class="line">    -callgrind       Outputs a graph in callgrind format</span><br><span class="line">    -comments        Output all profile comments</span><br><span class="line">    -disasm          Output assembly listings annotated with samples</span><br><span class="line">    -dot             Outputs a graph in DOT format  </span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这里不做赘述，仅对功能项进行梳理，了解<code>go tool pprof</code> <code>CLI</code> 可以做什么即可；</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>功能</th>
+<th>相关命令</th>
+<th>示例</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>指定输出格式</td>
+<td><code>-list -svg -top -web ... </code></td>
+<td><code>go tool pprof -top ./cpu.prof</code> </br>指定交互模式中TOP命令， 按照<code>flat</code>逆序排序</td>
+<td>部分格式需要依赖第三方包， 例如web;</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Node过滤</td>
+<td><code>-focus -hide -ignore ...</code></td>
+<td><code>go tool pprof -focus=find ./cpu.prof</code> 指定过滤出匹配find正则表达式的samples</td>
+<td>五花八门的过滤选项</td>
+</tr>
+<tr>
+<td>3</td>
+<td>聚合</td>
+<td>`-functions -files -lines</td>
+<td><code>go tool pprof -files ./cpu.prof</code>, 指定sample按照file维度聚合</td>
+<td>默认按照function维度聚合</td>
+</tr>
+<tr>
+<td>4</td>
+<td>排序</td>
+<td><code>-flat -cum</code></td>
+<td><code>go tool pprof -files -cum ./cpu.prof</code>, 指定按照文件聚合， 并且通过cum维度逆序排序；</td>
+<td>仅有两个排序选择</td>
+</tr>
+<tr>
+<td>5</td>
+<td>源.prof文件处理</td>
+<td><code>-diff_base, -base ...</code></td>
+<td><code>go tool pprof -diff_base ./v1/cpu.prof ./v2/cpu.prof</code> 展示两个<code>cpu.prof</code>文件之间的差异</td>
+<td>没有实践过</td>
+</tr>
+<tr>
+<td>6</td>
+<td>选择交互模式</td>
+<td><code>-http -tools -no_browser</code></td>
+<td><code>go tool pprof -http=0.0.0.0:1234  ./cpu.prof</code>, 通过Web方式交互</td>
+<td>最常用<code>-http</code></td>
+</tr>
+<tr>
+<td>7</td>
+<td>便捷选项</td>
+<td><code>-alloc_space -inuse_objects ...</code></td>
+<td><code>go tool pprof -alloc_space  ./v3/mem.prof</code> 通过 历史分配空间维度 查看<code>mem.prof</code>文件； 等于 <code>-sample_index=alloc_spac</code></td>
+<td>不同类型文件的选择式不一样的，例如内存prof文件就可以指定 <code>space, objects</code>等</td>
+</tr>
+</tbody></table>
+<p>在我自己的使用经历来看， 使用<code>go tool pprof -http=host:port source</code>的方式， 在<code>Web</code>页面上的选择已经基本上覆盖了所有的<code>Cli</code>使用方式。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p>这一部分介绍<code>pprof</code>的使用方式, 参考:  <a href="https://github.com/google/pprof/blob/main/doc/README.md">Google About Pprof README</a>; <code>pprof</code> 工具的使用围绕于<code>profiling data</code>, 那么可以分为两部分:<code>profiling data</code> 的生成, 分析<code>profiling data</code>;</p>
+<h3 id="1-profiling-data-生成"><a href="#1-profiling-data-生成" class="headerlink" title="1. profiling data 生成:"></a>1. <code>profiling data</code> 生成:</h3><h4 id="相关pkg"><a href="#相关pkg" class="headerlink" title="相关pkg:"></a>相关pkg:</h4><ul>
+<li><p><code>runtime/pprof</code>: 官方推荐标准包: 通过<code>runtime</code>获得<code>profiling data</code>, 一般适用于可结束代码, 例如<code>Utils App</code>;</p>
+</li>
+<li><p><code>net/http/pprof</code>: 官方推荐标准包: 支持通过<code>HTTP Request</code> 获得<code>profiling data</code>, 一般适用于不可结束代码, 例如<code>Web App</code>;</p>
+<p>其内部封装了<code>runtime/pprof</code>包, 在程序启动前自动注册<code>/debug/pprof/</code>路由, 方便触发式调用;</p>
+</li>
+</ul>
+<p>理论上说: 任何封装了<code>runtime/pprof</code>的<code>pprof</code>工具包, 均可以用于<code>profiling data</code>生成;</p>
+<h4 id="获得profiling-data的方式"><a href="#获得profiling-data的方式" class="headerlink" title="获得profiling data的方式:"></a>获得<code>profiling data</code>的方式:</h4><p>按照目标代码可以分为两种:</p>
+<h5 id="测试代码"><a href="#测试代码" class="headerlink" title="测试代码"></a>测试代码</h5><p>通过测试代码<code>_test.go</code>获得<code>profiling data</code>: </p>
+<p><code>go test</code> 基准测试<code>bench</code>内嵌了<code>runtime/pprof</code>, 可通过<code>options</code>获得: </p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">go test -cpuprofile cpu.prof -memprofile mem.prof -bench .</span><br></pre></td></tr></table></figure>
+<h5 id="程序代码"><a href="#程序代码" class="headerlink" title="程序代码"></a>程序代码</h5><p>通过程序代码<code>.go</code>获得,  这种方式需要嵌入代码,根据需要选择<code>runtime/pprof</code>, <code>net/http/pprof</code></p>
+<ul>
+<li><p>选择<code>runtime/pprof</code>:</p>
+<p><a href="https://golang.google.cn/pkg/runtime/pprof/">参考代码</a>示例:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> cpuprofile = flag.String(<span class="string">&quot;cpuprofile&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;write cpu profile to `file`&quot;</span>)</span><br><span class="line"><span class="keyword">var</span> memprofile = flag.String(<span class="string">&quot;memprofile&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;write memory profile to `file`&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    flag.Parse()</span><br><span class="line">    <span class="keyword">if</span> *cpuprofile != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        f, err := os.Create(*cpuprofile)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            log.Fatal(<span class="string">&quot;could not create CPU profile: &quot;</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">defer</span> f.Close() <span class="comment">// error handling omitted for example</span></span><br><span class="line">        <span class="keyword">if</span> err := pprof.StartCPUProfile(f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            log.Fatal(<span class="string">&quot;could not start CPU profile: &quot;</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">defer</span> pprof.StopCPUProfile()</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... rest of the program ...</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> *memprofile != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">        f, err := os.Create(*memprofile)</span><br><span class="line">        <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">            log.Fatal(<span class="string">&quot;could not create memory profile: &quot;</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">defer</span> f.Close() <span class="comment">// error handling omitted for example</span></span><br><span class="line">        runtime.GC() <span class="comment">// get up-to-date statistics</span></span><br><span class="line">        <span class="keyword">if</span> err := pprof.WriteHeapProfile(f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">            log.Fatal(<span class="string">&quot;could not write memory profile: &quot;</span>, err)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中通过, 命令行<code>options</code>方式控制, <code>CPU Profile</code>, <code>Memory Profile</code>的生成;</p>
+</li>
+<li><p>选择<code>net/http/pprof</code>:</p>
+<p>使用此方式的前提是:</p>
+<p><code>import _ &quot;net/http/pprof&quot;</code></p>
+<p>会默认注册/debug/pprof/. 路由到服务中, 通过<code>http request</code>获得<code>profiling data</code>, 并自动进入交互使用模式 具体为:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go tool pprof http://localhost:port/debug/pprof/profile   # 30-second CPU profile</span><br><span class="line">go tool pprof http://localhost:port/debug/pprof/heap      # heap profile</span><br><span class="line">go tool pprof http://localhost:port/debug/pprof/block     # goroutine blocking profile</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="2-profiling-data-分析"><a href="#2-profiling-data-分析" class="headerlink" title="2. profiling data 分析:"></a>2. <code>profiling data</code> 分析:</h3></li>
+</ul>
+<h4 id="live-profiling-data"><a href="#live-profiling-data" class="headerlink" title="live profiling data"></a><code>live profiling data</code></h4><p>查看实时<code>profiling data</code>, 如果使用了<code>net/http/pprof</code>包, 那么在浏览器上可以直接通过<code>URL: localhost:port/debug/pprof/</code>查看实时的<code>profiling data</code>. </p>
+<p>这种模式的使用场景, 还是比较少的.</p>
+<h4 id="file-profiling-data"><a href="#file-profiling-data" class="headerlink" title="file profiling data"></a><code>file profiling data</code></h4><p>查看序列化的<code>profiling data</code></p>
+<p>使用格式为: <code>pprof &lt;format&gt; [options] [binary] &lt;source&gt; ...</code></p>
+<p>其支持两种格式的分析:</p>
+<h5 id="Interactive-Terminal-Use"><a href="#Interactive-Terminal-Use" class="headerlink" title="Interactive Terminal Use"></a>Interactive Terminal Use</h5><p>终端交互是默认的<code>format</code>, 格式为:</p>
+<p><code>go tool pprof [options] source</code></p>
+<ul>
+<li><p><code>source</code>来源</p>
+<p>可以是本地已保存的<code>profiling data</code>, 也可以是一个<code>http</code>的<code>debug/pprof</code>请求(也是profiling data), 例如:</p>
+<ul>
+<li><code>go tool pprof ./cpu.prof</code>: 分析当前路径下的<code>cpu.prof</code>文件</li>
+<li><code>go tool pprof http://127.0.0.1:1234/debug/pprof/profile</code>: 分析30S内的本地<code>1234</code>服务产生的`CPU profiling data``</li>
+</ul>
+</li>
+<li><p><code>source</code>格式可以是<code>.pb.gz</code>格式的压缩文件, 也可以是<code>.pb</code>的解压缩文件</p>
+<ul>
+<li><p>压缩示例:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">[root]#</span><span class="bash"> ./pprof /root/pprof/pprof.cbspsvc-linux.samples.cpu.001.pb.gz</span></span><br><span class="line">File: cbspsvc-linux</span><br><span class="line">Type: cpu</span><br><span class="line">Time: Nov 22, 2023 at 2:42pm (CST)</span><br><span class="line">Duration: 30s, Total samples = 50ms ( 0.17%)</span><br><span class="line">Entering interactive mode (type &quot;help&quot; for commands, &quot;o&quot; for options)</span><br><span class="line">(pprof)</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li><p>解压缩示例:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">[root]#</span><span class="bash"> ./pprof /root/pprof/pprof.cbspsvc-linux.samples.cpu.002.pb</span></span><br><span class="line">File: cbspsvc-linux</span><br><span class="line">Type: cpu</span><br><span class="line">Time: Nov 22, 2023 at 2:46pm (CST)</span><br><span class="line">Duration: 30s, Total samples = 30ms (  0.1%)</span><br><span class="line">Entering interactive mode (type &quot;help&quot; for commands, &quot;o&quot; for options)</span><br><span class="line">(pprof)</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h5 id="Interactive-Web-Use"><a href="#Interactive-Web-Use" class="headerlink" title="Interactive Web Use"></a>Interactive Web Use</h5></li>
+</ul>
+</li>
+</ul>
+<p>通过指定<code>format: http</code>, 格式为:<code>go tool pprof -http=[host]:[port] [options] source</code></p>
+<p><code>pprof</code> 在指定端口,启动<code>http</code>请求, 通过浏览器, 以Web方式查看<code>source</code>, 例如: </p>
+<p>以本地地址, 在1234端口, 查看<code>cpu profiling data</code></p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@]# .&#x2F;pprof -http&#x3D;0.0.0.0:1234 &#x2F;root&#x2F;pprof&#x2F;pprof.cbspsvc-linux.samples.cpu.002.pb</span><br><span class="line">Serving web UI on http:&#x2F;&#x2F;0.0.0.0:1234</span><br><span class="line">http:&#x2F;&#x2F;0.0.0.0:1234</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><code>source</code> 文件的来源与格式, 与终端使用无差异;</p>
+<h2 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h2><p>这一部分将通过示例的方式展示性能优化分析过程。代码归档地址：<a href="https://github.com/GuardingDog/learnGo/tree/master">github</a>.</p>
+<h3 id="示例项目"><a href="#示例项目" class="headerlink" title="示例项目"></a>示例项目</h3><p><code>Go</code>在11年首次提出<a href="https://go.dev/blog/pprof">Profiling Go Program</a>时,采用示例项目为<code>Robert Hundt paper&#39;s</code>提出的<code>Loop Recognition Algorithm Code</code>. 原文中提到的优化方式，具备一定的代表性. 本文采用的项目源码与其一致, 将采用了<code>Interactive Web</code>方式复现了原文中的优化措施, 并通过性能对比的方式进一步体现优化效果. </p>
+<h4 id="环境信息"><a href="#环境信息" class="headerlink" title="环境信息"></a>环境信息</h4><ul>
+<li><p>CPU:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line"><span class="meta">[root]#</span><span class="bash"> lscpu</span></span><br><span class="line">Architecture:          x86_64</span><br><span class="line">CPU op-mode(s):        32-bit, 64-bit</span><br><span class="line">Byte Order:            Little Endian</span><br><span class="line">CPU(s):                4</span><br><span class="line">...</span><br><span class="line">Model name:            Intel(R) Core(TM)2 Duo CPU     T7700  @ 2.40GHz</span><br><span class="line">Stepping:              11</span><br><span class="line">CPU MHz:               2600.002</span><br><span class="line">BogoMIPS:              5200.00</span><br><span class="line">...</span><br><span class="line">L1d cache:             32K</span><br><span class="line">L1i cache:             32K</span><br><span class="line">L2 cache:              4096K</span><br><span class="line">...</span><br></pre></td></tr></table></figure></li>
+<li><p>内存:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root]# free</span><br><span class="line">              total        used        free      shared  buff&#x2F;cache   available</span><br><span class="line">Mem:       16265900     1089812    14215544       19504      960544    14829644</span><br><span class="line">Swap:       2097148           0     2097148</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>Go</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root]# go version</span><br><span class="line">go version go1.16.4 linux&#x2F;amd64</span><br></pre></td></tr></table></figure>
+<h4 id="衡量标准"><a href="#衡量标准" class="headerlink" title="衡量标准"></a>衡量标准</h4></li>
+</ul>
+<p>本文采用的衡量指标与<a href="https://go.dev/blog/pprof">Profiling Go Program</a>一致:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root runtime]# cat xtime</span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/sh</span></span><br><span class="line">/usr/bin/time -f &#x27;%Uu %Ss %er %MkB %C&#x27; &quot;$@&quot;</span><br></pre></td></tr></table></figure>
+<p>通过<code>./xtime binaryFilePath</code> 可以获得<code>binaryFilePath</code>下的程序执行的:</p>
+<ul>
+<li><code>%Uu</code>用户CPU执行时间, 单位为秒;</li>
+<li><code>%Ss</code>系统CPU执行时间, 单位为秒;</li>
+<li><code>%er</code>命令开始到结束时间, 单位为秒;</li>
+<li><code>%MKB</code>内存占用大小, 单位为KB;</li>
+<li><code>%C</code> 传递的命令行参数.</li>
+</ul>
+<h3 id="优化前"><a href="#优化前" class="headerlink" title="优化前:"></a>优化前:</h3><p><a href="https://github.com/GuardingDog/learnGo/blob/master/pkg/tools/pprof/runtime/v1/havlak.go">具体代码地址</a></p>
+<p>构建<code>go program</code>, 并通过<code>xtime</code>获得当前的程序执行情况:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v1]# go build ./havlak.go</span><br><span class="line">[root v1]# ll</span><br><span class="line">total 2492</span><br><span class="line">-rwxr-xr-x. 1 root root 2530042 Dec 25 16:39 havlak</span><br><span class="line">-rw-r--r--. 1 root root   16551 Dec 25 10:23 havlak.go</span><br><span class="line">[root v1]# ../xtime ./havlak</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">42.51u 4.31s 38.48r 316284kB ./havlak</span><br></pre></td></tr></table></figure>
+<p>在优化前的性能指标为:</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>User Time</th>
+<th>Sys Time</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>优化前</td>
+<td>42.51 s</td>
+<td>4.31 s</td>
+<td>316284 kB</td>
+</tr>
+</tbody></table>
+<h3 id="CPU分析"><a href="#CPU分析" class="headerlink" title="CPU分析"></a>CPU分析</h3><p>由于项目并非<code>Web</code>类, 属于可结束型代码, 所以采用了<code>runtime/pprof</code>包作为<code>profiling data</code>的生成包;</p>
+<h4 id="profiling-data-生成"><a href="#profiling-data-生成" class="headerlink" title="profiling data 生成:"></a><code>profiling data</code> 生成:</h4><ul>
+<li><p>嵌入<code>CPU Profile</code>生成代码, 开启<code>CPU Profiling</code>功能;</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> cpuprofile = flag.String(<span class="string">&quot;cpuprofile&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;write cpu profile to this file&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.Parse()</span><br><span class="line">	<span class="keyword">if</span> *cpuprofile != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		f, err := os.Create(*cpuprofile)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">&quot;could not create CPU profile: &quot;</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">defer</span> f.Close() <span class="comment">// error handling omitted for example</span></span><br><span class="line">		<span class="keyword">if</span> err := pprof.StartCPUProfile(f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">&quot;could not start CPU profile: &quot;</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">defer</span> pprof.StopCPUProfile()</span><br><span class="line">	&#125;</span><br><span class="line">	....</span><br></pre></td></tr></table></figure>
+<p>代码位置约为<code>660行</code>. 添加的代码部分, 其支持通过命令行参数<code>-cpuprofile</code>的方式,指定开启<code>CPU Profiling</code>功能的同时将<code>profiling data</code>输出在<code>cpuprofile</code>文件内;</p>
+</li>
+<li><p>编译代码, 开启<code>CPU Profiling</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v1]# go build ./havlak.go</span><br><span class="line">[root v1]# ll</span><br><span class="line">total 2492</span><br><span class="line">-rwxr-xr-x. 1 root root 2530010 Dec 25 16:56 havlak</span><br><span class="line">-rw-r--r--. 1 root root   16720 Dec 25 16:44 havlak.go</span><br><span class="line">[root v1]# ./havlak -cpuprofile=cpu.prof</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">[root v1]# ll</span><br><span class="line">total 2528</span><br><span class="line">-rw-r--r--. 1 root root   34063 Dec 25 16:58 cpu.prof</span><br><span class="line">-rwxr-xr-x. 1 root root 2530010 Dec 25 16:56 havlak</span><br><span class="line">-rw-r--r--. 1 root root   16720 Dec 25 16:44 havlak.go</span><br></pre></td></tr></table></figure>
+<p>在等待约30S后, 获得了<code>CPU Profiling data</code> : <code>cpu.prof</code>. </p>
+</li>
+</ul>
+<h4 id="profilinf-data-分析"><a href="#profilinf-data-分析" class="headerlink" title="profilinf data 分析:"></a><code>profilinf data</code> 分析:</h4><ul>
+<li><p>开启<code>Interactive Web</code>, 查看<code>CPU Profiling data</code></p>
+<p>通过<code>go tool pprof -http=host:port source</code>命令, 可以在指定端口允许通过<code>Web</code>查看<code>CPU Profiling data</code>;</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v1]# go tool pprof -http=0.0.0.0:1234 ./cpu.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
+<p>上面指定监听<code>1234</code>端口, 由于本地机器<code>IP</code>为<code>10.131.197.202</code>. 所以可以通过浏览器访问<code>http://10.131.197.202:1234</code>查看交互页面;</p>
+<p>页面默认展示<code>Graph VIEW</code>, 默认通过<code>cpu time</code>作为衡量指标, 如下图:</p>
+<p><img src="../images/image-20231225172027695.png" alt="image-20231225172027695"></p>
+<p>接下来将简单的解释下交互界面元素, 并对每一种<code>VIEW</code>模式进行简单解读.</p>
+</li>
+<li><p>界面解释:</p>
+<ul>
+<li><p>操作栏: </p>
+<p><img src="../images/image-20231225173219408.png" alt="image-20231225173219408"></p>
+<p>分为4列选项, <code>VIEW</code> 查看模式, <code>SAMPLE</code> 样本标签选择, <code>REFINE</code> 样本过滤,聚焦等, <code>CONFIG</code>记录配置项;1列正则表达式搜索框;</p>
+<p>其中<code>VIEW</code>与<code>SAMPLE</code>就我而言,使用比较频繁, 下面会分别进行简单解释, 详细解释建议自行参考官方文档: <a href="https://github.com/google/pprof/blob/main/doc/README.md">Google About Pprof README</a>.</p>
+</li>
+<li><p><code>VIEW: Top</code></p>
+<p><img src="../images/image-20231225174240035.png" alt="image-20231225174240035"></p>
+<p><code>Top</code>模式下默认支持查看<code>Function</code>级别的<code>CPU</code>占用情况, 默认按照<code>Flat</code>时间逆序排序,方便用来分析性能瓶颈;</p>
+<ul>
+<li><code>Flat</code>: 当前函数占用的<code>cpu</code>时间,  支持页面排序;</li>
+<li><code>Flat%</code>: 当前函数占用的<code>cpu</code>时间比例;</li>
+<li><code>Sum%</code>: <code>Flat%</code>的汇总展示, 例如第三行的<code>Sum%</code>就是<code>1.Flat% + 2.Flat% + 3.Flat%</code>;</li>
+<li><code>Cum</code>: 当前函数及子函数占用的<code>cpu</code>时间, 支持页面排序;</li>
+<li><code>Cum%</code>: 当前函数及子函数占用的<code>cpu</code>时间比例;</li>
+<li><code>Name</code>: 包名+函数名称</li>
+<li><code>Inlined?</code>: 当前函数是否被编译器通过<code>inline</code>进行了优化.</li>
+</ul>
+<p>那么对于第一行来说可以解释为:</p>
+<p><code>runtime.mapaccess1_fast64</code>函数本身执行时间最长约<code>3.88s</code>, 占比约<code>11.14%</code>, 与其子函数共占有<code>4.42s</code>, 占比约<code>12,69%</code>, 并未通过<code>inline</code>优化;</p>
+</li>
+<li><p><code>VIEW: Graph</code></p>
+<p><img src="../images/image-20231225191747898.png" alt="image-20231225191747898"></p>
+<p><code>Graph VIEW</code>模式是<code>Web</code>默认模式, 其展示了<code>Function</code>级别的调用关系, 如上图中<code>runtime.mallocgc -&gt; runtime(*mcache).nextFree</code>表示前者调用了后者, 边权重显示为<code>1.27s</code>, 表示<code>runtime(*mcache).nextFree</code>本身及其后续调用花销为<code>1.27s</code>, 具体解释如下, 每一个方框称为<code>Node</code>, 表示一个<code>Function</code></p>
+<ul>
+<li><code>Node Color/Size</code>: Size 代表了<code>cum</code>数字绝对值<ul>
+<li><code>cum -&gt; +∞</code>, Size越大, 颜色越红;</li>
+<li><code>cum -&gt; 0</code>, Size越小, 颜色越灰;</li>
+<li><code>cum -&gt; -∞</code>, Size越大, 颜色越绿;</li>
+</ul>
+</li>
+<li><code>Node Font Size</code>: 方框内字体Size代表<code>flat</code>, <code>flat -&gt; +∞</code>: 越大</li>
+<li><code>Edge weight</code>: Node之间的边越粗, 代表占有的资源越多, 例如子函数占用的时间;</li>
+<li><code>Edge color</code>: 与<code>Node color</code>形式一样</li>
+<li><code>Dashed Edge</code>: 虚线边, 表示其中省略了<code>node</code>, 也就是说非直接调用;</li>
+<li><code>Solid Edge</code>: 实线边, 表示直接调用;</li>
+<li><code>Inline Marked Edge</code>: <code>inline</code>标记的边, 表示子函数被编译器<code>inline</code>优化了;</li>
+</ul>
+</li>
+<li><p><code>VIEW: Flame Graph</code></p>
+<p><img src="../images/image-20231225194552548.png" alt="image-20231225194552548"></p>
+<p><code>Flame Graph</code> 因为其形状像是火焰, 俗称为火焰图; 其表示的是紧密型的函数调用(自上至下)关系;</p>
+<p>图中的<code>Box</code>关系与<code>profiling data</code>中的堆栈表示是一致的.</p>
+<p>每一个<code>Box</code>宽度表示<code>cum</code>时间. 其子函数位于下一层, 自左向右依次排列在一起, 如果有空余则表示<code>flat</code>时间;</p>
+<p>点击<code>Box</code>后会聚焦在此函数, 如下图:</p>
+<p><img src="../images/image-20231225195245151.png" alt="image-20231225195245151"></p>
+<p>可以看到<code>FindLoops</code>函数, 其<code>cum</code>开销为<code>21.20s</code>, 调用了诸多子函数, 下一层最右侧空白位置为<code>FindLoops</code>本身的时间开销:<code>flat</code>;</p>
+<p>PS: 我个人在使用时, 发现在1.21版本的<code>go tool pprof</code>下的火焰图有了新选项(<code>Flame Graph new</code>), 已经有了更多变化, 官方截图如下:</p>
+<p><img src="../images/image-20231225195624242.png" alt="image-20231225195624242"></p>
+<ul>
+<li>加入了颜色标识: 方便识别包;</li>
+<li>规范了子调用函数的图像展示, 自左至右开销时间依次降低;</li>
+<li>…</li>
+</ul>
+</li>
+<li><p><code>VIEW: Peek</code></p>
+<p><img src="../images/image-20231225195826156.png" alt="image-20231225195826156"></p>
+<p>以文本格式展示函数的调用关系, 可读性一般, 可以使用<code>Graph</code>, <code>Flame Graph</code>替代;</p>
+</li>
+<li><p><code>VIEW: Source</code></p>
+<p><img src="../images/image-20231225200450042.png" alt="image-20231225200450042"></p>
+<p>展示了已标注的源码, 左侧有三列, 分别表示 代码行, <code>flat</code>开销, <code>cum</code>开销; 右侧为源码本身;</p>
+<p>那么图中表示, 存在<code>runtime/mgcmark.go</code>文件的1211行的<code>heapBitsForAddr</code>函数本身开销为<code>130ms</code>, 包括其子函数的开销为<code>160ms</code>;</p>
+<p>本模式一般用于行级别的<code>BUG</code>排查, 一般已经基本明确瓶颈函数后, 通过上面的正则搜索框进行下一步定位;</p>
+<p>点击源码可以看到对应的汇编码, 以方便进一步排查;</p>
+<p><img src="../images/image-20231225201034874.png" alt="image-20231225201034874"></p>
+</li>
+<li><p><code>VIEW: Disassemble</code></p>
+<p><img src="../images/image-20231225201103015.png" alt="image-20231225201103015"></p>
+<p>汇编模式查看, 我自己没用过;</p>
+</li>
+</ul>
+</li>
+<li><p>分析</p>
+<ol>
+<li><p>首先通过<code>Top VIEW</code>确定下当前的瓶颈函数</p>
+<p><img src="../images/image-20231225202113461.png" alt="image-20231225202113461"></p>
+<p>发现<code>runtime.mapaccess1_fast64</code>函数其<code>flat</code>执行时间最长, 其功能为</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">runtime.mapaccess1_fast64 是 Go 语言中的一个内部函数，用于快速访问 map 结构中的元素。它是在编译器生成的代码中使用的，用于优化 map 的访问速度。这个函数的具体实现可以在 Go 语言的运行时源代码中找到。在一般的 Go 代码中，我们并不需要直接调用这个函数，而是通过 map[key] 的方式来访问 map 中的元素。</span><br></pre></td></tr></table></figure>
+<p>由于其是<code>runtime</code>包内的函数, 不是业务代码, 而我们需要优化的是业务代码, 可以通过<code>Graph VIEW</code>查看其调用路径;</p>
+</li>
+<li><p>其次通过<code>Graph VIEW</code>查看, 借助于正字表达式过滤, 可以排除无效的分支干扰:</p>
+<p><img src="../images/image-20231225202710714.png" alt="image-20231225202710714"></p>
+<p>发现其调用来源主要有两个<code>main.DFS 2.54s, main.FindLoop 1.88s</code>. 那么目前已经可以定位到函数级别了, 需要进一步定位到行级别(<code>Source VIEW</code>)的分析. 我选择查看<code>main.DFS</code>函数的<code>Source VIEW</code>;</p>
+</li>
+<li><p>通过<code>Source VIEW</code>, 借助于正字表达式过滤, 准确定位到<code>main.DFS</code>函数的源码标注:</p>
+<p><img src="../images/image-20231225203153527.png" alt="image-20231225203153527"></p>
+<p>从上图可以看出:<code>cum</code>维度上看: 时间开销较多的有,  <code>237行, 4.89s </code>, <code>236行, 2.07s</code>, <code>235行, 1.18s</code> …</p>
+<ul>
+<li><p>其中<code>237</code>行是递归, 235行是循环. 这种时间开销不可避免;</p>
+</li>
+<li><p><code>236</code>行在进行<code>map</code>索引过程, 其与<code>Top VIEW</code>中定位的<code>runtime.mapaccess1_fast64</code>是匹配的.是需要处理的;</p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>进一步分析, 发现<code>236行</code>操作的<code>number</code>变量, 在<code>232行 440ms, 240行 850ms</code>均在进行<code>map</code>索引操作. </p>
+<pre><code>- 涉及`number`的map索引开销约`2.5s`, 可以进行优化;</code></pre>
+</li>
+<li><p>修改代码:</p>
+<p>经过分析, 发现<code>number map</code>变量主要用于标识代码块是否访问过. 而<code>BasicBlock.Name int</code>属性是唯一且范围可控, 可以通过<code>[]int</code>切片的方式进行等价处理, 具体代码差异为:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v2]# diff /home/learnGo-master/pkg/tools/pprof/runtime/v1/havlak.go /home/learnGo-master/pkg/tools/pprof/runtime/v2/havlak.go | sed &#x27;s/^/差异行： /&#x27;</span><br><span class="line">差异行： 230c230</span><br><span class="line">差异行： &lt; func DFS(currentNode *BasicBlock, nodes []*UnionFindNode, number map[*BasicBlock]int, last []int, current int) int &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt; func DFS(currentNode *BasicBlock, nodes []*UnionFindNode, number []int, last []int, current int) int &#123;</span><br><span class="line">差异行： 232c232</span><br><span class="line">差异行： &lt;      number[currentNode] = current</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      number[currentNode.Name] = current</span><br><span class="line">差异行： 236c236</span><br><span class="line">差异行： &lt;              if number[target] == unvisited &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              if number[target.Name] == unvisited &#123;</span><br><span class="line">差异行： 240c240</span><br><span class="line">差异行： &lt;      last[number[currentNode]] = lastid</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      last[number[currentNode.Name]] = lastid</span><br><span class="line">差异行： 260c260</span><br><span class="line">差异行： &lt;      number := make(map[*BasicBlock]int)</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      number := make([]int, size)</span><br><span class="line">差异行： 276c276</span><br><span class="line">差异行： &lt;              number[bb] = unvisited</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              number[bb.Name] = unvisited</span><br><span class="line">差异行： 304c304</span><br><span class="line">差异行： &lt;                              v := number[nodeV]</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;                              v := number[nodeV.Name]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>重新编译并执行:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@sangfor v2]# go build .&#x2F;havlak.go</span><br><span class="line">[root@sangfor v2]# ..&#x2F;xtime .&#x2F;havlak</span><br><span class="line"># of loops: 76000 (including 1 artificial root node)</span><br><span class="line">26.71u 2.39s 20.65r 332400kB .&#x2F;havlak</span><br></pre></td></tr></table></figure>
+<p>发现<code>CPU</code>时间开销已经下降了;</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>User Time</th>
+<th>Sys Time</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>优化前</td>
+<td>42.51 s</td>
+<td>4.31 s</td>
+<td>316284 kB</td>
+</tr>
+<tr>
+<td>优化CPU后</td>
+<td>26.71 s</td>
+<td>2.39 s</td>
+<td>332400 kB</td>
+</tr>
+</tbody></table>
+<p>再此获得<code>cpuprofile</code>文件查看:</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">[root@sangfor v2]# .&#x2F;havlak -cpuprofile&#x3D;cpu.prof</span><br><span class="line"># of loops: 76000 (including 1 artificial root node)</span><br><span class="line">[root@sangfor v2]# ll</span><br><span class="line">total 2516</span><br><span class="line">-rw-r--r--. 1 root root   27387 Dec 25 21:07 cpu.prof</span><br><span class="line">-rwxr-xr-x. 1 root root 2525690 Dec 25 20:53 havlak</span><br><span class="line">-rw-r--r--. 1 root root   16723 Dec 25 20:53 havlak.go</span><br><span class="line">[root@sangfor v2]# go tool pprof -http&#x3D;0.0.0.0:1234 .&#x2F;cpu.prof</span><br><span class="line">warning: GOPATH set to GOROOT (&#x2F;usr&#x2F;local&#x2F;go&#x2F;) has no effect</span><br><span class="line">Serving web UI on http:&#x2F;&#x2F;0.0.0.0:1234</span><br></pre></td></tr></table></figure>
+<p>发现<code>runtime.mapaccess1_fast6</code>函数已经不再是瓶颈函数了;</p>
+<p><img src="../images/image-20231225211042259.png" alt="image-20231225211042259"></p>
+</li>
+<li><p>当前瓶颈函数: <code>runtime.scanobject</code>, <code>runtime.mallocgc</code>… 均为<code>GoGC</code>机制使用, 需要进行内存分析;</p>
+</li>
+</ul>
+<h3 id="内存分析"><a href="#内存分析" class="headerlink" title="内存分析"></a>内存分析</h3><h4 id="profiling-data-生成-1"><a href="#profiling-data-生成-1" class="headerlink" title="profiling data 生成:"></a><code>profiling data</code> 生成:</h4><ul>
+<li><p>嵌入<code>Mem Profile</code>生成代码, 开启<code>Mem Profiling</code>功能;</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> memprofile = flag.String(<span class="string">&quot;memprofile&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;write memory profile to this file&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	flag.Parse()</span><br><span class="line">	...</span><br><span class="line">	<span class="keyword">if</span> *memprofile != <span class="string">&quot;&quot;</span> &#123;</span><br><span class="line">		f, err := os.Create(*memprofile)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">&quot;could not create memory profile: &quot;</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">defer</span> f.Close() <span class="comment">// error handling omitted for example</span></span><br><span class="line">		runtime.GC()    <span class="comment">// get up-to-date statistics</span></span><br><span class="line">		<span class="keyword">if</span> err := pprof.WriteHeapProfile(f); err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(<span class="string">&quot;could not write memory profile: &quot;</span>, err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">50</span>; i++ &#123;</span><br><span class="line">		FindHavlakLoops(cfgraph, NewLSG())</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Printf(<span class="string">&quot;# of loops: %d (including 1 artificial root node)\n&quot;</span>, lsgraph.NumLoops())</span><br><span class="line">	lsgraph.CalculateNestingLevel()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>代码位置约为<code>709行</code>. 添加的代码部分, 其支持通过命令行参数<code>-memprofile</code>的方式,指定开启<code>Mem Profiling</code>功能的同时将<code>profiling data</code>输出在<code>memprofile</code>文件内;</li>
+</ul>
+</li>
+<li><p>编译代码, 开启<code>Mem Profiling</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v3]# go build ./havlak.go</span><br><span class="line">[root v3]# ./havlak -memprofile=mem.prof</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">[root@sangfor v3]# ll</span><br><span class="line">total 2556</span><br><span class="line">-rwxr-xr-x. 1 root root 2591320 Dec 25 21:18 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17170 Dec 25 21:13 havlak.go</span><br><span class="line">-rw-r--r--. 1 root root    1891 Dec 25 21:18 mem.prof</span><br></pre></td></tr></table></figure>
+<h4 id="profilinf-data-分析-1"><a href="#profilinf-data-分析-1" class="headerlink" title="profilinf data 分析:"></a><code>profilinf data</code> 分析:</h4></li>
+<li><p>开启<code>Interactive Web</code>, 查看<code>Mem Profiling data</code></p>
+<p>通过<code>go tool pprof -http=host:port source</code>命令, 可以在指定端口允许通过<code>Web</code>查看<code>Mem Profiling data</code>;</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v3]# go tool pprof -http=0.0.0.0:1234 ./mem.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
+<p>同样的默认展示<code>Graph VIEW</code>:</p>
+<p><img src="../images/image-20231225214519100.png" alt="image-20231225214519100"></p>
+</li>
+<li><p>界面解释: 基本与<code>CPU</code>一致, 不解释;</p>
+</li>
+<li><p>分析:</p>
+<ol>
+<li><p>通过<code>Top VIEW</code> 查看瓶颈函数</p>
+<p><img src="../images/image-20231225214348200.png" alt="image-20231225214348200"></p>
+<p>前三列占据了8成的内存占用, 瓶颈函数分别为<code>main.NewBasicBlock, main.(*LSG).NewLoop, main.(*SimpleLoop).AddNode</code>;</p>
+</li>
+<li><p>通过<code>graph VIEW</code>模式查看其调用情况</p>
+<p><img src="../images/image-20231225215136960.png" alt="image-20231225215136960"></p>
+<p>发现上面的函数均进行了<code>inline</code>优化处理, 对于性能分析来说, <code>inline</code>优化会导致<code>Source VIEW</code>模式无法直接定位到<code>inline function</code>, 例如查看<code>main.(*LSG).NewLoop</code>, 显示找不到:</p>
+<p><img src="../images/image-20231226095721989.png" alt="image-20231226095721989"></p>
+<p>对于此, 我两种处理方案:</p>
+<ol>
+<li><p>继续使用当前<code>profiling data</code>方案: 可以通过<code>no-inline</code>的父调用函数进行<code>Source VIEW</code>查验, 例如其调用函数<code>main.FindLoops</code>函数未进行<code>inline</code>处理,如下图:</p>
+<p><img src="../images/image-20231226100103507.png" alt="image-20231226100103507"></p>
+<p>发现405行中, <code>lsgraph.NewLoop()</code>函数占用了<code>11.50MB</code>的内存, 其标注如下图:</p>
+<p><img src="../images/image-20231226100531255.png" alt="image-20231226100531255"></p>
+<p>个人再自行通过代码阅读的方式, 排查上述代码. 例如我们知道<code>566行, 567行的 make()</code>函数会进行内存分配操作, 也许这里是优化项.</p>
+</li>
+<li><p>使用<code>no-inline</code>版本的<code>profiling data</code>, 重新编译并指定不采用<code>inline</code>优化, 随后再次生成一份<code>profiling data</code>:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root v3]# go build -o havlak-without-inline -gcflags=-l ./havlak.go</span><br><span class="line">[root v3]# ll</span><br><span class="line">total 5092</span><br><span class="line">-rwxr-xr-x. 1 root root 2591320 Dec 25 21:18 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17170 Dec 25 21:13 havlak.go</span><br><span class="line">-rwxr-xr-x. 1 root root 2595129 Dec 26 09:44 havlak-without-inline</span><br><span class="line">-rw-r--r--. 1 root root    1891 Dec 25 21:18 mem.prof</span><br><span class="line">[root v3]# ./havlak-without-inline -memprofile=mem-without-inline.prof</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">[root v3]# ll</span><br><span class="line">total 5096</span><br><span class="line">-rwxr-xr-x. 1 root root 2591320 Dec 25 21:18 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17170 Dec 25 21:13 havlak.go</span><br><span class="line">-rwxr-xr-x. 1 root root 2595129 Dec 26 09:44 havlak-without-inline</span><br><span class="line">-rw-r--r--. 1 root root    1891 Dec 25 21:18 mem.prof</span><br><span class="line">-rw-r--r--. 1 root root    2017 Dec 26 09:46 mem-without-inline.prof</span><br><span class="line">[root v3]# go tool pprof -http=0.0.0.0:1234 ./mem-without-inline.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
+<p>可以在Web上看到均无<code>inline</code>标识, 可以直接利用<code>Source VIEW</code>定位:</p>
+<p><img src="../images/image-20231226101357893.png" alt="image-20231226101357893"></p>
+<p>个人在使用时, 采用了此种方案.</p>
+</li>
+</ol>
+</li>
+<li><p>通过<code>Source VIEW</code>, 借助于正字表达式过滤, 准确定位到<code>main.(*LSG).NewLoop</code>函数的源码标注, 如下图:</p>
+<p><img src="../images/image-20231226101740684.png" alt="image-20231226101740684"></p>
+<p>发现<code>566行, 567行 make()</code> 函数占用了约<code>7MB</code>的内存开销, 并且进一步分析发现<code>basicBlocks, Children</code>可以通过切片的方式替换Map, 这会减少内存开销;</p>
+<p>在随后的分析中, 发现其他业务代码也有类似的问题, 并一并进行了优化处理, 这里就不一一赘述了, 具体文件差异如下:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root ~]# diff /home/learnGo-master/pkg/tools/pprof/runtime/v3/havlak.go /home/learnGo-master/pkg/tools/pprof/runtime/v4/havlak.go | sed &#x27;s/^/差异行： /&#x27;</span><br><span class="line">差异行： 244a245,253</span><br><span class="line">差异行： &gt; func appendUnique(a []int, x int) []int &#123;</span><br><span class="line">差异行： &gt;      for _, y := range a &#123;</span><br><span class="line">差异行： &gt;              if x == y &#123;</span><br><span class="line">差异行： &gt;                      return a</span><br><span class="line">差异行： &gt;              &#125;</span><br><span class="line">差异行： &gt;      &#125;</span><br><span class="line">差异行： &gt;      return append(a, x)</span><br><span class="line">差异行： &gt; &#125;</span><br><span class="line">差异行： &gt;</span><br><span class="line">差异行： 258c267</span><br><span class="line">差异行： &lt;      nonBackPreds := make([]map[int]bool, size)</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      nonBackPreds := make([][]int, size)</span><br><span class="line">差异行： 276c285</span><br><span class="line">差异行： &lt;      for i, bb := range cfgraph.Blocks &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, bb := range cfgraph.Blocks &#123;</span><br><span class="line">差异行： 278d286</span><br><span class="line">差异行： &lt;              nonBackPreds[i] = make(map[int]bool)</span><br><span class="line">差异行： 313c321</span><br><span class="line">差异行： &lt;                                      nonBackPreds[w][v] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;                                      nonBackPreds[w] = appendUnique(nonBackPreds[w], v)</span><br><span class="line">差异行： 389c397</span><br><span class="line">差异行： &lt;                                      nonBackPreds[w][ydash.dfsNumber] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;                                      nonBackPreds[w] = appendUnique(nonBackPreds[w], ydash.dfsNumber)</span><br><span class="line">差异行： 464,465c472,473</span><br><span class="line">差异行： &lt;      basicBlocks map[*BasicBlock]bool</span><br><span class="line">差异行： &lt;      Children    map[*SimpleLoop]bool</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      basicBlocks []*BasicBlock</span><br><span class="line">差异行： &gt;      Children    []*SimpleLoop</span><br><span class="line">差异行： 477c485</span><br><span class="line">差异行： &lt;      loop.basicBlocks[bb] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      loop.basicBlocks = append(loop.basicBlocks, bb)</span><br><span class="line">差异行： 481c489</span><br><span class="line">差异行： &lt;      loop.Children[child] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      loop.Children = append(loop.Children, child)</span><br><span class="line">差异行： 499c507</span><br><span class="line">差异行： &lt;              for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              for _, ll := range loop.Children &#123;</span><br><span class="line">差异行： 505c513</span><br><span class="line">差异行： &lt;              for bb := range loop.basicBlocks &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              for _, bb := range loop.basicBlocks &#123;</span><br><span class="line">差异行： 566,567d573</span><br><span class="line">差异行： &lt;      loop.basicBlocks = make(map[*BasicBlock]bool)</span><br><span class="line">差异行： &lt;      loop.Children = make(map[*SimpleLoop]bool)</span><br><span class="line">差异行： 587c593</span><br><span class="line">差异行： &lt;      for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, ll := range loop.Children &#123;</span><br><span class="line">差异行： 606c612</span><br><span class="line">差异行： &lt;      for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, ll := range loop.Children &#123;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>重新编译并执行:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">[root@sangfor v4]# go build ./havlak.go</span><br><span class="line">[root@sangfor v4]# ll</span><br><span class="line">total 2556</span><br><span class="line">-rwxr-xr-x. 1 root root 2590786 Dec 26 10:33 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17240 Dec 26 10:26 havlak.go</span><br><span class="line">[root@sangfor v4]# ../xtime ./havlak</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">11.64u 1.24s 8.49r 176892kB ./havlak</span><br></pre></td></tr></table></figure>
+<p>发现<code>Mem</code>开销下降了, 并且<code>CPU</code>时间开销也随之下降, 性能有所提升;</p>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th align="right">User Time</th>
+<th>Sys Time</th>
+<th>Memory</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>优化前</td>
+<td align="right">42.51 s</td>
+<td>4.31 s</td>
+<td>316284 kB</td>
+</tr>
+<tr>
+<td>优化CPU后</td>
+<td align="right">26.71 s</td>
+<td>2.39 s</td>
+<td>332400 kB</td>
+</tr>
+<tr>
+<td>优化CPU+MEM后</td>
+<td align="right">11.64 s</td>
+<td>1.24 s</td>
+<td>176892 kB</td>
+</tr>
+</tbody></table>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h3><table>
+<thead>
+<tr>
+<th>Version</th>
+<th align="right">User Time</th>
+<th>Opt</th>
+<th>Sys Time</th>
+<th>Opt</th>
+<th>Memory</th>
+<th>Opt</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>优化前</td>
+<td align="right">42.51 s</td>
+<td>0</td>
+<td>4.31 s</td>
+<td>0</td>
+<td>316284 kB</td>
+<td>0</td>
+</tr>
+<tr>
+<td>优化CPU后</td>
+<td align="right">26.71 s</td>
+<td>37.17 %</td>
+<td>2.39 s</td>
+<td>44.55 %</td>
+<td>332400 kB</td>
+<td>-5%</td>
+</tr>
+<tr>
+<td>优化CPU+MEM后</td>
+<td align="right">11.64 s</td>
+<td>72.62 %</td>
+<td>1.24 s</td>
+<td>71.23 %</td>
+<td>176892 kB</td>
+<td>44.07%</td>
+</tr>
+</tbody></table>
+<p>优化率计算公式<code>(优化前-优化后)/优化前</code></p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ol>
+<li><a href="https://github.com/google/pprof/blob/main/doc/README.md">https://github.com/google/pprof/blob/main/doc/README.md</a></li>
+<li><a href="https://go.dev/blog/pprof">https://go.dev/blog/pprof</a></li>
+<li><a href="https://protobuf.dev/">https://protobuf.dev/</a></li>
+<li><a href="https://github.com/google/pprof">https://github.com/google/pprof</a></li>
+<li><a href="https://golang.google.cn/pkg/runtime/pprof/">https://golang.google.cn/pkg/runtime/pprof/</a></li>
+<li><a href="https://github.com/eddycjy/blog/blob/master/content/posts/go/tools/2018-09-15-go-tool-pprof.md">https://github.com/eddycjy/blog/blob/master/content/posts/go/tools/2018-09-15-go-tool-pprof.md</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/141640004">https://zhuanlan.zhihu.com/p/141640004</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/51559344">https://zhuanlan.zhihu.com/p/51559344</a></li>
+<li><a href="https://juejin.cn/post/7193865759825592375">https://juejin.cn/post/7193865759825592375</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/373874739">https://zhuanlan.zhihu.com/p/373874739</a></li>
+</ol>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
 </search>
