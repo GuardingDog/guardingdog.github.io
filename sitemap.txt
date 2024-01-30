@@ -1,3 +1,5 @@
+https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Reflection/
+https://guardingdog.github.io/2024/01/31/First-Class-Function-In-Go/
 https://guardingdog.github.io/2024/01/16/Protocol-Buffer-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/
 https://guardingdog.github.io/2024/01/07/Go-Source-sync-RWMutex/
 https://guardingdog.github.io/googleb134722b14a07c86.html
@@ -32,7 +34,6 @@ https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-format/
 https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Interface/
 https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Allocation/
 https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Array-Slice-Map/
-https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Reflection/
 https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Channel/
 https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Concurrency-Goroutine/
 https://guardingdog.github.io/2022/06/29/GO-Learning-Fundamental-Dependency-Injection/
