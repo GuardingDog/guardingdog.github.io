@@ -9252,4 +9252,43 @@
         <tag>Go</tag>
       </tags>
   </entry>
+  <entry>
+    <title>go tool doc</title>
+    <url>/2024/01/31/go-tool-doc/</url>
+    <content><![CDATA[<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><code>go doc</code> 是<code>Go</code>语言的官方工具之一, 用于提取代码注释并生成<code>命令行</code>文档; 有一个相似命令, 可以生成<code>Web</code>页面查看注释, <code>godoc</code>; </p>
+<a id="more"></a>
+
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go help doc </span><br></pre></td></tr></table></figure>
+<p>上面的命令可以输出<code>go doc</code>的帮助文档;<br>使用方式为: <code>go doc [-u] [-c] [package|[package.]symbol[.methodOrField]]</code><br>其允许接受0 , 1, 2个入参</p>
+<ul>
+<li><p>0个入参:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go doc</span><br></pre></td></tr></table></figure>
+<p>默认输出当前路径下的<code>Package</code>注释; 也就是在<code>.go</code>文件头部的注释内容;</p>
+</li>
+<li><p>1个入参:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go doc &lt;pkg&gt;</span><br><span class="line">go doc &lt;sym&gt;[.&lt;methodOrField&gt;]</span><br><span class="line">go doc [&lt;pkg&gt;.]&lt;sym&gt;[.&lt;methodOrField&gt;]</span><br><span class="line">go doc [&lt;pkg&gt;.][&lt;sym&gt;.]&lt;methodOrField&gt;</span><br></pre></td></tr></table></figure>
+<p>其会在<code>GOROOT, GOPATH, currentPath</code>下寻找与语法匹配的标识.</p>
+<p><code>pkg</code> 标识可以是完整的包路径, 也可以是一个合适的包后缀. 例如<code>go doc json</code> 匹配到的是<code>encoding/json</code>包;</p>
+<p>例如: </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go doc json</span><br></pre></td></tr></table></figure>
+<p>输出<code>json</code>包(<code>encoding/json</code>)下的注释内容;</p>
+</li>
+<li><p>2个入参:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go doc &lt;pkg&gt; &lt;sym&gt;[.&lt;methodOrField&gt;]</span><br></pre></td></tr></table></figure>
+<p>例如: </p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">go doc json Decode</span><br></pre></td></tr></table></figure>
+<p>输出<code>json</code>包<code>Decode</code>标识的注释;</p>
+</li>
+</ul>
+<p>标识:</p>
+<figure class="highlight shell"><table><tr><td class="code"><pre><span class="line">Flags:</span><br><span class="line">        -all</span><br><span class="line">                Show all the documentation for the package.</span><br><span class="line">        -c</span><br><span class="line">                Respect case when matching symbols.</span><br><span class="line">        -cmd</span><br><span class="line">                Treat a command (package main) like a regular package.</span><br><span class="line">                Otherwise package main&#x27;s exported symbols are hidden</span><br><span class="line">                when showing the package&#x27;s top-level documentation.</span><br><span class="line">        -short</span><br><span class="line">                One-line representation for each symbol.</span><br><span class="line">        -src</span><br><span class="line">                Show the full source code for the symbol. This will</span><br><span class="line">                display the full Go source of its declaration and</span><br><span class="line">                definition, such as a function definition (including</span><br><span class="line">                the body), type declaration or enclosing const</span><br><span class="line">                block. The output may therefore include unexported</span><br><span class="line">                details.</span><br><span class="line">        -u</span><br><span class="line">                Show documentation for unexported as well as exported</span><br><span class="line">                symbols, methods, and fields.</span><br></pre></td></tr></table></figure>
+<p><code>go doc </code>依旧提供了可选<code>flag</code>, 支持功能扩展, 上面的定义很明确, 这里不解释;</p>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
 </search>

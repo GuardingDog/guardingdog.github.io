@@ -1,3 +1,4 @@
+https://guardingdog.github.io/2024/01/31/go-tool-doc/
 https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Reflection/
 https://guardingdog.github.io/2024/01/31/First-Class-Function-In-Go/
 https://guardingdog.github.io/2024/01/16/Protocol-Buffer-%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/
