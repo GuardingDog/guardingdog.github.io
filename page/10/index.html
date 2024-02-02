@@ -193,6 +193,293 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" class="post-title-link" itemprop="url">Python_python2的编码问题</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-17 23:31:50" itemprop="dateCreated datePublished" datetime="2021-01-17T23:31:50+08:00">2021-01-17</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">Edited on</span>
+                <time title="Modified: 2023-09-02 19:32:46" itemprop="dateModified" datetime="2023-09-02T19:32:46+08:00">2023-09-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
+                </span>
+                  , 
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Technology/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" class="post-meta-item leancloud_visitors" data-flag-title="Python_python2的编码问题" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2021/01/17/Python-python2%E7%9A%84%E7%BC%96%E7%A0%81%E9%97%AE%E9%A2%98/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <!-- more  -->
+
+<blockquote>
+<p>最近在调试python2过程中经常出现编码的问题，尤其是将python3程序重构为python2程序过程中出现的问题。</p>
+<p>问题一：编码本身有什么不同</p>
+<ul>
+<li>这在字符编码.md文件中已经有了清晰的解释</li>
+</ul>
+<p>问题二：python2处理中文时为什么总是会出现乱码</p>
+<ul>
+<li>encode与decode两者需要明确区分</li>
+<li>对应的字符与字节也需要区分</li>
+</ul>
+<p>带着以上两个问题看到了相关的解释，特记录如下：</p>
+</blockquote>
+<h2 id="字符与字节问题"><a href="#字符与字节问题" class="headerlink" title="字符与字节问题"></a>字符与字节问题</h2><blockquote>
+<p>字符与字节之间并不是同等地位。</p>
+<p><strong>字符串：</strong>由字符组成的序列</p>
+<p><strong>字符：</strong>字符是<strong>人</strong>使用的符号，是一种人所认知的单位。例如：“中” ， “1” ，“￥”等等</p>
+<blockquote>
+<ul>
+<li><p>在python3中，str对象中获取的元素是<strong>Unicode字符</strong> </p>
+</li>
+<li><p>在python2中，str对象中获取的原始<strong>字节序列</strong></p>
+</li>
+</ul>
+<p>可以看到同样是str对象，python2中其实是字节，python3中是字符</p>
+</blockquote>
+<p><strong>字节：</strong>字节是<strong>计算机</strong>所使用的符号，是8位的二进制数字。例如 0x01,01010101,0b45</p>
+</blockquote>
+<p><strong>不同编码体制中，字符与字节拥有着不同的对应关系：</strong></p>
+<ol>
+<li><p><strong>ASCII码：</strong>  一个英文字母（不分大小写）占一个字节的空间，<strong>一个中文汉字占两个字节</strong>的空间。一个<a href="https://link.zhihu.com/?target=https://www.baidu.com/s?wd=%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%95%B0%E5%AD%97&tn=44039180_cpr&fenlei=mv6quAkxTZn0IZRqIHckPjm4nH00T1YLPANWnW01uH6suhf3nWmk0ZwV5Hcvrjm3rH6sPfKWUMw85HfYnjn4nH6sgvPsT6KdThsqpZwYTjCEQLGCpyw9Uz4Bmy-bIi4WUvYETgN-TLwGUv3EPjRYPjnvPH63nHmLnWRvPHcd">二进制数字</a>序列，在计算机中作为一个数字单元，一般为8位二进制数，换算为十进制。最小值0，最大值255。</p>
+</li>
+<li><p><strong>UTF-8：</strong>一个英文字符=一个字节，一个中文（含繁体）=三个字节。</p>
+<blockquote>
+<p>已知UTF-8编码是UNICODE编码的实现形式的一种，Unicode规定了世界上所有的符号与二进制的对应关系，但是其实现形式多种多样，比如UTF-8,UTF-16等等。</p>
+<p><strong>Unicode才是真正的（人）字符串，而用ASCII、UTF-8、GBK等字符编码表示的是字节串。</strong></p>
+<blockquote>
+<p>从这个角度理解unicode就是CAMEO，utf-8就是VerbDic.</p>
+</blockquote>
+</blockquote>
+</li>
+</ol>
+<h2 id="encode与decode"><a href="#encode与decode" class="headerlink" title="encode与decode"></a>encode与decode</h2><blockquote>
+<p>encode与decode分别对应</p>
+<p><strong>encode:</strong> 将人类可识别的字符转换为机器可识别的字节码，<strong>字符到字节的过程</strong>。</p>
+<p><strong>decode:**就是将机器可识别的字节码转换成人类可识别的字符，</strong>字节到字符的过程**。</p>
+</blockquote>
+<h2 id="python中的默认编码"><a href="#python中的默认编码" class="headerlink" title="python中的默认编码"></a>python中的默认编码</h2><h3 id="Python源代码的执行过程"><a href="#Python源代码的执行过程" class="headerlink" title="Python源代码的执行过程"></a>Python源代码的执行过程</h3><blockquote>
+<p>我们都知道，磁盘上的文件都是以二进制格式存放的，其中文本文件都是以某种特定编码的字节形式存放的。对于程序源代码文件的字符编码是由编辑器指定的，比如我们使用Pycharm来编写Python程序时会指定工程编码和文件编码为UTF-8，那么Python代码被<strong>保存到磁盘</strong>时就会被转换为UTF-8编码对应的字节（<strong>encode过程</strong>）后写入磁盘。</p>
+<p>当执行Python代码文件中的代码时，Python解释器在读取Python代码文件中的字节串之后，需要将其转换为Unicode字符串（decode过程）之后才执行后续操作。</p>
+<p><img src="https://i.loli.net/2021/01/11/fBTidJh2WmHNkyD.png"></p>
+</blockquote>
+<h3 id="默认编码"><a href="#默认编码" class="headerlink" title="默认编码"></a>默认编码</h3><blockquote>
+<p>如果我们没有在代码文件指定字符编码，<strong>Python解释器</strong>会使用哪种字符编码把从代码文件中读取到的字节转换为Unicode字符串呢？就像我们配置某些软件时，有很多默认选项一样，需要在Python解释器内部设置默认的字符编码来解决这个问题，这就是“默认编码”。</p>
+<p>Python2和Python3的解释器使用的默认编码是不一样的，我们可以通过sys.getdefaultencoding()来获取默认编码：</p>
+<ul>
+<li><strong>Python2:ascii</strong></li>
+<li><strong>Python3:utf-8</strong></li>
+</ul>
+</blockquote>
+<h3 id="python2与python3处理文件"><a href="#python2与python3处理文件" class="headerlink" title="python2与python3处理文件"></a>python2与python3处理文件</h3><blockquote>
+<p>对于Python2来讲，Python解释器在读取到中文字符的字节码时，会先查看当前代码文件头部是否指明字符编码是什么。如果没有指定，则使用默认字符编码”ASCII”进行解码，导致中文字符解码失败，出现如下错误</p>
+<blockquote>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError:Non-ASCII character <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xxx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encoding declared;</span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>对于Python3来讲，执行过程是一样的，只是Python3的解释器以”UTF-8”作为默认编码，但是这并不表示可以完全兼容中文问题。比如我们在Windows上进行开发时，Python工程及代码文件都使用的是默认的GBK编码，也就是说Python代码文件是被转换成GBK格式的字节码保存到磁盘中的。Python3的解释器执行该代码文件时，试图用UTF-8进行解码操作时，同样会解码失败，出现如下错误：</p>
+<blockquote>
+<figure class="highlight dart"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SyntaxError:Non-UTF<span class="number">-8</span> code starting <span class="keyword">with</span> <span class="string">&#x27;\xc4&#x27;</span> <span class="keyword">in</span> file xx.py <span class="keyword">on</span> line <span class="number">11</span>, but no encodingdeclared; </span><br><span class="line">see http:<span class="comment">//python.org/dev/peps/pep-0263/ for details</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<h2 id="Python2-Python3对字符串的支持"><a href="#Python2-Python3对字符串的支持" class="headerlink" title="Python2 Python3对字符串的支持"></a>Python2 Python3对字符串的支持</h2><h3 id="Python2"><a href="#Python2" class="headerlink" title="Python2"></a>Python2</h3><blockquote>
+<p>Python2中对字符串的支持由以下三个类别提供：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">basestring</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(basestring)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">unicode</span></span>(basestring)</span><br></pre></td></tr></table></figure>
+
+<p>其中basestring类是str类与unicode类的父类。</p>
+<ul>
+<li><p><strong>str其实是字节串</strong>，它是unicode经过编码后的字节组成的序列。</p>
+<blockquote>
+<p>对UTF-8编码的str’汉’使用len()函数时，结果是3，因为UTF-8编码的’汉’==’\xE6\xB1\x89’。</p>
+</blockquote>
+</li>
+<li><p><strong>unicode才是真正意义上的字符串</strong>，对字节串str使用正确的字符编码进行解码后获得，并且len(u’汉’)==1。</p>
+</li>
+</ul>
+</blockquote>
+<h3 id="Python3"><a href="#Python3" class="headerlink" title="Python3"></a>Python3</h3><blockquote>
+<p>Python3中对字符串的支持进行了实现类层次的上简化，去掉了unicode类，添加了一个bytes类。从表面上来看，可认为Python3中的str和unicode合二为一了。</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">bytes</span></span>(<span class="keyword">object</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">str</span></span>(<span class="keyword">object</span>)</span><br></pre></td></tr></table></figure>
+
+<p>实际上，<strong>Python3中已经意识到之前的错误，开始明确区分字符串与字节</strong>。</p>
+<p><strong>因此Python3中的str已经是真正的字符串，而字节是用单独的bytes类来表示。</strong></p>
+<p>也就是说，Python3默认定义的就是字符串，实现了对Unicode的内置支持，减轻了程序员对字符串处理的负担。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/env python</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">a = <span class="string">&#x27;你好&#x27;</span></span><br><span class="line">b = <span class="string">u&#x27;你好&#x27;</span></span><br><span class="line">c = <span class="string">&#x27;你好&#x27;</span>.encode(<span class="string">&#x27;gbk&#x27;</span>) </span><br><span class="line">print(<span class="built_in">type</span>(a),<span class="built_in">len</span>(a))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(b),<span class="built_in">len</span>(b))         <span class="comment"># output:&lt;class&#x27;str&#x27;&gt; 2</span></span><br><span class="line">print(<span class="built_in">type</span>(c),<span class="built_in">len</span>(c))         <span class="comment"># output:&lt;class&#x27;bytes&#x27;&gt; 4</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="字符与字节转换"><a href="#字符与字节转换" class="headerlink" title="字符与字节转换"></a>字符与字节转换</h3><blockquote>
+<p>4.3的名称我自己起的，合不合适的我们再看</p>
+</blockquote>
+<ul>
+<li><p><strong>单个字符的encode：</strong></p>
+<blockquote>
+<p>Python提供了ord()函数获取字符的整数表示，chr()函数把编码转换为对应的字符：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;A&#x27;</span>)</span><br><span class="line"><span class="number">65</span></span><br><span class="line">&gt;&gt;&gt; ord(<span class="string">&#x27;中&#x27;</span>)</span><br><span class="line"><span class="number">20013</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">97</span>)</span><br><span class="line"><span class="string">&#x27;a&#x27;</span></span><br><span class="line">&gt;&gt;&gt; chr(<span class="number">20013</span>)</span><br><span class="line"><span class="string">&#x27;中&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>如果知道字符的整数编码，还可以用十六进制这么写字符：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;\u4e2d\u6587&#x27;</span></span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure></blockquote>
+</li>
+<li><p><strong>字符.encode() = 字节</strong></p>
+<blockquote>
+<p>Python3的字符串类型是str，在内存中以Unicode表示，一个字符对应若干个字节。如果要在网络上传输，或者保存到磁盘上，就需要把str变为以字节为单位的bytes。</p>
+<p>Python对bytes类型的数据用带b前缀的单引号或双引号表示：x = b’ABC’。</p>
+<p>要注意区分’ABC’和b’ABC’，前者是str，后者虽然内容显示得和前者一样，但bytes的每个字符都只占用一个字节。</p>
+<p>以Unicode表示的str通过encode()方法可以编码为指定的bytes，例如：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; <span class="string">&#x27;ABC&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line">b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br><span class="line">&gt;&gt;&gt; <span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line">Traceback (most recent call last)<span class="symbol">:</span></span><br><span class="line">File <span class="string">&quot;&lt;stdin&gt;&quot;</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></span><br><span class="line"><span class="symbol">UnicodeEncodeError:</span> <span class="string">&#x27;ascii&#x27;</span> codec can<span class="string">&#x27;t encode characters in position 0-1: ordinal not in range(128)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>常见的中文报错问题愿意：</p>
+<p>纯英文的str可以用ASCII编码为bytes，内容是一样的，含有中文的str可以用UTF-8编码为bytes。<strong>中文的str无法用ASCII编码，因为中文编码的范围超过了ASCII编码的范围，Python会报错。</strong></p>
+</li>
+</ul>
+</blockquote>
+</li>
+<li><p><strong>字节.decode() = 字符：</strong></p>
+<blockquote>
+<p>反过来，如果我们从网络或磁盘上读取了字节流，那么读到的数据就是bytes。要把bytes变为str，就需要用decode()方法：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;ABC&#x27;</span>.decode(<span class="string">&#x27;ascii&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;ABC&#x27;</span></span><br><span class="line">&gt;&gt;&gt; b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>.decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"><span class="string">&#x27;中文&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<p>要计算str包含多少个字符，可以用len()函数：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>)</span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p>len()函数计算的是str的字符数，如果换成bytes，len()函数就计算字节数：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;ABC&#x27;</span>)</span><br><span class="line"><span class="number">3</span></span><br><span class="line">&gt;&gt;&gt; len(b<span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span>)</span><br><span class="line"><span class="number">6</span></span><br><span class="line">&gt;&gt;&gt; len(<span class="string">&#x27;中文&#x27;</span>.encode(<span class="string">&#x27;utf-8&#x27;</span>))</span><br><span class="line"><span class="number">6</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="Python2-Python3字符编码的转换"><a href="#Python2-Python3字符编码的转换" class="headerlink" title="Python2 Python3字符编码的转换"></a>Python2 Python3字符编码的转换</h2><p>Unicode字符串可以与任意字符编码的字节串进行相互转换：</p>
+<p><img src="https://i.loli.net/2021/01/11/nODNpsrMTiJozU2.png"></p>
+</li>
+</ul>
+<blockquote>
+<p>从上图可以看出不同字节编码之间是可以通过Unicode来实现相互转换的。</p>
+<ul>
+<li><p>Python2中的字符串进行字符编码转换过程是：</p>
+<p><strong>字节串(Python2的str默认是字节串)–&gt;decode(‘原来的字符编码’)–&gt;Unicode字符串–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python2</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_a = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_a = utf_8_a.decode(<span class="string">&#x27;utf-8&#x27;</span>).encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_a.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Python3中定义的字符串默认就是unicode，因此不需要先解码，可以直接编码成新的字符编码：</p>
+<p><strong>字符串(str就是Unicode字符串)–&gt;encode(‘新的字符编码’)–&gt;字节串</strong></p>
+</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/usr/bin/env python3</span></span><br><span class="line"><span class="comment">#-*- coding:utf-8 -*- </span></span><br><span class="line">utf_8_b = <span class="string">&#x27;我爱中国&#x27;</span></span><br><span class="line">gbk_b = utf_8_b.encode(<span class="string">&#x27;gbk&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(gbk_b.decode(<span class="string">&#x27;gbk&#x27;</span>))</span><br><span class="line"><span class="comment"># 输出结果：我爱中国</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="Python2-中乱码问题的解决方案"><a href="#Python2-中乱码问题的解决方案" class="headerlink" title="Python2 中乱码问题的解决方案"></a>Python2 中乱码问题的解决方案</h2><h3 id="不要相信Print-结果"><a href="#不要相信Print-结果" class="headerlink" title="不要相信Print()结果"></a>不要相信Print()结果</h3><blockquote>
+<p>print()函数本身是加工后给<strong>人</strong>看的,不管给它什么样子的编码格式文件，都可以打印出来。</p>
+<p><strong>这也就意味着print()，并没有展示变量的本质。</strong></p>
+<p>可以选择 jupyter中</p>
+<blockquote>
+<p>这里是<strong>Python2</strong></p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese = <span class="string">&#x27;中文&#x27;</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chinese </span><br><span class="line"><span class="string">&#x27;\xe4\xb8\xad\xe6\x96\x87&#x27;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="Python2中“字符串”两大阵容"><a href="#Python2中“字符串”两大阵容" class="headerlink" title="Python2中“字符串”两大阵容"></a>Python2中“字符串”两大阵容</h3><blockquote>
+<p>unicode和str</p>
+<p>如果<code>type(字符串)</code>显示结果是<code>str</code>，其实指的是<code>bytes</code>字节码。</p>
+<blockquote>
+<p>由上面的内容我们已经理解当前python2中str对象与unicode对象分别代表：字节与字符</p>
+</blockquote>
+</blockquote>
+<ul>
+<li><p>encoding与decoding</p>
+<p>从<code>unicode</code>转换到<code>str</code>，这个叫<code>encoding</code>，编码。<br>从<code>str</code>转换到<code>unicode</code>，这个叫<code>decoding</code>，解码。</p>
+</li>
+</ul>
+<p><img src="https://i.loli.net/2021/01/11/X4YE6dehLPIiWq7.png"></p>
+<ul>
+<li><p>案例</p>
+<blockquote>
+<p>Python2</p>
+</blockquote>
+<p><img src="https://i.loli.net/2021/01/11/swf96A7lgDz14Rv.png"></p>
+</li>
+</ul>
+<h3 id="具体统一方案"><a href="#具体统一方案" class="headerlink" title="具体统一方案"></a>具体统一方案</h3><blockquote>
+<p>见剩余内容<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000013202801">https://segmentfault.com/a/1190000013202801</a></p>
+<p>这里的统一方案无非就是按照字符处理文件还是按照字节处理文件，何时进行decode何时encode的问题。</p>
+<p>做个给出了一个方案，但我目前并没有采用，这里不详细写</p>
+</blockquote>
+
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2021/01/17/Python-python-Call-Graph%E5%AD%A6%E4%B9%A0/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1146,112 +1433,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="GuardingDog">
-      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QingZhi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/05/python-%E7%88%AC%E8%99%AB/" class="post-title-link" itemprop="url">python-爬虫</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-04-05 23:02:42" itemprop="dateCreated datePublished" datetime="2020-04-05T23:02:42+08:00">2020-04-05</time>
-            </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="far fa-calendar-check"></i>
-                </span>
-                <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2021-01-24 17:17:20" itemprop="dateModified" datetime="2021-01-24T17:17:20+08:00">2021-01-24</time>
-              </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Technology/" itemprop="url" rel="index"><span itemprop="name">Technology</span></a>
-                </span>
-                  , 
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Technology/Python/" itemprop="url" rel="index"><span itemprop="name">Python</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2020/04/05/python-%E7%88%AC%E8%99%AB/" class="post-meta-item leancloud_visitors" data-flag-title="python-爬虫" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2020/04/05/python-%E7%88%AC%E8%99%AB/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2020/04/05/python-%E7%88%AC%E8%99%AB/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="Python-爬虫"><a href="#Python-爬虫" class="headerlink" title="Python_爬虫"></a>Python_爬虫</h1><p>爬虫对我来说一直是听说过没做过，今天一时兴起将爬虫的课程过了一遍，整理笔记如下。Python中是提供了爬虫库的，但学习中多采用requests库用于理解爬虫的过程。这里仅对老师讲解的部分进行了记录，还有很多未曾接触了，例如动态代理、header模拟浏览器等等针对反爬虫的策略。权当一份框架型笔记即可。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/04/05/python-%E7%88%AC%E8%99%AB/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1323,7 +1504,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">107</span>
+          <span class="site-state-item-count">108</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
