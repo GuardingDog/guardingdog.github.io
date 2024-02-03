@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="本部分将通过用例的方式, 展示Reflect构造Go装饰器的用例.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go Decorator With Reflect">
+<meta property="og:url" content="https://guardingdog.github.io/2024/02/03/Go-Decorator-With-Reflect/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="本部分将通过用例的方式, 展示Reflect构造Go装饰器的用例.">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-03T04:33:41.000Z">
+<meta property="article:modified_time" content="2024-02-03T04:34:45.597Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2024/02/03/Go-Decorator-With-Reflect/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Go Decorator With Reflect | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/03/Go-Decorator-With-Reflect/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go Decorator With Reflect
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-03 12:33:41 / Modified: 12:34:45" itemprop="dateCreated datePublished" datetime="2024-02-03T12:33:41+08:00">2024-02-03</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/02/03/Go-Decorator-With-Reflect/" class="post-meta-item leancloud_visitors" data-flag-title="Go Decorator With Reflect" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/02/03/Go-Decorator-With-Reflect/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/02/03/Go-Decorator-With-Reflect/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>本部分将通过用例的方式, 展示<code>Reflect</code>构造<code>Go</code>装饰器的用例.<br></p>
+<a id="more"></a>
+
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>在<code>云环境</code>中存在若干租户(<code>Project</code>)与若干虚拟机(<code>VM</code>), 往往一个<code>Project</code>名下存在多个<code>VM</code>, 并且<code>Project</code>仅能够操作自己名下的<code>VM</code>.</p>
+<p>代码示例如下:</p>
+<ul>
+<li><p>租户与虚拟机<code>Model</code>示例:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cloud</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> VM <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID        <span class="keyword">string</span></span><br><span class="line">	Name      <span class="keyword">string</span></span><br><span class="line">	CPU       <span class="keyword">string</span></span><br><span class="line">	ProjectID <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Project <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID       <span class="keyword">string</span></span><br><span class="line">	Name     <span class="keyword">string</span></span><br><span class="line">	AZID     <span class="keyword">string</span></span><br><span class="line">	ParentID <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>云环境内资源信息:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cloud</span><br><span class="line"><span class="comment">// ProjectToVMMap 租户与虚拟机的所属关系</span></span><br><span class="line"><span class="keyword">var</span> ProjectToVMMap = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">string</span>&#123;</span><br><span class="line">	<span class="string">&quot;A&quot;</span>: <span class="string">&quot;001&quot;</span>,</span><br><span class="line">	<span class="string">&quot;B&quot;</span>: <span class="string">&quot;002&quot;</span>,</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// GlobleVMs 全局虚拟机信息</span></span><br><span class="line"><span class="keyword">var</span> GlobleVMs <span class="keyword">map</span>[<span class="keyword">string</span>]VM</span><br></pre></td></tr></table></figure></li>
+<li><p>工具类方法:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cloud</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// PrintVMs 输出全局虚拟机信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PrintVMs</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;VMs num: %v\n&quot;</span>, <span class="built_in">len</span>(GlobleVMs))</span><br><span class="line">	<span class="keyword">for</span> _, vm := <span class="keyword">range</span> GlobleVMs &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;VM info: %+v \n&quot;</span>, vm)</span><br><span class="line">	&#125;</span><br><span class="line">	fmt.Printf(<span class="string">&quot;\n&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// InitVMs 初始化全局虚拟机信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitVMs</span><span class="params">()</span></span> &#123;</span><br><span class="line">	GlobleVMs = <span class="keyword">map</span>[<span class="keyword">string</span>]VM&#123;</span><br><span class="line">		<span class="string">&quot;001&quot;</span>: &#123;</span><br><span class="line">			ID:        <span class="string">&quot;001&quot;</span>,</span><br><span class="line">			Name:      <span class="string">&quot;vm_001&quot;</span>,</span><br><span class="line">			CPU:       <span class="string">&quot;x86&quot;</span>,</span><br><span class="line">			ProjectID: <span class="string">&quot;A&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="string">&quot;002&quot;</span>: &#123;</span><br><span class="line">			ID:        <span class="string">&quot;002&quot;</span>,</span><br><span class="line">			Name:      <span class="string">&quot;vm_002&quot;</span>,</span><br><span class="line">			CPU:       <span class="string">&quot;arm&quot;</span>,</span><br><span class="line">			ProjectID: <span class="string">&quot;B&quot;</span>,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>代码中提供两个接口, 支持<code>Project</code>操作<code>VM</code>:</p>
+<ul>
+<li><p>修改虚拟机名称:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cloud</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PutVMParams <span class="keyword">struct</span> &#123;</span><br><span class="line">	ProjectID <span class="keyword">string</span></span><br><span class="line">	VMID      <span class="keyword">string</span></span><br><span class="line">	VMName    <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PutVM</span><span class="params">(params PutVMParams)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	vm, ok := GlobleVMs[params.VMID]</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;VMID: %v missing \n&quot;</span>, params.VMID)</span><br><span class="line">		<span class="keyword">return</span> fmt.Errorf(<span class="string">&quot;VMID MISSING ERROR&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	vm.Name = params.VMName</span><br><span class="line">	GlobleVMs[params.VMID] = vm</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>删除虚拟机:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cloud</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> DeleteVMParams <span class="keyword">struct</span> &#123;</span><br><span class="line">	ProjectID <span class="keyword">string</span></span><br><span class="line">	VMID      <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DeleteVM</span><span class="params">(params DeleteVMParams)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	_, ok := GlobleVMs[params.VMID]</span><br><span class="line">	<span class="keyword">if</span> !ok &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;VMID: %v missing \n&quot;</span>, params.VMID)</span><br><span class="line">		<span class="keyword">return</span> fmt.Errorf(<span class="string">&quot;VMID MISSING ERROR&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">delete</span>(GlobleVMs, params.VMID)</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>主逻辑:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;self/pkg/cloud&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	cloud.InitVMs()</span><br><span class="line">	cloud.PrintVMs()</span><br><span class="line"></span><br><span class="line">	putParams := cloud.PutVMParams&#123;</span><br><span class="line">		ProjectID: <span class="string">&quot;B&quot;</span>,</span><br><span class="line">		VMID:      <span class="string">&quot;001&quot;</span>,</span><br><span class="line">		VMName:    <span class="string">&quot;MyServer&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	err := cloud.PutVM(putParams)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Put vm failed, err: %v \n&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	cloud.PrintVMs()</span><br><span class="line"></span><br><span class="line">	deleteParams := cloud.DeleteVMParams&#123;</span><br><span class="line">		ProjectID: <span class="string">&quot;A&quot;</span>,</span><br><span class="line">		VMID:      <span class="string">&quot;002&quot;</span>,</span><br><span class="line">	&#125;</span><br><span class="line">	err = cloud.DeleteVM(deleteParams)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Delete vm failed, err: %v \n&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	cloud.PrintVMs()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中, </p>
+<ul>
+<li>优先初始化了两个<code>VM</code>信息, 其中<code>A</code>租户拥有<code>VM 001</code>, <code>B</code>租户拥有<code>VM 002</code>, 并输出<code>VM</code>信息查看下当前的<code>VM</code>情况;</li>
+<li>其次<code>B</code>租户修改<code>VM 001</code>名称, 然而其操作的是<code>A</code>租户的<code>VM</code>, 并输出<code>VM</code>信息查看下当前的<code>VM</code>情况;</li>
+<li>最后<code>A</code>租户删除<code>VM 002</code>名称, 然而其操作的是<code>B</code>租户的<code>VM</code>, 并输出<code>VM</code>信息查看下当前的<code>VM</code>情况;</li>
+</ul>
+<p>输出为:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[root self]# go run ./cmd/main.go </span><br><span class="line">VMs num: 2</span><br><span class="line">VM info: &#123;ID:002 Name:vm_002 CPU:arm ProjectID:B&#125; </span><br><span class="line">VM info: &#123;ID:001 Name:vm_001 CPU:x86 ProjectID:A&#125; </span><br><span class="line"></span><br><span class="line">VMs num: 2</span><br><span class="line">VM info: &#123;ID:001 Name:MyServer CPU:x86 ProjectID:A&#125; </span><br><span class="line">VM info: &#123;ID:002 Name:vm_002 CPU:arm ProjectID:B&#125; </span><br><span class="line"></span><br><span class="line">VMs num: 1</span><br><span class="line">VM info: &#123;ID:001 Name:MyServer CPU:x86 ProjectID:A&#125; </span><br></pre></td></tr></table></figure>
+<h3 id="需求"><a href="#需求" class="headerlink" title="需求"></a>需求</h3></li>
+</ul>
+<p>上面的业务代码<code>PutVM, DeleteVM</code>中缺失了<code>Project</code>权限检验逻辑, 导致任意<code>Project</code>的权限泄露. 需要添加<strong>权限检验</strong>逻辑.</p>
+<h3 id="思路"><a href="#思路" class="headerlink" title="思路"></a>思路</h3><h4 id="业务嵌入法"><a href="#业务嵌入法" class="headerlink" title="业务嵌入法"></a>业务嵌入法</h4><p>可以直接在业务代码头部添加<strong>权限检验</strong>逻辑, 如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 权限检验逻辑</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">checkPermission</span><span class="params">(projectID <span class="keyword">string</span>, vmID <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> ProjectToVMMap[projectID] == vmID</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PutVM</span><span class="params">(params PutVMParams)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">if</span> !checkPermission(params.ProjectID, params.VMID) &#123;</span><br><span class="line">		<span class="keyword">return</span> fmt.Errorf(<span class="string">&quot;Permission check failed&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的代码中, 我直接选择在业务代码头部嵌入了权限检验逻辑, 其</p>
+<ul>
+<li>优点: 逻辑简单</li>
+<li>缺点: 代码耦合: 业务代码与权限代码耦合在一起;</li>
+</ul>
+<p>输出为:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@sangfor self]# <span class="keyword">go</span> run ./cmd/main.<span class="keyword">go</span> </span><br><span class="line">VMs num: <span class="number">2</span></span><br><span class="line">VM info: &#123;ID:<span class="number">001</span> Name:vm_001 CPU:x86 ProjectID:A&#125; </span><br><span class="line">VM info: &#123;ID:<span class="number">002</span> Name:vm_002 CPU:arm ProjectID:B&#125; </span><br><span class="line"></span><br><span class="line">Put vm failed, err: Permission check failed</span><br></pre></td></tr></table></figure>
+<p>发现上面的代码修改已经达到了需求, 然而实际项目中的修改量往往不止于此, 可能存在<code>n</code>个业务接口需要适配, 极易造成改动引发. 我们期望可以将业务代码与权限检验逻辑解耦, 这样即使出现了改动引发错误, 也不会改动到业务代码.</p>
+<h4 id="reflect装饰器法"><a href="#reflect装饰器法" class="headerlink" title="reflect装饰器法"></a><code>reflect</code>装饰器法</h4><ul>
+<li><p>有一个很合适的解决方案：<code>Python 装饰器</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Python 的装饰器是一种非常有用的功能，它允许你在不修改原有函数代码的情况下，给函数添加额外的功能。装饰器本质上是一个函数，它接受一个函数作为参数，并返回一个新的函数。当你将装饰器应用于某个函数时，你实际上是在该函数周围“包裹”了一层额外的逻辑。</span><br></pre></td></tr></table></figure>
+<p>然而我们使用的是<code>Go</code>; 此时就需要<code>reflect</code>登场了. </p>
+</li>
+<li><p><input checked="" disabled="" type="checkbox">  可行性, 在<code>Go</code>中<code>Func</code>也是值(<code>Value</code>), 既然是值那么就可以通过<code>reflect</code>修改. </p>
+</li>
+</ul>
+<p>装饰器具体代码如下:</p>
+<ul>
+<li><p>定义一个Model. 用于权限检验</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// decroateCheckVMParams 虚拟机权限检验Model</span></span><br><span class="line"><span class="keyword">type</span> decroateCheckVMParams <span class="keyword">struct</span> &#123;</span><br><span class="line">	ProjectID <span class="keyword">string</span></span><br><span class="line">	VMID      <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>定义一个装饰函数, 嵌入权限检验逻辑</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// decorateCheckVM 装饰函数, 其会添加虚拟机权限检验逻辑到函数原代码中</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">decorateCheckVM</span><span class="params">(newFunc, oldFunc <span class="keyword">interface</span>&#123;&#125;, injectFunc <span class="keyword">func</span>(in reflect.Value)</span> *<span class="title">decroateCheckVMParams</span>)</span> &#123;</span><br><span class="line">	<span class="keyword">var</span> decoratedFunc, targetFunc reflect.Value</span><br><span class="line">	decoratedFunc = reflect.ValueOf(newFunc).Elem()</span><br><span class="line">	targetFunc = reflect.ValueOf(oldFunc)</span><br><span class="line">	v := reflect.MakeFunc(</span><br><span class="line">		targetFunc.Type(),</span><br><span class="line">		<span class="function"><span class="keyword">func</span><span class="params">(in []reflect.Value)</span> <span class="params">(out []reflect.Value)</span></span> &#123;</span><br><span class="line">			param := injectFunc(in[<span class="number">0</span>])</span><br><span class="line">			<span class="keyword">if</span> !checkPermission(param.ProjectID, param.VMID) &#123;</span><br><span class="line">				err := fmt.Errorf(<span class="string">&quot;Check permission failed&quot;</span>)</span><br><span class="line">				out = []reflect.Value&#123;reflect.ValueOf(err)&#125;</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">			out = targetFunc.Call(in)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;,</span><br><span class="line">	)</span><br><span class="line">	decoratedFunc.Set(v)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// DecoratedPutVM 装饰器逻辑</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DecoratedPutVM</span><span class="params">()</span> <span class="title">func</span><span class="params">(params PutVMParams)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	decoratedHandleFunc := PutVM</span><br><span class="line">	decorateCheckVM(&amp;decoratedHandleFunc, decoratedHandleFunc, convertToDecoratedCheckVM)</span><br><span class="line">	<span class="keyword">return</span> decoratedHandleFunc</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>decorateCheckVM</code> 函数是一个装饰器工厂，它接受三个参数：<code>newFunc</code> 是一个将被装饰的函数的引用，<code>oldFunc</code> 是原始的未装饰函数，<code>injectFunc</code> 是一个将 <code>reflect.Value</code> 转换为 <code>*decroateCheckVMParams</code> 的函数。<code>decorateCheckVM</code> 函数的目的是在 <code>oldFunc</code> 的调用前插入权限检查逻辑。</p>
+<p><code>DecoratedPutVM</code> 函数是一个具体的装饰器实现，它使用 <code>decorateCheckVM</code> 来装饰 <code>PutVM</code> 函数（假设 <code>PutVM</code> 是一个已经定义的函数，它接受 <code>PutVMParams</code> 类型的参数并返回一个 <code>error</code>）。<code>DecoratedPutVM</code> 函数返回一个新的函数，这个新函数在调用 <code>PutVM</code> 之前会执行权限检查。</p>
+<p>这里有几个需要注意的地方：</p>
+<ol>
+<li><code>decorateCheckVM</code> 函数中的 <code>decoratedFunc</code> 和 <code>targetFunc</code> 是通过反射创建的函数值，<code>decoratedFunc</code> 是一个指向 <code>newFunc</code> 的指针，而 <code>targetFunc</code> 是 <code>oldFunc</code> 的值。</li>
+<li><code>reflect.MakeFunc</code> 用于创建一个新的函数，这个函数在调用时会先执行 <code>injectFunc</code> 来获取参数，然后检查权限，如果权限检查失败，它会返回一个错误；如果权限检查通过，它会调用原始的 <code>targetFunc</code> 函数。</li>
+</ol>
+<p>这段代码的目的是通过反射来动态地添加权限检查逻辑到现有的函数中，而不需要修改原始函数的代码。这是一种常见的装饰器模式的实现方式，它允许开发者在不改变原始代码的情况下，为函数添加额外的功能。</p>
+</li>
+<li><p>定义一个注入函数, 实现将业务参数转换为权限检验参数:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// convertToDecoratedCheckVM 参数转换逻辑, 将业务参数转换为虚拟机权限检验参数</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">convertToDecoratedCheckVM</span><span class="params">(in reflect.Value)</span> *<span class="title">decroateCheckVMParams</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> param *decroateCheckVMParams</span><br><span class="line">	<span class="keyword">switch</span> in.Interface().(<span class="keyword">type</span>) &#123;</span><br><span class="line">	<span class="keyword">case</span> PutVMParams:</span><br><span class="line">		_p, _ := in.Interface().(PutVMParams)</span><br><span class="line">		param = &amp;decroateCheckVMParams&#123;</span><br><span class="line">			ProjectID: _p.ProjectID,</span><br><span class="line">			VMID:      _p.VMID,</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">case</span> DeleteVMParams:</span><br><span class="line">		_p, _ := in.Interface().(DeleteVMParams)</span><br><span class="line">		param = &amp;decroateCheckVMParams&#123;</span><br><span class="line">			ProjectID: _p.ProjectID,</span><br><span class="line">			VMID:      _p.VMID,</span><br><span class="line">		&#125;</span><br><span class="line">	<span class="keyword">default</span>:</span><br><span class="line">		fmt.Println(<span class="string">&quot;Unimplement param type, build check project id param failed&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> param</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>convertToDecoratedCheckVM</code> 函数接受一个 <code>reflect.Value</code> 类型的参数，并根据这个反射值的实际类型，将其转换为一个指向 <code>decroateCheckVMParams</code> 结构体的指针。</p>
+<p>这个函数检查 <code>reflect.Value</code> 中的实际类型，如果是 <code>PutVMParams</code> 或 <code>DeleteVMParams</code> 类型，它就创建一个新的 <code>decroateCheckVMParams</code> 实例，并从输入参数中复制 <code>ProjectID</code> 和 <code>VMID</code> 字段。如果输入的类型不是这两种之一，它将打印一条错误消息。</p>
+</li>
+<li><p>适配主函数, 查看效果:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;self/pkg/cloud&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">	putVMFunc := cloud.DecoratedPutVM()</span><br><span class="line">	<span class="comment">// err := cloud.PutVM(putParams)</span></span><br><span class="line">	err := putVMFunc(putParams)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Put vm failed, err: %v \n&quot;</span>, err.Error())</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>发现输出一致:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@ self]# go run ./cmd/main.go </span><br><span class="line">VMs num: 2</span><br><span class="line">VM info: &#123;ID:001 Name:vm_001 CPU:x86 ProjectID:A&#125; </span><br><span class="line">VM info: &#123;ID:002 Name:vm_002 CPU:arm ProjectID:B&#125; </span><br><span class="line"></span><br><span class="line">Put vm failed, err: Check permission failed </span><br></pre></td></tr></table></figure>
+<p>这种方式的特点为:其利用反射与闭包的方式, 实现了类似于Python装饰器的效果,使得在进入业务逻辑前进行动态的权限检验;通过依赖注入方式, 将业务参数修改为由业务控制, 实现权限检验与业务参数解耦.</p>
+</li>
+</ul>
+<p>扩展性良好, 如果我们想实现<code>DeleteVM</code>逻辑, 只需要添加一段简短的逻辑即可:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// DecoratedDeleteVM 装饰器逻辑</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">DecoratedDeleteVM</span><span class="params">()</span> <span class="title">func</span><span class="params">(params DeleteVMParams)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	decoratedHandleFunc := DeleteVM</span><br><span class="line">	decorateCheckVM(&amp;decoratedHandleFunc, decoratedHandleFunc, convertToDecoratedCheckVM)</span><br><span class="line">	<span class="keyword">return</span> decoratedHandleFunc</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>读者可以自行检验, 效果.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/02/03/Refelct-in-Go/" rel="prev" title="Refelct in Go">
+      <i class="fa fa-chevron-left"></i> Refelct in Go
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9C%80%E6%B1%82"><span class="nav-number">2.</span> <span class="nav-text">需求</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%9D%E8%B7%AF"><span class="nav-number">3.</span> <span class="nav-text">思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%B8%9A%E5%8A%A1%E5%B5%8C%E5%85%A5%E6%B3%95"><span class="nav-number">3.1.</span> <span class="nav-text">业务嵌入法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#reflect%E8%A3%85%E9%A5%B0%E5%99%A8%E6%B3%95"><span class="nav-number">3.2.</span> <span class="nav-text">reflect装饰器法</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">110</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>

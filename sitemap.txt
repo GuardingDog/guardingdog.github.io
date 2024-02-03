@@ -1,3 +1,5 @@
+https://guardingdog.github.io/2024/02/03/Go-Decorator-With-Reflect/
+https://guardingdog.github.io/2024/02/03/Refelct-in-Go/
 https://guardingdog.github.io/2024/02/03/Errors-Handle-in-Go/
 https://guardingdog.github.io/2024/01/31/go-tool-doc/
 https://guardingdog.github.io/2022/06/29/Go-Learning-Fundamental-Concurrency-Reflection/
