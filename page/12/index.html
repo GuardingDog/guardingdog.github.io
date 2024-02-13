@@ -20,32 +20,30 @@
     var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="神经网络和深度学习 笔记来源">
-<meta property="og:type" content="article">
-<meta property="og:title" content="神经网络基础">
-<meta property="og:url" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/index.html">
+  <meta name="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="QingZhi&#39;s Blog">
+<meta property="og:url" content="https://guardingdog.github.io/page/12/index.html">
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
-<meta property="og:description" content="神经网络和深度学习 笔记来源">
+<meta property="og:description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
 <meta property="og:locale" content="en_US">
-<meta property="article:published_time" content="2020-04-02T05:02:25.000Z">
-<meta property="article:modified_time" content="2021-01-24T09:16:16.247Z">
 <meta property="article:author" content="GuardingDog">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
+<link rel="canonical" href="https://guardingdog.github.io/page/12/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome : false,
-    isPost : true,
+    isHome : true,
+    isPost : false,
     lang   : 'en'
   };
 </script>
 
-  <title>神经网络基础 | QingZhi's Blog</title>
+  <title>QingZhi's Blog</title>
   
 
 
@@ -189,10 +187,9 @@
         <div class="content-wrap">
           
 
-          <div class="content post posts-expand">
+          <div class="content index posts-expand">
             
-
-    
+      
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
@@ -208,9 +205,10 @@
       <meta itemprop="name" content="QingZhi's Blog">
     </span>
       <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          神经网络基础
-        </h1>
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/" class="post-title-link" itemprop="url">神经网络基础</a>
+        </h2>
 
         <div class="post-meta">
             <span class="post-meta-item">
@@ -274,168 +272,41 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="神经网络和深度学习"><a href="#神经网络和深度学习" class="headerlink" title="神经网络和深度学习"></a>神经网络和深度学习</h1><blockquote>
+          <h1 id="神经网络和深度学习"><a href="#神经网络和深度学习" class="headerlink" title="神经网络和深度学习"></a>神经网络和深度学习</h1><blockquote>
 <p><a target="_blank" rel="noopener" href="https://kyonhuang.top/Andrew-Ng-Deep-Learning-notes/#/Neural_Networks_and_Deep_Learning/">笔记来源</a></p>
 </blockquote>
-<a id="more"></a>
-<h2 id="神经网络基础"><a href="#神经网络基础" class="headerlink" title="神经网络基础"></a>神经网络基础</h2><h3 id="训练集、验证集与测试集"><a href="#训练集、验证集与测试集" class="headerlink" title="训练集、验证集与测试集"></a>训练集、验证集与测试集</h3><blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/HuZihu/p/10538295.html">解释博客</a></p>
-</blockquote>
-<p>三种集合的关系一直是容易混淆的概念：</p>
-<p><strong>训练集（Training Set）</strong>：用于训练模型。</p>
-<p><strong>验证集（Validation Set）</strong>：用于调整和选择模型。</p>
-<p><strong>测试集（Test Set）</strong>：用于评估最终的模型。</p>
-<h3 id="注意点"><a href="#注意点" class="headerlink" title="注意点"></a>注意点</h3><ol>
-<li>Logistic回归中损失函数建议采用</li>
-</ol>
-<p>$$<br>L(\hat{y},y) = -(y\log\hat{y})-(1-y)\log(1-\hat{y})<br>$$</p>
-<p>不建议采用平方差函数，存在局部解。<strong>可以去了解</strong></p>
-<ol start="2">
-<li>样本实例在矩阵中多采用<strong>列向量</strong>表示，也就是说m个由n维特征表示的样本矩阵为[n,m]</li>
-</ol>
-<ul>
-<li>实现一个神经网络时，如果需要遍历整个训练集，并不需要直接使用 for 循环。</li>
-<li>神经网络的计算过程中，通常有一个正向过程（forward pass）或者叫<strong>正向传播步骤（forward propagation step）</strong>，接着会有一个反向过程（backward pass）或者叫<strong>反向传播步骤（backward propagation step）</strong>。</li>
-</ul>
-<h3 id="Logistic回归"><a href="#Logistic回归" class="headerlink" title="Logistic回归"></a>Logistic回归</h3><blockquote>
-<p>逻辑回归最简总结：</p>
-<ul>
-<li>线性回归+sigmoid函数</li>
-</ul>
-<p>$$<br>z= (w^Tx+b)<br>$$</p>
-<p>$$<br>\hat y = \frac{1}{1+e^{-z}}<br>$$</p>
-</blockquote>
-<p>Logistic 回归是一个用于二分分类的算法。</p>
-<p>Logistic 回归中使用的参数如下：</p>
-<ul>
-<li><p>输入的特征向量：$ x \in R^{n_x}$ , 其中${n_x}$是特征数量；</p>
-</li>
-<li><p>用于训练的标签：$y \in 0,1$;</p>
-</li>
-<li><p>权重：$w \in R^{n_x}$</p>
-</li>
-<li><p>偏置：$b \in R$</p>
-</li>
-<li><p>输出：$\hat{y} = \sigma(w^Tx+b)$</p>
-</li>
-<li><p>Sigmoid 函数：</p>
-</li>
-</ul>
-<p>$$<br>  s = \sigma(w^Tx+b) = \sigma(z) = \frac{1}{1+e^{-z}}<br>$$</p>
-<p>为了将 $w^Tx+b$  约束在 [0, 1] 间，引入 Sigmoid 函数。从下图可看出，Sigmoid 函数的值域为 [0, 1]。</p>
-
-
-
-<p>Logistic 回归可以看作是一个非常小的神经网络。下图是一个典型例子：</p>
-<blockquote>
-<p>也就是一个普通的神经元</p>
-</blockquote>
-
-
-
-<h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p><strong>损失函数（loss function）</strong>用于衡量预测结果与真实值之间的误差。</p>
-<p>最简单的损失函数定义方式为平方差损失：<br>$$<br>L(\hat{y},y) = \frac{1}{2}(\hat{y}-y)^2<br>$$<br>但 Logistic 回归中我们<strong>并不倾向</strong>于使用这样的损失函数，因为之后讨论的优化问题会变成非凸的，最后会得到很多个局部最优解，梯度下降法可能找不到全局最优值。</p>
-<p>一般使用<br>$$<br>L(\hat{y},y) = -(y\log\hat{y})-(1-y)\log(1-\hat{y})<br>$$<br>损失函数是在单个训练样本中定义的，它衡量了在<strong>单个</strong>训练样本上的表现。而<strong>代价函数（cost function，或者称作成本函数）</strong>衡量的是在<strong>全体</strong>训练样本上的表现，即衡量参数 w 和 b 的效果。<br>$$<br>J(w,b) = \frac{1}{m}\sum_{i=1}^mL(\hat{y}^{(i)},y^{(i)})<br>$$</p>
-<h3 id="梯度下降法（Gradient-Descent）"><a href="#梯度下降法（Gradient-Descent）" class="headerlink" title="梯度下降法（Gradient Descent）"></a>梯度下降法（Gradient Descent）</h3><blockquote>
-<p>最简总结：<br>$$<br>w := w - \alpha\frac{dJ(w, b)}{dw}<br>$$</p>
-</blockquote>
-<p>函数的<strong>梯度（gradient）</strong>指出了函数的最陡增长方向。即是说，按梯度的方向走，函数增长得就越快。那么按梯度的负方向走，函数值自然就降低得最快了。</p>
-<p>模型的训练目标即是寻找合适的 w 与 b 以最小化代价函数值。简单起见我们先假设 w 与 b 都是一维实数，那么可以得到如下的 J 关于 w 与 b 的图：</p>
-
-
-
-<p>可以看到，成本函数 J 是一个<strong>凸函数</strong>，与非凸函数的区别在于其不含有多个局部最低点；选择这样的代价函数就保证了无论我们初始化模型参数如何，都能够寻找到合适的最优解。</p>
-<p>参数 w 的更新公式为：<br>$$<br>w := w - \alpha\frac{dJ(w, b)}{dw}<br>$$<br>其中 α 表示学习速率，即每次更新的 w 的步伐长度。</p>
-<p>当 w 大于最优解 w′ 时，导数大于 0，那么 w 就会向更小的方向更新。反之当 w 小于最优解 w′ 时，导数小于 0，那么 w 就会向更大的方向更新。迭代直到收敛。</p>
-<p>在成本函数 J(w, b) 中还存在参数 b，因此也有：<br>$$<br>b := b - \alpha\frac{dJ(w, b)}{db}<br>$$</p>
-<h3 id="计算图（Computation-Graph）"><a href="#计算图（Computation-Graph）" class="headerlink" title="计算图（Computation Graph）"></a>计算图（Computation Graph）</h3><p>神经网络中的计算即是由多个计算网络输出的前向传播与计算梯度的后向传播构成。所谓的<strong>反向传播（Back Propagation）</strong>即是当我们需要计算最终值相对于某个特征变量的导数时，我们需要利用计算图中上一步的结点定义。</p>
-<h3 id="Logistic回归中的梯度下降法"><a href="#Logistic回归中的梯度下降法" class="headerlink" title="Logistic回归中的梯度下降法"></a>Logistic回归中的梯度下降法</h3><p>假设输入的特征向量维度为 2，即输入参数共有 x1, w1, x2, w2, b 这五个。可以推导出如下的计算图：</p>
-
-
-
-<p>首先反向求出 L 对于 a 的导数：<br>$$<br>da=\frac{dL(a,y)}{da}=\frac{1-y}{1-a}-\frac{y}{a}<br>$$<br>然后继续反向求出 L 对于 z 的导数：<br>$$<br>dz=\frac{dL}{dz}=\frac{dL(a,y)}{dz}=\frac{dL}{da}\frac{da}{dz}=a-y<br>$$<br>依此类推求出最终的损失函数相较于原始参数的导数之后，根据如下公式进行参数更新：<br>$$<br>w _1:=w _1-\alpha dw _1<br>$$</p>
-<p>$$<br>w _2:=w _2-\alpha dw _2<br>$$</p>
-<p>$$<br>b:=b-\alpha db<br>$$</p>
-<p>接下来我们需要将对于单个用例的损失函数扩展到整个训练集的代价函数：<br>$$<br>J(w,b)=\frac{1}{m}\sum^m_{i=1}L(a^{(i)},y^{(i)})<br>$$<br>其中:<br>$$<br>  a^{(i)}=\hat{y}^{(i)}=\sigma(z^{(i)})=\sigma(w^Tx^{(i)}+b)<br>$$<br>我们可以对于某个权重参数 $w_1$，其导数计算为：<br>$$<br>\frac{\partial J(w,b)}{\partial{w_1}}=\frac{1}{m}\sum^m_{i=1}\frac{\partial L(a^{(i)},y^{(i)})}{\partial{w_1}}<br>$$<br>完整的 Logistic 回归中某次训练的流程如下，这里仅假设特征向量的维度为 2：</p>
-
-
-
-<p>然后对 w1、w2、b 进行迭代。</p>
-<p>上述过程在计算时有一个缺点：你需要编写两个 for 循环。第一个 for 循环遍历 m 个样本，而第二个 for 循环遍历所有特征。如果有大量特征，在代码中显式使用 for 循环会使算法很低效。<strong>向量化</strong>可以用于解决显式使用 for 循环的问题。</p>
-<h3 id="向量化（Vectorization）"><a href="#向量化（Vectorization）" class="headerlink" title="向量化（Vectorization）"></a>向量化（Vectorization）</h3><p>在 Logistic 回归中，需要计算<br>$$<br>z=w^Tx+b<br>$$<br>如果是非向量化的循环方式操作，代码可能如下：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">z = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(n_x):</span><br><span class="line">    z += w[i] * x[i]</span><br><span class="line">z += b</span><br></pre></td></tr></table></figure>
-<p>而如果是向量化的操作，代码则会简洁很多，并带来近百倍的性能提升（并行指令）：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">z = np.dot(w, x) + b</span><br></pre></td></tr></table></figure>
-<p>不用显式 for 循环，实现 Logistic 回归的梯度下降一次迭代（对应之前蓝色代码的 for 循环部分。这里公式和 NumPy 的代码混杂，注意分辨）<br>$$<br>Z=w^TX+b=np.dot(w.T, x) + b<br>$$</p>
-<p>$$<br> A=\sigma(Z)<br>$$</p>
-<p>$$<br> dZ=A-Y<br>$$</p>
-<p>$$<br>dw=\frac{1}{m}XdZ^T<br>$$</p>
-<p>$$<br> db=\frac{1}{m}np.sum(dZ)<br>$$</p>
-<p>$$<br> w:=w-\sigma dw<br>$$</p>
-<p>$$<br> b:=b-\sigma db<br>$$</p>
-<p>正向和反向传播尽管如此，多次迭代的梯度下降依然需要 for 循环。</p>
-<h3 id="广播（broadcasting）"><a href="#广播（broadcasting）" class="headerlink" title="广播（broadcasting）"></a>广播（broadcasting）</h3><p>Numpy 的 Universal functions 中要求输入的数组 shape 是一致的。当数组的 shape 不相等的时候，则会使用广播机制，调整数组使得 shape 一样，满足规则，则可以运算，否则就出错。</p>
-<p>四条规则：</p>
-<ol>
-<li>让所有输入数组都向其中 shape 最长的数组看齐，shape 中不足的部分都通过在前面加 1 补齐；</li>
-<li>输出数组的 shape 是输入数组 shape 的各个轴上的最大值；</li>
-<li>如果输入数组的某个轴和输出数组的对应轴的长度相同或者其长度为 1 时，这个数组能够用来计算，否则出错；</li>
-<li>当输入数组的某个轴的长度为 1 时，沿着此轴运算时都用此轴上的第一组值。</li>
-</ol>
-<h3 id="Numpy-使用技巧"><a href="#Numpy-使用技巧" class="headerlink" title="Numpy 使用技巧"></a>Numpy 使用技巧</h3><p>转置对秩为 1 的数组无效。因此，应该避免使用秩为 1 的数组，用 n * 1 的矩阵代替。例如，用<code>np.random.randn(5,1)</code>代替<code>np.random.randn(5)</code>。</p>
-<p>如果得到了一个秩为 1 的数组，可以使用<code>reshape</code>进行转换。</p>
-
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
     </div>
 
     
     
     
-        <div class="reward-container">
-  <div></div>
-  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
-    Donate
-  </button>
-  <div id="qr" style="display: none;">
-      
-      <div style="display: inline-block;">
-        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
-        <p>WeChat Pay</p>
-      </div>
-      
-      <div style="display: inline-block;">
-        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
-        <p>Alipay</p>
-      </div>
-
-  </div>
-</div>
-
-
       <footer class="post-footer">
-
-        
-
-
-        
-    <div class="post-nav">
-      <div class="post-nav-item"></div>
-      <div class="post-nav-item">
-    <a href="/2020/04/02/Pyhton-%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81/" rel="next" title="Pyhton_字符编码">
-      Pyhton_字符编码 <i class="fa fa-chevron-right"></i>
-    </a></div>
-    </div>
+        <div class="post-eof"></div>
       </footer>
-    
   </article>
   
   
   
 
 
+  
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/11/"><i class="fa fa-angle-left" aria-label="Previous page"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/11/">11</a><span class="page-number current">12</span>
+  </nav>
+
+
 
           </div>
           
-    <div class="comments" id="valine-comments"></div>
 
 <script>
   window.addEventListener('tabs:register', () => {
@@ -482,7 +353,6 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.</span> <span class="nav-text">神经网络和深度学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80"><span class="nav-number">1.1.</span> <span class="nav-text">神经网络基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E4%B8%8E%E6%B5%8B%E8%AF%95%E9%9B%86"><span class="nav-number">1.1.1.</span> <span class="nav-text">训练集、验证集与测试集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="nav-number">1.1.2.</span> <span class="nav-text">注意点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logistic%E5%9B%9E%E5%BD%92"><span class="nav-number">1.1.3.</span> <span class="nav-text">Logistic回归</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8D%9F%E5%A4%B1%E5%87%BD%E6%95%B0"><span class="nav-number">1.1.4.</span> <span class="nav-text">损失函数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95%EF%BC%88Gradient-Descent%EF%BC%89"><span class="nav-number">1.1.5.</span> <span class="nav-text">梯度下降法（Gradient Descent）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%A1%E7%AE%97%E5%9B%BE%EF%BC%88Computation-Graph%EF%BC%89"><span class="nav-number">1.1.6.</span> <span class="nav-text">计算图（Computation Graph）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Logistic%E5%9B%9E%E5%BD%92%E4%B8%AD%E7%9A%84%E6%A2%AF%E5%BA%A6%E4%B8%8B%E9%99%8D%E6%B3%95"><span class="nav-number">1.1.7.</span> <span class="nav-text">Logistic回归中的梯度下降法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%90%91%E9%87%8F%E5%8C%96%EF%BC%88Vectorization%EF%BC%89"><span class="nav-number">1.1.8.</span> <span class="nav-text">向量化（Vectorization）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%B9%BF%E6%92%AD%EF%BC%88broadcasting%EF%BC%89"><span class="nav-number">1.1.9.</span> <span class="nav-text">广播（broadcasting）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Numpy-%E4%BD%BF%E7%94%A8%E6%8A%80%E5%B7%A7"><span class="nav-number">1.1.10.</span> <span class="nav-text">Numpy 使用技巧</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 

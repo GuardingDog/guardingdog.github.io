@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://guardingdog.github.io/2024/02/13/How-Reflect-Work-in-Go/</loc>
+    
+    <lastmod>2024-02-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://guardingdog.github.io/2024/02/03/Go-Decorator-With-Reflect/</loc>
     
     <lastmod>2024-02-03</lastmod>
@@ -1048,7 +1057,7 @@
 
   <url>
     <loc>https://guardingdog.github.io/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -1056,49 +1065,49 @@
   
   <url>
     <loc>https://guardingdog.github.io/tags/Python/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/wordnet/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/regex/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/memory/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/Algorithm/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/Go/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/tags/Docker/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -1107,56 +1116,56 @@
   
   <url>
     <loc>https://guardingdog.github.io/categories/Technology/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Technology/Python/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Technology/Neural-Network/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/life/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Technology/Wordnet/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Technology/Algorithm/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Go/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>https://guardingdog.github.io/categories/Docker/</loc>
-    <lastmod>2024-02-03</lastmod>
+    <lastmod>2024-02-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
