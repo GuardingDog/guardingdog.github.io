@@ -193,6 +193,295 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Select/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/15/Go-Concurrency-programming-Select/" class="post-title-link" itemprop="url">Go Concurrency programming Select</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-15 22:22:55 / Modified: 22:23:47" itemprop="dateCreated datePublished" datetime="2024-02-15T22:22:55+08:00">2024-02-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/02/15/Go-Concurrency-programming-Select/" class="post-meta-item leancloud_visitors" data-flag-title="Go Concurrency programming Select" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/02/15/Go-Concurrency-programming-Select/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/02/15/Go-Concurrency-programming-Select/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>Select</code>就是<code>Channel</code>的<code>Switch</code>. <code>Select</code>具备一系列的<code>Case</code>分支和一个默认<code>default</code>分支, 每一个<code>case</code>对应于一个<code>channel</code>操作(<code>send/receive</code>). <code>select</code>在多<code>case</code>场景下会一直等待, 直到某个<code>case</code>操作完成, 就会执行<code>case</code>内对应的语句.</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/15/Go-Concurrency-programming-Select/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Channel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/15/Go-Concurrency-programming-Channel/" class="post-title-link" itemprop="url">Go Concurrency programming Channel</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-15 22:21:20 / Modified: 22:22:10" itemprop="dateCreated datePublished" datetime="2024-02-15T22:21:20+08:00">2024-02-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/02/15/Go-Concurrency-programming-Channel/" class="post-meta-item leancloud_visitors" data-flag-title="Go Concurrency programming Channel" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/02/15/Go-Concurrency-programming-Channel/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/02/15/Go-Concurrency-programming-Channel/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p>在<code>Go</code>中<code>goroutine</code>的同步机制主要包括<code>channel</code>与<code>sync</code>. 本文介绍<code>channel</code>的简单定义与使用. </p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/15/Go-Concurrency-programming-Channel/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Basic-Concept/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2024/02/15/Go-Concurrency-programming-Basic-Concept/" class="post-title-link" itemprop="url">Go Concurrency programming Basic Concept</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-15 22:19:34 / Modified: 22:20:47" itemprop="dateCreated datePublished" datetime="2024-02-15T22:19:34+08:00">2024-02-15</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/02/15/Go-Concurrency-programming-Basic-Concept/" class="post-meta-item leancloud_visitors" data-flag-title="Go Concurrency programming Basic Concept" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/02/15/Go-Concurrency-programming-Basic-Concept/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/02/15/Go-Concurrency-programming-Basic-Concept/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <p><code>Go Concurency Programming</code> 是<code>Go</code>并发编程系列的梳理, 由基础到进阶包括: 基础概念(<code>并发, 并行, 进程, 线程, 协程</code>), <code>Go</code>内置数据结构(<code>Channel</code>), <code>Go</code>内置使用语句<code>Select, Sync, Mutex</code>, 推荐编码范式(<code>PipeLine, Fan-in, Fan-Out ...</code>), <code>Go</code>高级使用原语(<code>Context</code>), <code>Go</code>底层实现原理: <code>GPM, CSP</code>, 经典案例;</p>
+<p>本文过一遍并发编程中的基础概念: 并发, 并行, 进程, 线程, 协程, <code>GoRoutine</code>;</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/2024/02/15/Go-Concurrency-programming-Basic-Concept/#more" rel="contents">
+                Read more &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
     <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/13/How-Reflect-Work-in-Go/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -872,305 +1161,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/01/07/Go-Source-sync-RWMutex/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="GuardingDog">
-      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QingZhi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2024/01/07/Go-Source-sync-RWMutex/" class="post-title-link" itemprop="url">Go Source: sync.RWMutex</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2024-01-07 14:10:36 / Modified: 14:12:27" itemprop="dateCreated datePublished" datetime="2024-01-07T14:10:36+08:00">2024-01-07</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2024/01/07/Go-Source-sync-RWMutex/" class="post-meta-item leancloud_visitors" data-flag-title="Go Source: sync.RWMutex" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2024/01/07/Go-Source-sync-RWMutex/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2024/01/07/Go-Source-sync-RWMutex/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>本文是<code>Go Source Code</code>解读系列之<code>sync/RWMutex</code>读写锁. 本系列会以代码示例作为切入点, 解释源码.</p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>为什么不允许对<code>sync.RWMutex</code>通过<code>recursive read</code>的方式使用.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2024/01/07/Go-Source-sync-RWMutex/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2023/12/30/Go-tool-pprof/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="GuardingDog">
-      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QingZhi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/12/30/Go-tool-pprof/" class="post-title-link" itemprop="url">Go tool pprof</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-12-30 17:47:36 / Modified: 17:58:43" itemprop="dateCreated datePublished" datetime="2023-12-30T17:47:36+08:00">2023-12-30</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2023/12/30/Go-tool-pprof/" class="post-meta-item leancloud_visitors" data-flag-title="Go tool pprof" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2023/12/30/Go-tool-pprof/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/12/30/Go-tool-pprof/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p>最近在项目中进行了大数据量下的性能测试, 在寻找性能瓶颈过程中,利用<code>go tool pprof</code>工具, 解决了内存大量申请释放, 业务逻辑等问题;</p>
-<p>本文主要分为三部分:</p>
-<ul>
-<li><p><code>go tool pprof</code> 的介绍;</p>
-</li>
-<li><p><code>go tool pprof</code> 的使用方式的介绍;</p>
-</li>
-<li><p>项目实践检验</p>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/12/30/Go-tool-pprof/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
-    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2023/09/03/Go-Learning-Fundamental-Text-Normalization/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="GuardingDog">
-      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="QingZhi's Blog">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/" class="post-title-link" itemprop="url">Go_Learning_Fundamental_Text_Normalization</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-              
-
-              <time title="Created: 2023-09-03 01:28:03 / Modified: 01:28:33" itemprop="dateCreated datePublished" datetime="2023-09-03T01:28:03+08:00">2023-09-03</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-folder"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
-                </span>
-            </span>
-
-          
-            <span id="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/" class="post-meta-item leancloud_visitors" data-flag-title="Go_Learning_Fundamental_Text_Normalization" title="Views">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-eye"></i>
-              </span>
-              <span class="post-meta-item-text">Views: </span>
-              <span class="leancloud-visitors-count"></span>
-            </span>
-  
-  <span class="post-meta-item">
-    
-      <span class="post-meta-item-icon">
-        <i class="far fa-comment"></i>
-      </span>
-      <span class="post-meta-item-text">Valine: </span>
-    
-    <a title="valine" href="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/#valine-comments" itemprop="discussionUrl">
-      <span class="post-comments-count valine-comment-count" data-xid="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/" itemprop="commentCount"></span>
-    </a>
-  </span>
-  
-  
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>Refs: <a target="_blank" rel="noopener" href="https://go.dev/blog/normalization">Text normalization in Go - The Go Programming Language</a></p>
-<h2 id="Prior-knowledge"><a href="#Prior-knowledge" class="headerlink" title="Prior knowledge"></a>Prior knowledge</h2><p>Before learning this part, we should know  some theoretical knowledge about <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Unicode_equivalence">Unicode equivalence - Wikipedia</a>.</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2023/09/03/Go-Learning-Fundamental-Text-Normalization/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -1242,7 +1232,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">111</span>
+          <span class="site-state-item-count">114</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

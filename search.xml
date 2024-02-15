@@ -9642,4 +9642,138 @@
         <tag>Go</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Go Concurrency programming Basic Concept</title>
+    <url>/2024/02/15/Go-Concurrency-programming-Basic-Concept/</url>
+    <content><![CDATA[<p><code>Go Concurency Programming</code> 是<code>Go</code>并发编程系列的梳理, 由基础到进阶包括: 基础概念(<code>并发, 并行, 进程, 线程, 协程</code>), <code>Go</code>内置数据结构(<code>Channel</code>), <code>Go</code>内置使用语句<code>Select, Sync, Mutex</code>, 推荐编码范式(<code>PipeLine, Fan-in, Fan-Out ...</code>), <code>Go</code>高级使用原语(<code>Context</code>), <code>Go</code>底层实现原理: <code>GPM, CSP</code>, 经典案例;</p>
+<p>本文过一遍并发编程中的基础概念: 并发, 并行, 进程, 线程, 协程, <code>GoRoutine</code>;</p>
+<a id="more"></a>
+
+<h2 id="进程-线程与协程"><a href="#进程-线程与协程" class="headerlink" title="进程, 线程与协程"></a>进程, 线程与协程</h2><p><code>Process thread coroutine</code></p>
+<ul>
+<li>进程 <code>Process</code>:是<strong>程序</strong>在操作系统上的<strong>一次运行过程</strong>, 是系统进行<strong>资源</strong>(<code>CPU, Memory ...</code>)分配与调度的独立单位; 例如打开浏览器, 就是启动了一个浏览器进程, 关闭浏览器, 就是结束了一个浏览器进程, 在这期间一般称为运行时(<code>Runtime</code>), 系统会对浏览器进程分配其所需要的<code>CPU, Memory</code>等资源. 如果分配失败一般会引起<code>Crash</code>, 例如<code>OOM</code>错误, 用户常见的<code>内存空间不足</code>等错误;</li>
+<li>线程<code>thread</code>: 是进程的<strong>执行实体</strong>, 它是<code>CPU</code>调度与分配的独立单位, 由进程生成. 一个进程可以创建/撤销多个线程, 多个线程间可以并发执行. 例如<code>QQ</code>进程, 会生成一个<code>thread</code>用于监控<code>QQ Message</code>, 生成一个<code>thread</code>用于监听<code>QQ Mail</code> 等;</li>
+<li>协程<code>coroutine</code>: 是<strong>用户</strong>级别的<code>线程</code>, 其<strong>调度</strong>由用户控制, 属于轻量级的线程, 一个线程可以创建多个协程, 在Go中就是大名鼎鼎的<code>GoRoutine</code>概念;</li>
+</ul>
+<h2 id="并发与并行"><a href="#并发与并行" class="headerlink" title="并发与并行"></a>并发与并行</h2><p><code>Concurrency and parallelism</code></p>
+<ul>
+<li>并发<code>Concurrency</code>: 指的是<strong>多线程程序</strong>在<strong>单核</strong>CPU上运行, 依赖快速时间片轮转的方式, 使得达到了伪并行的效果;</li>
+<li>并行<code>parallelism</code>: 指的是<strong>多线程程序</strong>在<strong>多核</strong>CPU上运行;</li>
+</ul>
+<p>并发与并行总是被一起提出来, 是由于其对于用户端的感受是无差别的,即程序在同时处理多个动作, 例如在浏览器上同时开启多个网页.</p>
+<h2 id="goroutine"><a href="#goroutine" class="headerlink" title="goroutine"></a>goroutine</h2><p><code>goroutine</code>是<code>Go</code>中的<code>coroutine</code>实现, 是<code>Go Concurrency Programming</code>实现的基础特性. 通过<code>goroutine</code>可以轻松的将函数/方法通过并发的方式运行, 相比较于传统的创建线程的方式, 其可读性更强, 性能开销更小, 简单示例: </p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="keyword">go</span> sayHello() <span class="comment">// Create a goroutine for the sayHello function</span></span><br><span class="line">	<span class="comment">// Other code...</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// Wait for goroutines to finish executing</span></span><br><span class="line">	time.Sleep(time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sayHello</span><span class="params">()</span></span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">&quot;Hello, goroutine!&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中, <code>sayHello</code>函数作为一个<code>goroutine</code>并发执行. 通过关键字**<code>go</code>**就可以轻松发起一个<code>goroutine</code>;</p>
+<p><code>goroutine</code>是非常<strong>轻量</strong>的, 每个<code>goroutine</code>初期仅占用几<code>KB</code>, 可以轻松开启十万级别的<code>goroutines</code>,而不会对性能产生太大影响。<code>Go</code>运行时将它们多路复用到少数操作系统线程上，<code>runtime</code>处理<code>goroutines</code>的调度和执行。</p>
+<p><code>goroutines</code>的美妙之处在于其简单易用。与传统的线程模型相比，它们使您能够以更直接和可读的方式编写并发代码。然而，请记住，在必要时，可能需要适当的同步机制（如通道或同步原语）来协调<code>goroutine</code>之间的通信。</p>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go Concurrency programming Select</title>
+    <url>/2024/02/15/Go-Concurrency-programming-Select/</url>
+    <content><![CDATA[<p><code>Select</code>就是<code>Channel</code>的<code>Switch</code>. <code>Select</code>具备一系列的<code>Case</code>分支和一个默认<code>default</code>分支, 每一个<code>case</code>对应于一个<code>channel</code>操作(<code>send/receive</code>). <code>select</code>在多<code>case</code>场景下会一直等待, 直到某个<code>case</code>操作完成, 就会执行<code>case</code>内对应的语句.</p>
+<a id="more"></a>
+
+<p>代码示例:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">select</span> &#123;</span><br><span class="line"><span class="keyword">case</span> &lt;-chan1:</span><br><span class="line">   <span class="comment">// 如果chan1成功读到数据，则进行该case处理语句</span></span><br><span class="line"><span class="keyword">case</span> chan2 &lt;- <span class="number">1</span>:</span><br><span class="line">   <span class="comment">// 如果成功向chan2写入数据，则进行该case处理语句</span></span><br><span class="line"><span class="keyword">default</span>:</span><br><span class="line">   <span class="comment">// 如果上面都没有成功，则进入default处理流程</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>特点:</p>
+<ul>
+<li><p><code>select</code>可以同时监听一个或多个<code>channel</code>, 直到某个<code>channel</code>操作完成;</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>)</span><br><span class="line">	<span class="keyword">go</span> sender1(ch1)</span><br><span class="line">	<span class="keyword">go</span> sender2(ch2)</span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> value := &lt;-ch1:</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got from channel one: %v \n&quot;</span>, value)</span><br><span class="line">	<span class="keyword">case</span> value := &lt;-ch2:</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got from channel two: %v \n&quot;</span>, value)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sender1</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	ch &lt;- <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sender2</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	ch &lt;- <span class="string">&quot;Qingzhi&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面定义了两个<code>case</code>, 分别从<code>ch1</code>, <code>ch2</code>两个<code>channel</code>进行接收操作, 满足操作则进行打印操作;</p>
+</li>
+<li><p>多个<code>case</code>同时满足时, 随机选择一个<code>case</code>执行, 其他<code>case</code>不执行; </p>
+<p>在<code>select</code>前通过<code>sleep</code>操作保证多<code>case</code>同时满足, 多次运行,可以发现输出结果时随机的.</p>
+</li>
+<li><p><code>default case</code>一般用于非阻塞的<code>case</code>.</p>
+</li>
+<li><p>一般通过<code>time.After</code>设置超时器.</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">string</span>)</span><br><span class="line">	<span class="keyword">go</span> sender1(ch1)</span><br><span class="line">	<span class="keyword">go</span> sender2(ch2)</span><br><span class="line">	<span class="keyword">select</span> &#123;</span><br><span class="line">	<span class="keyword">case</span> value := &lt;-ch1:</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got from channel one: %v \n&quot;</span>, value)</span><br><span class="line">	<span class="keyword">case</span> value := &lt;-ch2:</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got from channel two: %v \n&quot;</span>, value)</span><br><span class="line">	<span class="keyword">case</span> &lt;-time.After(<span class="number">1</span> * time.Second):</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Time out \n&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sender1</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	time.Sleep(<span class="number">2</span> * time.Second)</span><br><span class="line">	ch &lt;- <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sender2</span><span class="params">(ch <span class="keyword">chan</span> <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	time.Sleep(<span class="number">2</span> * time.Second)</span><br><span class="line">	ch &lt;- <span class="string">&quot;Qingzhi&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过<code>time.After</code>可以获得一个仅能够接收的<code>channel</code>, 这样可以手动设置超时器, 防止程序挂起.</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Go Concurrency programming Channel</title>
+    <url>/2024/02/15/Go-Concurrency-programming-Channel/</url>
+    <content><![CDATA[<p>在<code>Go</code>中<code>goroutine</code>的同步机制主要包括<code>channel</code>与<code>sync</code>. 本文介绍<code>channel</code>的简单定义与使用. </p>
+<a id="more"></a>
+
+<h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>在<code>Go</code>中可以轻松的发起数千甚至上万级别的<code>goroutines</code>, 但是仅仅发起<code>goroutine</code>而不做同步限制是无意义的, 需要<code>goroutine</code>之间可以通信, 此时<code>Go</code>提出了概念:<code>channel</code>, 中文通常称为<code>通道</code>.</p>
+<p><code>Go</code>语言的并发模型是<code>CSP（Communicating Sequential Processes）</code>，提倡<strong>通过通信共享内存</strong>而不是<strong>通过共享内存而实现通信</strong>, 其推动诞生了<code>channel</code>; 对于传统的<strong>通过共享内存进行通信</strong>过程中, 不同的线程访问同一内存区域获取资源, 为了防止<code>race condition</code>就需要通过<code>mutex</code>方式处理, 这势必降低了性能表现; 对于<strong>通过通信共享内存</strong>的方式(<code>channel</code>), 在相关<code>goroutine</code>之间创建了隧道, 通信不被其他<code>goroutine</code>感知, 自然没有<code>race condition</code>问题, 提升了性能表现.</p>
+<h2 id="用处"><a href="#用处" class="headerlink" title="用处"></a>用处</h2><p>一句话说: <code>channel</code>是用于<code>goroutine</code>间通信的机制. 因其特点, 具备多种用处:</p>
+<ul>
+<li>同步控制: <code>channel</code>可控制同步执行<code>goroutine</code>, 通过<code>send/receive value with channel</code>可以控制特定<code>goroutine</code>的生命周期, 这可以防止<code>race condition</code>, 保证程序运行的安全性;</li>
+<li>数据通信: <code>channel</code>可以用于<code>goroutines</code>间的数据通信, 这使得复杂的工作拆解为多个简单的工作;</li>
+<li>并发: <code>channel</code>的出现, 也使得将复杂工作拆分为多个简单工作(<code>goroutine</code>)存在可能性, 这也就进一步利用了<code>concurrency</code>的特性;</li>
+<li>错误处理:<code>channel</code>也可以用于<code>Error Handing</code>错误处理, 通过<code>Error Channel</code>可以将错误信息传递给其他并发环境, 进而进行优雅处理;</li>
+<li>资源分享:<code>channel</code>可以用于<code>goroutines</code>间的资源共享, 例如传递<code>ref</code>到<code>channel</code>;</li>
+</ul>
+<h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><h3 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h3><p><code>channel</code>是引用类型, 空值为<code>nil</code>, 声明格式如下:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> Variable <span class="keyword">chan</span> Type</span><br></pre></td></tr></table></figure>
+<p>例如:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">var</span> ch1 <span class="keyword">chan</span> <span class="keyword">int</span> <span class="comment">// 声明一个传递数字的通道, 为nil</span></span><br><span class="line"><span class="keyword">var</span> ch2 <span class="keyword">chan</span> <span class="keyword">bool</span> <span class="comment">// 声明一个传递布尔值的通道, 为nil</span></span><br><span class="line"><span class="keyword">var</span> ch3 <span class="keyword">chan</span> []<span class="keyword">int</span> <span class="comment">// 声明一个传递int切片的通道, 为nil</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h3><p>通过<code>make</code>关键字+<code>chan</code>关键字可以创建<code>channel</code>, 如:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="built_in">make</span>(<span class="keyword">chan</span> Type, [buffer size])</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Type: 指的是<code>channel</code>中的元素类型;</li>
+<li>buffer size: 指的是<code>channel</code>缓冲区大小, 不填则表示为无缓冲<code>channel</code>.</li>
+</ul>
+<p>例如:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>) <span class="comment">// 创建一个无缓冲的int通道</span></span><br><span class="line">ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">5</span>) <span class="comment">// 创建一个缓冲大小为5的int通道</span></span><br><span class="line">ch3 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">bool</span>) <span class="comment">// 创建一个无缓冲的bool通道</span></span><br></pre></td></tr></table></figure>
+<h3 id="发送-amp-接收"><a href="#发送-amp-接收" class="headerlink" title="发送&amp;接收"></a>发送&amp;接收</h3><p>通过标识符<code>&lt;-</code>可以实现发送值到通道, 从通道接收值的操作:</p>
+<ul>
+<li><p>发送值, <code>ch &lt;- value</code>:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">ch &lt;- <span class="number">15</span> <span class="comment">// 发送15到channel ch中</span></span><br></pre></td></tr></table></figure></li>
+<li><p>接收值, <code>varable := &lt;- ch</code>:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line">a := &lt;- ch <span class="comment">// 接收一个channel value, 并初始化为变量a</span></span><br></pre></td></tr></table></figure>
+<h3 id="关闭"><a href="#关闭" class="headerlink" title="关闭"></a>关闭</h3></li>
+</ul>
+<p>通过<code>close</code>关键字, 可以关闭一个通道.示例:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">3</span>; i++ &#123;</span><br><span class="line">			ch &lt;- i</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(ch) <span class="comment">// Close the channel after sending all values</span></span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	<span class="keyword">for</span> value := <span class="keyword">range</span> ch &#123;</span><br><span class="line">		fmt.Println(value)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子同, 起了一个<code>goroutine</code>实现发送值操作, 并在发送完毕后关闭了通道;</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><h3 id="无缓冲通道"><a href="#无缓冲通道" class="headerlink" title="无缓冲通道"></a>无缓冲通道</h3><p><code>channel</code>具备有两个重要的属性: <code>len, cap</code>. <code>len(ch)</code>可以获得<code>ch</code>中当前的数据量, <code>cap(ch)</code>可以获得<code>ch</code>中的容量, 就是在初始化时<code>make(chan Type, [buffer size])</code>中的<code>buffer size</code>. 很明显<code>len &lt;= cap</code>.</p>
+<p>无缓冲通道就是<code>buffer size == 0</code>的通道. 无缓冲通道根据其特点也成为<strong>阻塞通道, 同步通道</strong>; </p>
+<ul>
+<li>在发送值时: 发送值到<code>Unbuffered Channel</code>后<code>sender</code>将会<strong>阻塞</strong>, 直到<code>value</code>被<code>receiver</code>接收;</li>
+<li>在接收值时: <code>receiver</code>将会<strong>阻塞</strong>, 直到从<code>Unbuffered Channel</code>接收到<code>value</code>;</li>
+</ul>
+<p>就像是快递员送快递,必须送到客户的手上, 中间没有快递柜. 客户在获得快递前, 就在楼下傻呆着等快递员送过来.示例:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="comment">// Receiver</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Start receiving ....&quot;</span>)</span><br><span class="line">        <span class="comment">// Do Something</span></span><br><span class="line">		value := &lt;-ch</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Receive %v \n&quot;</span>, value)</span><br><span class="line">        <span class="comment">// Do Something</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;End receiving ....&quot;</span>)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// Sender</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;Start sending ....&quot;</span>)</span><br><span class="line">        <span class="comment">// Do Something</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;Send 1&quot;</span>)</span><br><span class="line">		ch &lt;- <span class="number">1</span></span><br><span class="line">        <span class="comment">// Do Something</span></span><br><span class="line">		fmt.Println(<span class="string">&quot;End sending ....&quot;</span>)</span><br><span class="line">		<span class="built_in">close</span>(ch)</span><br><span class="line">	&#125;()</span><br><span class="line"></span><br><span class="line">	time.Sleep(<span class="number">2</span> * time.Second)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面的例子中创建了一个无缓冲通道<code>ch</code>, 并通过匿名函数的方式, 发起了两个协程, 一个作用为<code>receiver</code>, 一个作用为<code>sender</code>. 两个匿名函数中均通过关键日志的方式输出了操作内容, 可以发现不管如何执行, 接收操作一定是在发送操作之后发生的, 也就是说: <code>Receive %v \n</code>的日志必定出现在<code>Send 1</code>日志之后, 其他日志由于并发导致执行顺序不确定. 这就是<strong>同步通道/阻塞通道</strong>的由来;</p>
+<h3 id="有缓冲通道"><a href="#有缓冲通道" class="headerlink" title="有缓冲通道"></a>有缓冲通道</h3><p>理解了无缓冲通道, 有缓冲通道就是指的时<code>Buffer Size</code>不为<code>0</code>的通道, 就像是在快递员与顾客之间添加了快递柜, <code>Buffer Size</code>就是快递柜的个数, 示例代码:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">1</span>) <span class="comment">// Init Buffered Channel with Size 1</span></span><br><span class="line">    ch &lt;- <span class="number">15</span></span><br><span class="line">    fmt.Println(<span class="string">&quot;End Sending .... &quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有缓冲通道与无缓冲通道, 并没有本质区别. 例如上面提到的<strong>阻塞通道</strong>的用处, 当<code>Sender</code>向一个<code>len==cap</code>的通道发送时, 也会被阻塞. 当<code>Receiver</code>像一个<code>len == 0</code>的通道接收时, 也会被阻塞;</p>
+<h3 id="同步与阻塞"><a href="#同步与阻塞" class="headerlink" title="同步与阻塞"></a>同步与阻塞</h3><p>同步与阻塞在实际时往往会借助于无缓冲通道实现, 可以实现<code>goroutines</code>之间的同步机制, 而不必借助于<code>sync/mutex</code>包;</p>
+<h3 id="优雅通道取值"><a href="#优雅通道取值" class="headerlink" title="优雅通道取值"></a>优雅通道取值</h3><p>通道取值的基础方式为: <code>varable := &lt;- ch</code>, 这种方式存在一个缺陷, 当通道已经没有数据时, 其会返回对应数据类型的零值, 这会困扰<code>Receiver</code>,无法得知这是否是<code>Sender</code>所发.</p>
+<p>也可以通过: <code>if variable, ok := &lt;- ch; ok &#123; ...&#125;</code>进行判定, 当通道存在值时<code>ok == true</code>; 但是这并不优雅, 一般推荐使用<code>for range</code>语句获取, 其内置会判定<code>ch</code>是否已经关闭了, 关闭后不再取值;示例:</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> value := <span class="keyword">range</span> ch &#123;</span><br><span class="line">       <span class="comment">// Process the received value</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="单向通道"><a href="#单向通道" class="headerlink" title="单向通道"></a>单向通道</h3><p>单向通道用于<strong>限定函数中通道参数的用途</strong>, 仅发送, 仅接收.</p>
+<figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">counter</span><span class="params">(out <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ &#123;</span><br><span class="line">        out &lt;- i</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">close</span>(out)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">squarer</span><span class="params">(out <span class="keyword">chan</span>&lt;- <span class="keyword">int</span>, in &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> in &#123;</span><br><span class="line">        out &lt;- i * i</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">close</span>(out)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">printer</span><span class="params">(in &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">for</span> i := <span class="keyword">range</span> in &#123;</span><br><span class="line">        fmt.Println(i)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    ch1 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    ch2 := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="keyword">go</span> counter(ch1)</span><br><span class="line">    <span class="keyword">go</span> squarer(ch2, ch1)</span><br><span class="line">    printer(ch2)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>chan&lt;- int</code>是一个只能发送的通道，可以发送但是不能接收；</li>
+<li><code>&lt;-chan int</code>是一个只能接收的通道，可以接收但是不能发送。</li>
+</ol>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文介绍了<code>Channel</code>的来源, 基本用处, 基本使用, 基本场景等内容, 通过本文可以对<code>Channel</code>有一个初步的了解. 在实际项目中, 其应用会更加丰富,例如结合<code>Select, Context</code>等, 这会在后续内容梳理更新.</p>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
 </search>
