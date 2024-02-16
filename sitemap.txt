@@ -1,3 +1,5 @@
+https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Pipeline/
+https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Sync/
 https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Select/
 https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Channel/
 https://guardingdog.github.io/2024/02/15/Go-Concurrency-programming-Basic-Concept/

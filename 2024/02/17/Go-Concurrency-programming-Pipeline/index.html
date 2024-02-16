@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"guardingdog.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"valine","storage":true,"lazyload":false,"nav":{"disqus":{"text":"Load Disqus","order":-1},"gitalk":{"order":-2}},"activeClass":"valine"},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="参考: Go Concurrency Patterns: Pipelines and cancellation - The Go Programming Language Pipeline是并发编程之中的官方推荐范式. 本文将通过Demo形式介绍一个并发编程范式: pipeline, 与相关适配模式: fan-in, fan-out, cancellation. Go并发原语使得编码人员可以轻易的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Go Concurrency programming Pipeline">
+<meta property="og:url" content="https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Pipeline/index.html">
+<meta property="og:site_name" content="QingZhi&#39;s Blog">
+<meta property="og:description" content="参考: Go Concurrency Patterns: Pipelines and cancellation - The Go Programming Language Pipeline是并发编程之中的官方推荐范式. 本文将通过Demo形式介绍一个并发编程范式: pipeline, 与相关适配模式: fan-in, fan-out, cancellation. Go并发原语使得编码人员可以轻易的">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2024-02-16T16:22:01.000Z">
+<meta property="article:modified_time" content="2024-02-16T16:22:52.371Z">
+<meta property="article:author" content="GuardingDog">
+<meta property="article:tag" content="Go">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Pipeline/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'en'
+  };
+</script>
+
+  <title>Go Concurrency programming Pipeline | QingZhi's Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband">
+	<a target="_blank" rel="noopener" href="https://github.com/GuardingDog" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewBox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+	</div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">QingZhi's Blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">Persistence is not easy</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+        <li class="menu-item menu-item-guestbook">
+
+    <a href="/guestbook/" rel="section"><i class="fa fa-book fa-fw"></i>guestbook</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="en">
+    <link itemprop="mainEntityOfPage" href="https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Pipeline/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.jpg">
+      <meta itemprop="name" content="GuardingDog">
+      <meta itemprop="description" content="Personal website for recording life and technology. If there is any resemblance, Icopied it.">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="QingZhi's Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Go Concurrency programming Pipeline
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+              
+
+              <time title="Created: 2024-02-17 00:22:01 / Modified: 00:22:52" itemprop="dateCreated datePublished" datetime="2024-02-17T00:22:01+08:00">2024-02-17</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Go/" itemprop="url" rel="index"><span itemprop="name">Go</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2024/02/17/Go-Concurrency-programming-Pipeline/" class="post-meta-item leancloud_visitors" data-flag-title="Go Concurrency programming Pipeline" title="Views">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">Views: </span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine: </span>
+    
+    <a title="valine" href="/2024/02/17/Go-Concurrency-programming-Pipeline/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2024/02/17/Go-Concurrency-programming-Pipeline/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>参考: <a target="_blank" rel="noopener" href="https://go.dev/blog/pipelines">Go Concurrency Patterns: Pipelines and cancellation - The Go Programming Language</a></p>
+<p><code>Pipeline</code>是并发编程之中的官方推荐范式. 本文将通过<code>Demo</code>形式介绍一个并发编程范式: <code>pipeline</code>, 与相关适配模式: <code>fan-in, fan-out, cancellation</code>.</p>
+<p><code>Go</code>并发原语使得编码人员可以轻易的构建数据流管道<code>pipeline</code>从而更有效的利用<code>I/O, CPU</code>等资源.</p>
+<a id="more"></a>
+
+<h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><p><code>pipeline</code>并没有一个标准定义, 只是一种并发编程范式. <code>pipeline</code>指的是将复杂的工作拆分为多个阶段<code>stage</code>, 每个<code>stage</code>可以视为一个函数, 内部逻辑由多个或一个<code>goroutine</code>构成; 这些<code>goroutine</code>可以拆分为三步:</p>
+<ol>
+<li>通过<code>inbound-channels</code>接收数据;</li>
+<li>操作数据,达到业务目的;</li>
+<li>发送结果到<code>outbound-channels</code>.</li>
+</ol>
+<p>那么顾名思义: 第一个<code>stage</code>, 仅包含有<code>outbound-channels</code>, 称为<code>producer</code>; 最后一个<code>stage</code>, 仅包含有<code>inbound-channels</code>, 称为<code>consumer</code>; 其余中间阶段一般同时具备<code>inbound-channels, outbound-channels</code>.</p>
+<p>经过上面的定义, 我们可以大概明确<code>pipeline</code>的伪代码如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CompleteWork 复杂工作拆分为三个阶段并发完成</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CompleteWork</span><span class="params">(sourceData Data)</span> <span class="title">ResultData</span></span> &#123;</span><br><span class="line">	ch1 := startStage(sourceData)</span><br><span class="line">	ch2 := middleStage(ch1)</span><br><span class="line">	resultData := endStage(ch2)</span><br><span class="line">	<span class="keyword">return</span> resultData</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// startStage 第一阶段并发处理源数据, 生成中间数据1</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">startStage</span><span class="params">(sourceData Data)</span> &lt;-<span class="title">chan</span> <span class="title">Data</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> outbound <span class="keyword">chan</span> Data</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(sourceData Data)</span></span> &#123;</span><br><span class="line">		<span class="comment">// operate sourceData</span></span><br><span class="line">		outbound &lt;- operate(sourceData)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// middleStage 第二阶段并发处理中间数据1, 生成中间数据2 </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">middleStage</span><span class="params">(inbound &lt;-<span class="keyword">chan</span> Data)</span> &lt;-<span class="title">chan</span> <span class="title">Data2</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> outbound <span class="keyword">chan</span> Data2</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(inbound <span class="keyword">chan</span> Data)</span></span> &#123;</span><br><span class="line">		<span class="comment">// operate inbound</span></span><br><span class="line">		outbound &lt;- operate(sourceData)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// endStage 第三阶段并发处理中间数据2, 生成最终结果</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">endStage</span><span class="params">(inbound &lt;-<span class="keyword">chan</span> Data2)</span> <span class="title">ResultData</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> result ResultData</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(inbound <span class="keyword">chan</span> Data2)</span></span> &#123;</span><br><span class="line">		<span class="comment">// operate inbound</span></span><br><span class="line">		result &lt;- operate(inbound)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> result</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下面给将通过<code>Demo</code>方式展示其过程, 以便于更好理解;</p>
+<h2 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h2><p>我们以<code>数字的平方</code>为例, 给定一个数据源<code>[]int</code>, 要求输出每个数字元素的平方; </p>
+<h3 id="Step1-basic"><a href="#Step1-basic" class="headerlink" title="Step1: basic"></a>Step1: basic</h3><p>那可以分为两个<code>stage</code>:</p>
+<ul>
+<li><p><code>stage1</code> 将数据源<code>[]int</code>发送到<code>channel: ch1</code>中;</p>
+</li>
+<li><p><code>stage2</code>读取<code>ch1</code>并将结果发送到<code>channel: ch2</code>中; </p>
+</li>
+<li><p><code>stage3</code>读取<code>ch2</code>并打印输出即可;</p>
+</li>
+<li><p><code>Stage1</code>:</p>
+<p>示例代码:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Gen</span><span class="params">(nums ...<span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> _, n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Send value: %v to channel \n&quot;</span>, n)</span><br><span class="line">			out &lt;- n</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(out)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>stage1</code>是一个函数, 其将源数据<code>nums</code>转换到<code>channel: out</code>中. 在函数内部, 首先定义了一个<code>outbound-channel: out</code>, 随后启用一个<code>goroutine</code>将数字<code>send</code>到<code>out</code>, 同时通过<code>fmt</code>输出方便用户了解执行过程, 在完成发送完毕后, 通过<code>close</code>关闭<code>channel: out</code>;</p>
+</li>
+<li><p><code>Stage2</code>:</p>
+<p>示例代码:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Sq</span><span class="params">(in &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> in &#123;</span><br><span class="line">			fmt.Printf(<span class="string">&quot;Receive value: %v from channel \n&quot;</span>, n)</span><br><span class="line">			out &lt;- n * n</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="built_in">close</span>(out)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>stage2</code>是一个函数, 其接受一个<code>inbound-channel: in</code>, 并返回平方结果<code>outbound-channel: out</code>. 在函数内部, 首先定义了一个<code>outbound-channel: out</code>, 随后启用一个<code>goroutine</code>将读取数据平方后发送发送到<code>out</code>中,  同时通过<code>fmt</code>输出方便用户了解执行过程, 在完成发送完毕后, 通过<code>close</code>关闭<code>channel: out</code>;</p>
+</li>
+</ul>
+<p><code>stage</code>定义完毕后, 我这边通过单测的方式实现<code>数字的平方</code>业务逻辑: <code>logic</code>:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPipeline</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="comment">// Set up pipeline</span></span><br><span class="line">    <span class="comment">// Stage1</span></span><br><span class="line">	ch1 := Gen(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>)</span><br><span class="line">    <span class="comment">// Stage2</span></span><br><span class="line">	out := Sq(ch1)</span><br><span class="line">    <span class="comment">// Stage3: Consume result</span></span><br><span class="line">	<span class="keyword">for</span> o := <span class="keyword">range</span> out &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got result: %v \n&quot;</span>, o)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过单测可以查看实现效果:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@VM<span class="number">-0</span><span class="number">-9</span>-centos base]# <span class="keyword">go</span> test -v .</span><br><span class="line">=== RUN   TestPipeline</span><br><span class="line">Send value: <span class="number">1</span> to channel </span><br><span class="line">Send value: <span class="number">2</span> to channel </span><br><span class="line">Receive value: <span class="number">1</span> from channel </span><br><span class="line">Receive value: <span class="number">2</span> from channel </span><br><span class="line">Send value: <span class="number">3</span> to channel </span><br><span class="line">Got result: <span class="number">1</span> </span><br><span class="line">Got result: <span class="number">4</span> </span><br><span class="line">Receive value: <span class="number">3</span> from channel </span><br><span class="line">Got result: <span class="number">9</span> </span><br><span class="line">--- PASS: TestPipeline (<span class="number">0.00</span>s)</span><br><span class="line">PASS</span><br><span class="line">ok      learngo/pkg/concurrency/pipeline/base   <span class="number">0.002</span>s</span><br></pre></td></tr></table></figure>
+<p>由于并发的不确定性, 上面的<code>fmt</code>输出结果不完全固定, 但是可以明确的是: <code>Gen</code>, <code>Sq</code>, <code>logic</code>三个<code>goroutine</code>是并发的, 这有效利用了<code>CPU</code>.</p>
+<p><strong>这就是pipeline.</strong></p>
+<h3 id="Step2-with-fan-in-fan-out"><a href="#Step2-with-fan-in-fan-out" class="headerlink" title="Step2: with fan-in fan-out"></a>Step2: with fan-in fan-out</h3><p>在分布式系统中, 每一个<code>Worker</code>都可以占用<code>CPU &amp; I/O</code>, 为了更有效的利用其优势, 可以同时发起多个函数, 读取同一个<code>channel</code>,直到<code>channel</code>关闭,  这种方式称为: <code>fan-out</code>;</p>
+<p>相对的, 一个函数可以同时读取多个<code>inbound-channels: ins</code>, 将结果输出到一个<code>outbound-channel: out</code>, 直到所有的<code>ins</code>均已关闭, 这种方式称为<code>fan-in</code>;</p>
+<p>业务代码<code>logic</code>部分, 调整为分布式处理模式(<code>fan-in, fan-out</code>):</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPipeline</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">    <span class="comment">// Set up pipeline</span></span><br><span class="line">    <span class="comment">// Stage1</span></span><br><span class="line">	ch1 := Gen(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">    <span class="comment">// Stage2</span></span><br><span class="line">	<span class="comment">// fan-out: Distribute the work across two goroutines</span></span><br><span class="line">	out1 := Sq(ch1)</span><br><span class="line">	out2 := Sq(ch1)</span><br><span class="line">    <span class="comment">// Stage3: Consume result</span></span><br><span class="line">	<span class="comment">// fan-in: Consume fan-in result</span></span><br><span class="line">	<span class="keyword">for</span> o := <span class="keyword">range</span> merge(out1, out2) &#123;</span><br><span class="line">		fmt.Printf(<span class="string">&quot;Got result: %v \n&quot;</span>, o)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p><code>fan-out</code>: 这里假设将工作分为两个<code>worker</code>处理, 每个<code>worker</code>逻辑一摸一样<code>无需修改代码</code>,  每个<code>worker</code>读取同一个<code>channel: ch1</code>;</p>
+</li>
+<li><p><code>fan-in</code>: 定义了一个新函数<code>merge</code>, 其将读取<code>channle</code>列表, 将结果输出到同一个<code>result channle</code>中:代码示例如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">merge</span><span class="params">(ins ...&lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">    <span class="comment">// Start an output goroutine for each input channel in cs.  output</span></span><br><span class="line">    <span class="comment">// copies values from c to out until c is closed, then calls wg.Done.</span></span><br><span class="line">	output := <span class="function"><span class="keyword">func</span><span class="params">(c &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> c &#123;</span><br><span class="line">			out &lt;- n</span><br><span class="line">		&#125;</span><br><span class="line">		wg.Done()</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	wg.Add(<span class="built_in">len</span>(ins))</span><br><span class="line">	<span class="keyword">for</span> _, c := <span class="keyword">range</span> ins &#123;</span><br><span class="line">		<span class="keyword">go</span> output(c)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// Start a goroutine to close out once all the output goroutines are</span></span><br><span class="line">    <span class="comment">// done.  This must start after the wg.Add call.</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		wg.Wait()</span><br><span class="line">		<span class="built_in">close</span>(out)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在<code>merge</code>中, 首先定义一个<code>outbound-channel: out</code>用来接收所有<code>ins</code>结果. 随后采用<code>goroutine</code>方式实现并发读取入参<code>channel</code>操作, 采用<code>goroutine</code>方式实现并发关闭<code>channel out</code>操作;由于向<code>closed channel out</code>发送数据会导致<code>panic</code>, 这里采用了<code>wg sync.WaitGroup</code>进行并发同步控制.</p>
+<p>每一个<code>inbound-channel</code>采用<code>goroutine</code>实现: </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">	<span class="keyword">for</span> n:= <span class="keyword">range</span> c &#123;</span><br><span class="line">		out &lt;- n</span><br><span class="line">	&#125;</span><br><span class="line">    wg.Done()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于范式中需要注意的是:</p>
+<ul>
+<li><strong>在所有<code>Send</code>操作完毕后, 需要<code>close outbound-channel</code>;</strong> 通过<code>wg</code>机制实现.</li>
+<li><strong>在<code>inbound-channel close</code>前, 需要持续<code>receive value</code>.</strong> 通过<code>for range</code>机制实现.</li>
+</ul>
+</li>
+</ul>
+<h3 id="Step3-with-cancellation"><a href="#Step3-with-cancellation" class="headerlink" title="Step3: with cancellation"></a>Step3: with cancellation</h3><p>上面的例子中存在缺陷: 采用了<code>unbuffered channel</code> 是一种阻塞通道. 也就是说如果某一步<code>stage</code>不达预期的话, 会导致相关<code>goroutine</code>阻塞, 从而造成资源泄露, <code>GC</code>机制无法回收阻塞的<code>goroutine</code>;</p>
+<p>并且在实际应用过程中, 某些值也许具备特殊含义, 例如<code>0 == Error</code>, 这也需要相关协程均进行销毁操作;下面是一个阻塞例子:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPipeline</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	ch1 := Gen(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line">	<span class="comment">// fan-out: Distribute the work across two goroutines</span></span><br><span class="line">	out1 := Sq(ch1)</span><br><span class="line">	out2 := Sq(ch1)</span><br><span class="line">	<span class="comment">// fan-in: Consume fan-in result</span></span><br><span class="line">	result := merge(out1, out2)</span><br><span class="line">    <span class="comment">// WARNING!!!!! Resource Leak</span></span><br><span class="line">	fmt.Printf(<span class="string">&quot;Got result: %v \n&quot;</span>, &lt;-result)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的例子中, 仅消费了一次,  会导致<code>Gen, Sq*2, Merge</code>内部的协程均挂起;</p>
+<p>需要有一个机制进行<strong>取消信号的广播</strong>, 告知所有的协程, 该退出了. </p>
+<p>那么该如何处理呢? 那就需要<code>pipeline stage</code>添加<code>Cancel Channel</code> 作为入参;并结合<code>Select</code>语句, 同时感知多个<code>channel</code>操作:</p>
+<p>例如: <code>Sq</code>函数:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sq</span><span class="params">(done &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, in &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="built_in">close</span>(out)</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> in &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> out &lt;- n * n:</span><br><span class="line">			<span class="keyword">case</span> &lt;-done:</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>相比较于之前函数, 在入参列表中添加了 <code>done channel</code>用于标识是否已外部已完成操作, 内部采用<code>select</code>同时监控<code>out channel &amp; done channel operation</code>, 如果监控到<code>done</code>动作, 则<code>return</code>, 销毁此<code>goroutine</code>;</p>
+<p>对于<code>logic</code>中则需要定义<code>done channel</code>, 并在退出前发送<code>done</code>信号: </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPipeline</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">defer</span> <span class="built_in">close</span>(done)</span><br><span class="line">	....</span><br><span class="line">&#125;	</span><br></pre></td></tr></table></figure>
+<p>如上所示, 这里采用<code>close</code>操作, 是因为从<code>closed channel</code>获取值, 会默认获得类型零值. 也就是说<code>close</code>是一种广播操作;</p>
+<p>整体代码如下:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> cancel</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;testing&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">TestPipeline</span><span class="params">(t *testing.T)</span></span> &#123;</span><br><span class="line">	<span class="comment">// Set up a done channel that&#x27;s shared by the whole pipeline,</span></span><br><span class="line">	<span class="comment">// and close that channel when this pipeline exits, as a signal</span></span><br><span class="line">	<span class="comment">// for all the goroutines we started to exit.</span></span><br><span class="line">	done := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;)</span><br><span class="line">	<span class="keyword">defer</span> <span class="built_in">close</span>(done)</span><br><span class="line"></span><br><span class="line">	in := gen(done, <span class="number">2</span>, <span class="number">3</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Distribute the sq work across two goroutines that both read from in.</span></span><br><span class="line">	c1 := sq(done, in)</span><br><span class="line">	c2 := sq(done, in)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Consume the first value from output.</span></span><br><span class="line">	out := merge(done, c1, c2)</span><br><span class="line">	fmt.Println(&lt;-out) <span class="comment">// 4 or 9</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// done will be closed by the deferred call.</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">gen</span><span class="params">(done &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, nums ...<span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="built_in">close</span>(out)</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> nums &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> out &lt;- n:</span><br><span class="line">			<span class="keyword">case</span> &lt;-done:</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sq</span><span class="params">(done &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, in &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="built_in">close</span>(out)</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> in &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> out &lt;- n * n:</span><br><span class="line">			<span class="keyword">case</span> &lt;-done:</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">merge</span><span class="params">(done &lt;-<span class="keyword">chan</span> <span class="keyword">struct</span>&#123;&#125;, cs ...&lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span> &lt;-<span class="title">chan</span> <span class="title">int</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line">	out := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Start an output goroutine for each input channel in cs.  output</span></span><br><span class="line">	<span class="comment">// copies values from c to out until c or done is closed, then calls</span></span><br><span class="line">	<span class="comment">// wg.Done.</span></span><br><span class="line">	output := <span class="function"><span class="keyword">func</span><span class="params">(c &lt;-<span class="keyword">chan</span> <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> wg.Done()</span><br><span class="line">		<span class="keyword">for</span> n := <span class="keyword">range</span> c &#123;</span><br><span class="line">			<span class="keyword">select</span> &#123;</span><br><span class="line">			<span class="keyword">case</span> out &lt;- n:</span><br><span class="line">			<span class="keyword">case</span> &lt;-done:</span><br><span class="line">				<span class="keyword">return</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	wg.Add(<span class="built_in">len</span>(cs))</span><br><span class="line">	<span class="keyword">for</span> _, c := <span class="keyword">range</span> cs &#123;</span><br><span class="line">		<span class="keyword">go</span> output(c)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Start a goroutine to close out once all the output goroutines are</span></span><br><span class="line">	<span class="comment">// done.  This must start after the wg.Add call.</span></span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		wg.Wait()</span><br><span class="line">		<span class="built_in">close</span>(out)</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">return</span> out</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>本文通过<code>Demo</code>方式展示了<code>pipeline</code>的并发编程范式, 并一步步展示了<code>fan-in, fan-out, cancellation</code>的适配结果, 逐步完善了<code>pipeline</code>工作模式. 期望可以在日常应用中, 不断实践, 并总结更优雅的并发编程范式.</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div></div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    Donate
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/images/wechatPay.jpg" alt="GuardingDog WeChat Pay">
+        <p>WeChat Pay</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/images/aliPay.jpg" alt="GuardingDog Alipay">
+        <p>Alipay</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          
+          <div class="post-tags">
+              <a href="/tags/Go/" rel="tag"><i class="fa fa-tag"></i> Go</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2024/02/17/Go-Concurrency-programming-Sync/" rel="prev" title="Go Concurrency programming Sync">
+      <i class="fa fa-chevron-left"></i> Go Concurrency programming Sync
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9A%E4%B9%89"><span class="nav-number">1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo"><span class="nav-number">2.</span> <span class="nav-text">Demo</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Step1-basic"><span class="nav-number">2.1.</span> <span class="nav-text">Step1: basic</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step2-with-fan-in-fan-out"><span class="nav-number">2.2.</span> <span class="nav-text">Step2: with fan-in fan-out</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Step3-with-cancellation"><span class="nav-number">2.3.</span> <span class="nav-text">Step3: with cancellation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%93%E8%AE%BA"><span class="nav-number">3.</span> <span class="nav-text">结论</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="GuardingDog"
+      src="/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">GuardingDog</p>
+  <div class="site-description" itemprop="description">Personal website for recording life and technology. If there is any resemblance, Icopied it.</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">116</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/GuardingDog" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;GuardingDog" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="/sun2387353@163.com" title="E-Mail → sun2387353@163.com"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/yourname" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/yourname" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;yourname" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i>Google</a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2020 – 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">GuardingDog</span>
+</div>
+<!--
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+-->
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+
+
+
+
+  
+  <style>
+  
+  button.darkmode-toggle {
+  z-index: 9999;
+  }
+  
+  img, .darkmode-ignore {
+    isolation: isolate;
+    display: block;
+  }
+  </style>
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/pjax/pjax.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+  <script src="/lib/darkmode-js/lib/darkmode-js.min.js"></script>
+
+
+<script>
+var options = {
+  bottom: '64px', // default: '32px'
+  right: 'unset', // default: '32px'
+  left: '32px', // default: 'unset'
+  time: '0.5s', // default: '0.3s'
+  mixColor: '#fff', // default: '#fff'
+  backgroundColor: '#fff',  // default: '#fff'
+  buttonColorDark: '#100f2c',  // default: '#100f2c'
+  buttonColorLight: '#fff', // default: '#fff'
+  saveInCookies: false, // default: true,
+  label: '🌓', // default: ''
+  autoMatchOsTheme: true // default: true
+}
+const darkmode = new Darkmode(options);
+darkmode.showWidget();
+// window.onload = function(){
+//   setTimeout(
+//     function() {
+//       document.getElementsByClassName('darkmode-toggle')[0].click();
+//     },
+//     550,
+//   );
+//   document.getElementsByClassName('darkmode-toggle')[0].click();
+// }
+</script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+  <script>
+var pjax = new Pjax({
+  selectors: [
+    'head title',
+    '#page-configurations',
+    '.content-wrap',
+    '.post-toc-wrap',
+    '.languages',
+    '#pjax'
+  ],
+  switches: {
+    '.post-toc-wrap': Pjax.switches.innerHTML
+  },
+  analytics: false,
+  cacheBust: false,
+  scrollTo : !CONFIG.bookmark.enable
+});
+
+window.addEventListener('pjax:success', () => {
+  document.querySelectorAll('script[data-pjax], script#page-configurations, #pjax script').forEach(element => {
+    var code = element.text || element.textContent || element.innerHTML || '';
+    var parent = element.parentNode;
+    parent.removeChild(element);
+    var script = document.createElement('script');
+    if (element.id) {
+      script.id = element.id;
+    }
+    if (element.className) {
+      script.className = element.className;
+    }
+    if (element.type) {
+      script.type = element.type;
+    }
+    if (element.src) {
+      script.src = element.src;
+      // Force synchronous loading of peripheral JS.
+      script.async = false;
+    }
+    if (element.dataset.pjax !== undefined) {
+      script.dataset.pjax = '';
+    }
+    if (code !== '') {
+      script.appendChild(document.createTextNode(code));
+    }
+    parent.appendChild(script);
+  });
+  NexT.boot.refresh();
+  // Define Motion Sequence & Bootstrap Motion.
+  if (CONFIG.motion.enable) {
+    NexT.motion.integrator
+      .init()
+      .add(NexT.motion.middleWares.subMenu)
+      .add(NexT.motion.middleWares.postList)
+      .bootstrap();
+  }
+  NexT.utils.updateSidebarPosition();
+});
+</script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="pjax">
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : false,
+      notify     : false,
+      appId      : '7alk9zMW4cerOHY4GBQkS9pX-gzGzoHsz',
+      appKey     : '0DEHlLcP8dJ2GLpKJ8gqy9U9',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+    </div>
+</body>
+</html>
