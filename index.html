@@ -218,7 +218,7 @@
               <span class="post-meta-item-text">Posted on</span>
               
 
-              <time title="Created: 2024-02-17 17:10:13 / Modified: 17:10:49" itemprop="dateCreated datePublished" datetime="2024-02-17T17:10:13+08:00">2024-02-17</time>
+              <time title="Created: 2024-02-17 17:10:13 / Modified: 21:47:00" itemprop="dateCreated datePublished" datetime="2024-02-17T17:10:13+08:00">2024-02-17</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -263,6 +263,7 @@
 
       
           <p>参考: <a target="_blank" rel="noopener" href="https://go.dev/blog/context">Go Concurrency Patterns: Context - The Go Programming Language</a></p>
+<p>本文将简单介绍下<code>context pkg</code>内的关键类型与函数, 随后通过两个用例的方式展示<code>context</code>在并发编程中的使用场景;</p>
 <h2 id="缘由"><a href="#缘由" class="headerlink" title="缘由"></a>缘由</h2><p>在<code>Server</code>端一次请求的发生, 往往需要启动新的<code>goroutine</code>, 例如用来请求数据库或<code>RPC</code>. 这就提出了一些合理的需求: 有时需要对<code>goroutine</code>进行生命周期的控制, 例如超过了预期时间则视为请求失败, 应当销毁相关<code>goroutine</code>; 有时需要传递请求相关的内容, 例如权限信息, <code>Trace-ID</code>等. </p>
 <p>基于此<code>Google</code>提出了<code>context</code>包, 在并发场景下实现请求生命周期控制;</p>
           <!--noindex-->
