@@ -9988,4 +9988,133 @@
         <tag>Go</tag>
       </tags>
   </entry>
+  <entry>
+    <title>Go Data Structure Source Code chan</title>
+    <url>/2024/02/22/Go-Data-Structure-Source-Code-chan/</url>
+    <content><![CDATA[<h2 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h2><p><code>channel</code>是<code>Go</code>提供的用于<code>goroutine</code>间通信的数据结构, 是核心数据结构之一. 本文假设读者熟悉<code>channel</code>的使用方式, 将从源码的角度解读其数据结构, 并通过源码解释各个操作下<code>channel</code>内实现流程.</p>
+<a id="more"></a>
+
+<h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>源码位置: <code>src/runtime/chan.go</code>, <code>channel</code>的核心数据结构为: <code>hchan</code>.</p>
+<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> hchan <span class="keyword">struct</span> &#123;</span><br><span class="line">	qcount   <span class="keyword">uint</span>           <span class="comment">// channel 内的存量数据数量</span></span><br><span class="line">	dataqsiz <span class="keyword">uint</span>           <span class="comment">// channel 的Size</span></span><br><span class="line">	buf      unsafe.Pointer <span class="comment">// 指向环形队列的指针, 环形队列存储了数据</span></span><br><span class="line">	elemsize <span class="keyword">uint16</span>         <span class="comment">// 元素大小, 如int64为8, 标识为8字节</span></span><br><span class="line">	closed   <span class="keyword">uint32</span>         <span class="comment">// channel 状态, 0标识为未关闭, 否则为关闭</span></span><br><span class="line">	elemtype *_type 	   <span class="comment">// 元素类型信息</span></span><br><span class="line">	sendx    <span class="keyword">uint</span>          <span class="comment">// 环形队列send操作的Index, 初始化为0</span></span><br><span class="line">	recvx    <span class="keyword">uint</span>          <span class="comment">// 环形队列receive操作的Index, 初始化为0</span></span><br><span class="line">	recvq    waitq         <span class="comment">// 阻塞的receiver goroutines 列表, 其为链表结构</span></span><br><span class="line">	sendq    waitq  	   <span class="comment">// 阻塞的sender goroutines 列表, 其为链表结构	</span></span><br><span class="line">	lock mutex             <span class="comment">// 互斥锁</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面是<code>channel</code>结构体定义,定义并不复杂, 其核心结构为<code>buf</code>: 环形队列.  下面i将通过操作示例的方式, 展示各种操作下的数据结构实例.</p>
+<h3 id="空channel初始化"><a href="#空channel初始化" class="headerlink" title="空channel初始化"></a>空channel初始化</h3><p>初始化一个<code>size == 0</code>的<code>int32</code>类型<code>channel</code>: <code>make(chan int32)</code>:</p>
+<img src="../pictures/InitEmptyChannel.png" alt="初始化空channel" style="zoom: 33%;" />
+
+<p>图片展示了<code>channel</code>实例, 简单解释下各个属性的赋值原因, 后面示例中不重复解释:</p>
+<ul>
+<li><code>qcount = 0</code>: 初始化后<code>channel</code>元素数量为0;</li>
+<li><code>dataqsize = 0</code>:  空<code>channel</code>的<code>size</code>默认为0, 且不会改变;</li>
+<li><code>buf</code>: 指向<code>buf</code>属性本身的地址;</li>
+<li><code>elemsize = 4</code>: 由于元素为<code>int32</code>, 四个字节大小;</li>
+<li><code>closed = 0</code>: 未关闭状态的<code>channel</code>;</li>
+<li><code>elemtype = _int32</code>: 元素类型为<code>_int32</code>, 包含有若干信息;</li>
+<li><code>sendx = 0</code>: 发送操作需要的索引, 默认为<code>0</code>, 由于为空<code>channel</code>, 所以不会使用的;</li>
+<li><code>recvx = 0</code>: 接收操作需要的索引, 默认为<code>0</code>, 由于为空<code>channel</code>, 所以不会使用的;</li>
+<li><code>recvq = nil</code>: 尚没有阻塞的接收协程出现;</li>
+<li><code>rendq = nil</code>: 尚没有阻塞的发送协程出现;</li>
+</ul>
+<p>需要注意的是在<code>size == 0</code>时, <code>c.buf</code>环形队列指针, 指向了<code>c.buf</code>本身的地址, 这是因为在通道的读写操作中，通常会涉及到对 <code>buf</code> 字段的读写操作，而我们不希望这些操作与像 close() 这样的操作发生竞争。</p>
+<h3 id="buffer-channel-初始化"><a href="#buffer-channel-初始化" class="headerlink" title="buffer channel 初始化"></a>buffer channel 初始化</h3><p>初始化一个<code>size == 6</code>的<code>int32</code>类型<code>channel</code>: <code>make(chan int32, 6)</code>:</p>
+<img src="../pictures/初始化Buffer队列.png" alt="初始化Buffer channel" style="zoom:33%;" />
+
+<p>该实例中, 可以看到<code>buf</code>属性, 指向了一个环形队列.</p>
+<h3 id="环形队列"><a href="#环形队列" class="headerlink" title="环形队列"></a>环形队列</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">6</span>)</span><br><span class="line">c &lt;- <span class="number">1</span> <span class="comment">// send</span></span><br><span class="line">c &lt;- <span class="number">1</span> <span class="comment">// send</span></span><br><span class="line">c &lt;- <span class="number">1</span> <span class="comment">// send</span></span><br><span class="line">&lt;- c <span class="comment">// receive</span></span><br></pre></td></tr></table></figure>
+<p>上面首先定义了一个<code>size == 6</code>的<code>int</code>类型的<code>channel</code>; 其次连续进行三次<code>send</code>操作, 最后进行一次<code>receive</code>操作. 此时数据结构为:</p>
+<img src="../pictures/环形队列示例.png" style="zoom:33%;" />
+
+<ul>
+<li><code>sendx</code>: 三次<code>send</code>操作, 使得<code>snedx = 3</code>;</li>
+<li><code>recvx</code>: 一次<code>receive</code>操作, 使得<code>revcx = 1</code>;</li>
+</ul>
+<h3 id="等待队列"><a href="#等待队列" class="headerlink" title="等待队列"></a>等待队列</h3><figure class="highlight go"><table><tr><td class="code"><pre><span class="line">c := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">6</span>)</span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span> &#123;&lt;- c&#125; <span class="comment">// 阻塞</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span> &#123;&lt;- c&#125; <span class="comment">// 阻塞</span></span><br><span class="line"><span class="keyword">go</span> <span class="function"><span class="keyword">func</span> <span class="params">()</span></span> &#123;&lt;- c&#125; <span class="comment">// 阻塞</span></span><br></pre></td></tr></table></figure>
+<img src="../pictures/等待队列示例.png" style="zoom:33%;" />
+
+<ul>
+<li><code>recvq</code>: 由于对于存量数据为空的<code>channel</code>, 连续出现三个协程进行了<code>receive</code>操作, 到这这三个<code>goroutine</code>均被阻塞, 并挂在<code>recvq</code>属性上.</li>
+</ul>
+<h2 id="操作流程"><a href="#操作流程" class="headerlink" title="操作流程"></a>操作流程</h2><p><code>Go</code>提供了四种内置<code>channel</code>操作: <code>make, send, receive, close</code>. 而<code>channel</code>的常见操作特性想必大家都知道, 例如<code>close</code>一个<code>nil channel</code>会导致程序奔溃. 那么为何会奔溃, 哪一步逻辑导致的奔溃呢? 这就需要结合源码进行理解.</p>
+<p>下面我将采用流程图的方式展示, 部分源码细节过于繁琐, 例如<code>lock</code>操作, 等将会被忽略, 尽可能梳理主干逻辑.</p>
+<h3 id="Make"><a href="#Make" class="headerlink" title="Make"></a>Make</h3><ul>
+<li><p>函数签名: <code>func makechan(t *chantype, size int) *hchan &#123;...&#125;</code></p>
+</li>
+<li><p>流程图:</p>
+<img src="../pictures/Make 操作流程.png" style="zoom: 33%;" />
+</li>
+<li><p>解读: 代码简单, 可读性强;</p>
+<ol>
+<li>首先会检查元素的大小和对齐方式是否合法，</li>
+<li>然后计算需要分配的内存大小。根据元素是否包含指针，选择不同的分配方式。</li>
+<li>最后初始化channel的一些属性，比如元素大小、元素类型、缓冲区大小等。如果开启了debug模式，还会打印一些信息。总的来说，就是为了创建一个符合要求的channel。</li>
+</ol>
+</li>
+</ul>
+<h3 id="Send"><a href="#Send" class="headerlink" title="Send"></a>Send</h3><ul>
+<li><p>函数签名:<code>func chansend(c *hchan, ep unsafe.Pointer, block bool, callerpc uintptr) bool &#123;...&#125;</code></p>
+</li>
+<li><p>流程图:</p>
+<img src="../pictures/Send 操作流程.png" style="zoom:33%;" />
+</li>
+<li><p>解读:代码可读性一般, 实现了通道发送操作的逻辑，包括了非阻塞发送、阻塞发送和竞争检测等功能。</p>
+<ol>
+<li><p>首先会判断通道 c 是否为 nil，如果为 nil 且不需要阻塞，则直接返回 false；否则会阻塞当前 <code>goroutine</code>。</p>
+</li>
+<li><p>如果开启了 race 检测，会调用 <code>racereadpc()</code> 方法做竞争检测。</p>
+</li>
+<li><p>如果不需要阻塞且通道未关闭且通道已满，则直接返回 false。</p>
+</li>
+<li><p>如果通道已关闭，则解锁并 <code>panic</code> 报错。</p>
+</li>
+<li><p>尝试从接收 <code>goroutine </code>列表中取出一个 <code>goroutine</code>，如果成功则直接发送数据并返回 <code>true</code>。</p>
+</li>
+<li><p>如果通道缓冲区中有空间可以发送数据，则将数据拷贝到缓冲区中，并更新发送索引等信息，最后返回 <code>true</code>。</p>
+</li>
+<li><p>如果不需要阻塞，则直接返回 <code>false</code>。</p>
+</li>
+<li><p>如果需要阻塞，则创建一个 <code>sudog </code>结构并加入发送 <code>goroutine</code> 列表，然后调用 <code>gopark() </code>进行阻塞等待。</p>
+</li>
+<li><p>当有接收 <code>goroutine</code> 唤醒发送 <code>goroutine</code> 时，处理唤醒逻辑并返回 <code>true</code>。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Receive"><a href="#Receive" class="headerlink" title="Receive"></a>Receive</h3><ul>
+<li><p>函数签名:<code>func chanrecv(c *hchan, ep unsafe.Pointer, block bool) (selected, received bool) &#123;&#125;</code></p>
+</li>
+<li><p>流程图:</p>
+<img src="../pictures/Receive 操作.png" style="zoom:33%;" />
+</li>
+<li><p>解读: 代码可读性差, 下面是大概概括, 无法与上面流程图完全一致;</p>
+<ol>
+<li>会判断通道是否为空，如果是非阻塞接收且通道为空，则直接返回；</li>
+<li>如果通道已关闭并且为空，则清空数据并返回。</li>
+<li>如果有数据可接收，则直接接收并返回。</li>
+<li>如果是阻塞接收，则将当前 <code>goroutine</code> 挂起等待数据。</li>
+</ol>
+</li>
+</ul>
+<h3 id="Close"><a href="#Close" class="headerlink" title="Close"></a>Close</h3><ul>
+<li><p>函数签名:<code>func closechan(c *hchan) &#123;...&#125;</code></p>
+</li>
+<li><p>流程图:</p>
+<img src="../pictures/Close 操作.png" style="zoom:33%;" />
+</li>
+<li><p>解读: 这段代码清晰而易读;</p>
+<ol>
+<li>首先会判断通道 c 是否为 nil，如果是则 panic 报错。</li>
+<li>然后判断通道是否已经关闭，如果已关闭则解锁并 panic 报错。</li>
+<li>如果开启了 race 检测，会进行相应的竞争检测(图中未展示)。</li>
+<li>释放所有接收 <code>goroutine</code> 的资源，包括清空接收元素和标记等操作。</li>
+<li>释放所有发送 <code>goroutine</code> 的资源，将发送元素清空，标记等操作。</li>
+</ol>
+</li>
+</ul>
+<h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p><code>channel</code>底层是实现核心为循环队列, 并不复杂. 本文结合源码总结了<code>channel</code>数据结构与常见操作的源码流程. 愿可以帮助到你.</p>
+]]></content>
+      <categories>
+        <category>Go</category>
+      </categories>
+      <tags>
+        <tag>Go</tag>
+      </tags>
+  </entry>
 </search>

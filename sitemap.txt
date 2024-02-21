@@ -1,3 +1,4 @@
+https://guardingdog.github.io/2024/02/22/Go-Data-Structure-Source-Code-chan/
 https://guardingdog.github.io/2024/02/17/Go-Concurrency-Programming-Context/
 https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Pipeline/
 https://guardingdog.github.io/2024/02/17/Go-Concurrency-programming-Sync/
