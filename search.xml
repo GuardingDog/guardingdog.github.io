@@ -10402,6 +10402,12 @@
 <li>等量扩容模式下，桶数量不变，掩码和扩容前是一致的，因此扩容前后 key 所在的桶序号不变</li>
 <li>增量扩容模式下，桶数量变成原来的 2倍，掩码也比之前多了 1 位，key 所在的桶序号可能会改变。比如原本的 B 是 5，计算位置时只需取 key 的低位哈希后 5 位，而增量扩容后B是 6，计算位置时需取 key 的低位哈希后 6位。桶序号是否改变取决于 key 的低位哈希的倒数第 6 位是 0 还是 1</li>
 </ul>
+<p><strong>注意细节:</strong></p>
+<ul>
+<li><code>hmap</code>结构中有一个<code>oldbuckets</code>吗，扩容刚发生时，会先将老数据存到这个里面。</li>
+<li>每次对<code>map</code>进行删改操作时，会触发从<code>oldbucket</code>中迁移到<code>bucket</code>的操作【非一次性，分多次】</li>
+<li>在扩容没有完全迁移完成之前，每次get或者put遍历数据时，都会先遍历<code>oldbuckets</code>，然后再遍历<code>buckets</code>。</li>
+</ul>
 <h2 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h2><p>通过上述分析，不难得出以下结论:</p>
 <ul>
 <li>创建 <code>map</code> 时尽量指定 <code>hint</code> 的大小，避免后续带来的扩容问题</li>
