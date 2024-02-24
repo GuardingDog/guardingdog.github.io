@@ -27,10 +27,16 @@
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
 <meta property="og:description" content="神经网络和深度学习 笔记来源">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/sigmoid-function.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/LogReg_kiank.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/cost-function.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/Logistic-Computation-Graph.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/whole-logistic-training-update.png">
 <meta property="article:published_time" content="2020-04-02T05:02:25.000Z">
 <meta property="article:modified_time" content="2021-01-24T09:16:16.247Z">
 <meta property="article:author" content="GuardingDog">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/sigmoid-function.png">
 
 <link rel="canonical" href="https://guardingdog.github.io/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/">
 
@@ -323,14 +329,14 @@
 </ul>
 <p>$$<br>  s = \sigma(w^Tx+b) = \sigma(z) = \frac{1}{1+e^{-z}}<br>$$</p>
 <p>为了将 $w^Tx+b$  约束在 [0, 1] 间，引入 Sigmoid 函数。从下图可看出，Sigmoid 函数的值域为 [0, 1]。</p>
-
+<img src="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/sigmoid-function.png" class="" title="Sigmoid函数">
 
 
 <p>Logistic 回归可以看作是一个非常小的神经网络。下图是一个典型例子：</p>
 <blockquote>
 <p>也就是一个普通的神经元</p>
 </blockquote>
-
+<img src="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/LogReg_kiank.png" class="" title="逻辑回归图示">
 
 
 <h3 id="损失函数"><a href="#损失函数" class="headerlink" title="损失函数"></a>损失函数</h3><p><strong>损失函数（loss function）</strong>用于衡量预测结果与真实值之间的误差。</p>
@@ -341,7 +347,7 @@
 </blockquote>
 <p>函数的<strong>梯度（gradient）</strong>指出了函数的最陡增长方向。即是说，按梯度的方向走，函数增长得就越快。那么按梯度的负方向走，函数值自然就降低得最快了。</p>
 <p>模型的训练目标即是寻找合适的 w 与 b 以最小化代价函数值。简单起见我们先假设 w 与 b 都是一维实数，那么可以得到如下的 J 关于 w 与 b 的图：</p>
-
+<img src="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/cost-function.png" class="" title="梯度下降法示例">
 
 
 <p>可以看到，成本函数 J 是一个<strong>凸函数</strong>，与非凸函数的区别在于其不含有多个局部最低点；选择这样的代价函数就保证了无论我们初始化模型参数如何，都能够寻找到合适的最优解。</p>
@@ -350,14 +356,14 @@
 <p>在成本函数 J(w, b) 中还存在参数 b，因此也有：<br>$$<br>b := b - \alpha\frac{dJ(w, b)}{db}<br>$$</p>
 <h3 id="计算图（Computation-Graph）"><a href="#计算图（Computation-Graph）" class="headerlink" title="计算图（Computation Graph）"></a>计算图（Computation Graph）</h3><p>神经网络中的计算即是由多个计算网络输出的前向传播与计算梯度的后向传播构成。所谓的<strong>反向传播（Back Propagation）</strong>即是当我们需要计算最终值相对于某个特征变量的导数时，我们需要利用计算图中上一步的结点定义。</p>
 <h3 id="Logistic回归中的梯度下降法"><a href="#Logistic回归中的梯度下降法" class="headerlink" title="Logistic回归中的梯度下降法"></a>Logistic回归中的梯度下降法</h3><p>假设输入的特征向量维度为 2，即输入参数共有 x1, w1, x2, w2, b 这五个。可以推导出如下的计算图：</p>
-
+<img src="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/Logistic-Computation-Graph.png" class="" title="逻辑回归中的梯度下降法">
 
 
 <p>首先反向求出 L 对于 a 的导数：<br>$$<br>da=\frac{dL(a,y)}{da}=\frac{1-y}{1-a}-\frac{y}{a}<br>$$<br>然后继续反向求出 L 对于 z 的导数：<br>$$<br>dz=\frac{dL}{dz}=\frac{dL(a,y)}{dz}=\frac{dL}{da}\frac{da}{dz}=a-y<br>$$<br>依此类推求出最终的损失函数相较于原始参数的导数之后，根据如下公式进行参数更新：<br>$$<br>w _1:=w _1-\alpha dw _1<br>$$</p>
 <p>$$<br>w _2:=w _2-\alpha dw _2<br>$$</p>
 <p>$$<br>b:=b-\alpha db<br>$$</p>
 <p>接下来我们需要将对于单个用例的损失函数扩展到整个训练集的代价函数：<br>$$<br>J(w,b)=\frac{1}{m}\sum^m_{i=1}L(a^{(i)},y^{(i)})<br>$$<br>其中:<br>$$<br>  a^{(i)}=\hat{y}^{(i)}=\sigma(z^{(i)})=\sigma(w^Tx^{(i)}+b)<br>$$<br>我们可以对于某个权重参数 $w_1$，其导数计算为：<br>$$<br>\frac{\partial J(w,b)}{\partial{w_1}}=\frac{1}{m}\sum^m_{i=1}\frac{\partial L(a^{(i)},y^{(i)})}{\partial{w_1}}<br>$$<br>完整的 Logistic 回归中某次训练的流程如下，这里仅假设特征向量的维度为 2：</p>
-
+<img src="/2020/04/02/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%9F%BA%E7%A1%80/whole-logistic-training-update.png" class="" title="逻辑回归训练代码">
 
 
 <p>然后对 w1、w2、b 进行迭代。</p>
@@ -498,7 +504,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

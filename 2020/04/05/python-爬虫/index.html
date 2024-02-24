@@ -27,11 +27,24 @@
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
 <meta property="og:description" content="Python_爬虫爬虫对我来说一直是听说过没做过，今天一时兴起将爬虫的课程过了一遍，整理笔记如下。Python中是提供了爬虫库的，但学习中多采用requests库用于理解爬虫的过程。这里仅对老师讲解的部分进行了记录，还有很多未曾接触了，例如动态代理、header模拟浏览器等等针对反爬虫的策略。权当一份框架型笔记即可。">
 <meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/requests%E5%AF%B9%E8%B1%A1.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/BeautifulSoup%E6%A6%82%E8%A6%81.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/HtmlTAG.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/Bs4%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/bs4%E5%B9%B3%E8%A1%8C%E9%81%8D%E5%8E%86.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/Bs4%E9%81%8D%E5%8E%86%E6%80%BB%E7%BB%93.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/XmlTag.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/JSON.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/YAML.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/%E8%9E%8D%E5%90%88%E6%96%B9%E6%B3%95.png">
+<meta property="og:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/findAll.png">
 <meta property="article:published_time" content="2020-04-05T15:02:42.000Z">
 <meta property="article:modified_time" content="2021-01-24T09:17:20.533Z">
 <meta property="article:author" content="GuardingDog">
 <meta property="article:tag" content="Python">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95.png">
 
 <link rel="canonical" href="https://guardingdog.github.io/2020/04/05/python-%E7%88%AC%E8%99%AB/">
 
@@ -345,10 +358,10 @@
 <h4 id="HTTP协议"><a href="#HTTP协议" class="headerlink" title="HTTP协议"></a>HTTP协议</h4><p>HTTP：Hypertext Transfer Protocol , 超文本传输协议，是一种基于”<strong>请求与响应</strong>“,无状态的应用层协议。</p>
 <p>理解此协议可以从定义出发：1.<strong>请求与响应</strong>：说明HTTP协议的工作方式为客户端向服务器发送请求，服务器向客户端响应。2.<strong>无状态</strong>：说明HTTP协议前后无关，没有记忆信息。3.<strong>应用层</strong>:高层协议，已经是面向用户的协议了。</p>
 <p>HTTP协议通过URL定位资源，通过对应请求（GET\HEAD\PUT…）进行相关操作。对于URL的格式这里不解释。对于请求，HTTP规定了6种请求方式，如图：</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/HTTP%E8%AF%B7%E6%B1%82%E6%96%B9%E6%B3%95.png" class="" title="This is an test image">
 <p>各种方法解释，图上都有，这里不详细解释。我们发现与request的请求方法<strong>是一一对应</strong>的。前两种方法用于获取数据，后四种方法用于修改数据。</p>
 <h4 id="Request对象与Response对象"><a href="#Request对象与Response对象" class="headerlink" title="Request对象与Response对象"></a>Request对象与Response对象</h4><p>requests库主要包含两个对象，分别是Request与Response,分别对应<strong>发送对象</strong>，<strong>返回对象</strong>。</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/requests%E5%AF%B9%E8%B1%A1.png" class="" title="This is an test image">
 
 <h5 id="Response对象属性"><a href="#Response对象属性" class="headerlink" title="Response对象属性"></a>Response对象属性</h5><table>
 <thead>
@@ -438,7 +451,7 @@
 <h2 id="BeautifulSoup库"><a href="#BeautifulSoup库" class="headerlink" title="BeautifulSoup库"></a>BeautifulSoup库</h2><p>BeautifulSoup可用于爬虫过程第二步，对HTML进行树结构解析，并提供了相对完备的遍历方法。</p>
 <h3 id="BeautifulSoup的基本使用"><a href="#BeautifulSoup的基本使用" class="headerlink" title="BeautifulSoup的基本使用"></a>BeautifulSoup的基本使用</h3><p>使用很简单，指定HTML地址与解析方式即可。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将纯文本文件转换为树形结构，并进行解析便是BeautifulSoup的作用</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup <span class="keyword">as</span> bs</span><br><span class="line"><span class="comment">#第一个参数为通过requests获得的html文本</span></span><br><span class="line"><span class="comment">#第二个参数为指定用HTML格式解析此文本</span></span><br><span class="line"><span class="comment">#返回soup对象</span></span><br><span class="line">soup = bs(r.text,<span class="string">&quot;html.parser&quot;</span>)</span><br></pre></td></tr></table></figure>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/BeautifulSoup%E6%A6%82%E8%A6%81.png" class="" title="This is an test image">
 <h3 id="soup对象的基本元素"><a href="#soup对象的基本元素" class="headerlink" title="soup对象的基本元素"></a>soup对象的基本元素</h3><table>
 <thead>
 <tr>
@@ -493,11 +506,11 @@
 </ul>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">newsoup = BeautifulSoup(<span class="string">&quot;&lt;b&gt;&lt;!-- this is comment --&gt;&lt;p&gt;This is not comment&lt;/p&gt;&lt;/b&gt;&quot;</span>)</span><br><span class="line">newsoup.b.string</span><br><span class="line"><span class="comment">#获得字符，但不知是否是comment还是NavigableString</span></span><br><span class="line"><span class="keyword">if</span> <span class="built_in">type</span>(newsoup.b.string) <span class="keyword">is</span> bs4.elemnt.Comment :</span><br><span class="line">    print(<span class="string">&quot;发现Comment&quot;</span>)</span><br></pre></td></tr></table></figure>
 <p>下图为熟知的HTML格式，其与BeautifulSoup基本是一一对应的。</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/HtmlTAG.png" class="" title="This is an test image">
 
 <h3 id="BS的遍历"><a href="#BS的遍历" class="headerlink" title="BS的遍历"></a>BS的遍历</h3><p>BeautifulSoup对于树的遍历方式，并没有特殊的内容，这里仅做简单的介绍，知道即可。重点还是在应用中的情形。</p>
 <p>三种遍历方式：上行、下行、平行</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/Bs4%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F.png" class="" title="This is an test image">
 
 <ul>
 <li>下行遍历方法展示</li>
@@ -569,15 +582,15 @@
 </tr>
 </tbody></table>
 <p>注意：平行遍历指的是在同一个父节点的前提下，而不是树中所有同一层次的情况。如图：</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/bs4%E5%B9%B3%E8%A1%8C%E9%81%8D%E5%8E%86.png" class="" title="This is an test image">
 <p>Bs4的遍历情况总结如图：</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/Bs4%E9%81%8D%E5%8E%86%E6%80%BB%E7%BB%93.png" class="" title="This is an test image">
 
 <h2 id="信息标注方式与信息提取方法"><a href="#信息标注方式与信息提取方法" class="headerlink" title="信息标注方式与信息提取方法"></a>信息标注方式与信息提取方法</h2><h3 id="信息标注方式简介"><a href="#信息标注方式简介" class="headerlink" title="信息标注方式简介"></a>信息标注方式简介</h3><p>常见的信息标注方式有三种，分别是XML、JSON、YAML。HTML是XML的变种，也属于XML格式。下面简单的介绍比较三种信息标注方式。</p>
 <ul>
 <li>XML：eXtensible Markup Language , 其构成单位是Tag标签，且标签内包含有名称属性等信息如图：</li>
 </ul>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/XmlTag.png" class="" title="This is an test image">
 
 
 <pre><code>其中空元素可通过一个&lt;&gt;表示 , 注释通过&lt;!-- --&gt; 表示</code></pre>
@@ -587,7 +600,7 @@
 <ul>
 <li>JSON：JavaScript Object Notation , <strong>有类型</strong>的键值对表示方式</li>
 </ul>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/JSON.png" class="" title="This is an test image">
 
 
 <p>总结：JSON格式包含三种样式</p>
@@ -595,7 +608,7 @@
 <ul>
 <li>YAML：Ain’t Markup Language ， 无类型键值对</li>
 </ul>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/YAML.png" class="" title="This is an test image">
 
 <p>  其表示各种关系情况：</p>
 <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#缩进表示所属关系，同Python</span></span><br><span class="line"><span class="attr">name:</span></span><br><span class="line">	<span class="attr">newName :</span> <span class="string">北京理工</span></span><br><span class="line">	<span class="attr">OldName :</span> <span class="string">延安自然科学院</span></span><br><span class="line"><span class="comment"># “-” 表达并列关系</span></span><br><span class="line"><span class="attr">name:</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">北京理工大学</span></span><br><span class="line"><span class="bullet">-</span> <span class="string">延安自然科学院</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># “|”表达整块数据</span></span><br><span class="line"><span class="attr">text:</span> <span class="string">|</span></span><br><span class="line"><span class="string">北京理工大学创立与......</span></span><br></pre></td></tr></table></figure>
@@ -616,7 +629,7 @@
 <li><p>无视标记形式，直接搜索关键信息。对信息文本直接查找。提取速度快，但准确性不确定。</p>
 </li>
 <li><p>融合方法，一般先通过第二种方式确定范围，再使用第一种方式精确处理。如图</p>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/%E8%9E%8D%E5%90%88%E6%96%B9%E6%B3%95.png" class="" title="This is an test image">
 
 </li>
 </ol>
@@ -624,7 +637,7 @@
 <ol>
 <li>首先利用find_all()方法，无视标记形式，直接搜索关键信息。</li>
 </ol>
-
+<img src="/2020/04/05/python-%E7%88%AC%E8%99%AB/findAll.png" class="" title="This is an test image">
 
 <ol start="2">
 <li>其次解析其标签格式</li>
@@ -750,7 +763,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>

@@ -27,35 +27,35 @@
 <meta property="og:site_name" content="QingZhi&#39;s Blog">
 <meta property="og:description" content="引言最近在项目中进行了大数据量下的性能测试, 在寻找性能瓶颈过程中,利用go tool pprof工具, 解决了内存大量申请释放, 业务逻辑等问题; 本文主要分为三部分:  go tool pprof 的介绍;  go tool pprof 的使用方式的介绍;  项目实践检验">
 <meta property="og:locale" content="en_US">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225172027695.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225173219408.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225174240035.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225191747898.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225194552548.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225195245151.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225195624242.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225195826156.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225200450042.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225201034874.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225201103015.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225202113461.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225202710714.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225203153527.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225211042259.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225214519100.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225214348200.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225215136960.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231226095721989.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231226100103507.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231226100531255.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231226101357893.png">
-<meta property="og:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231226101740684.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225172027695.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225173219408.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225174240035.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225191747898.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225194552548.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225195245151.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225195624242.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225195826156.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225200450042.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225201034874.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225201103015.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225202113461.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225202710714.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225203153527.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225211042259.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225214519100.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225214348200.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231225215136960.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231226095721989.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231226100103507.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231226100531255.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231226101357893.png">
+<meta property="og:image" content="https://guardingdog.github.io/images/image-20231226101740684.png">
 <meta property="article:published_time" content="2023-12-30T09:47:36.000Z">
 <meta property="article:modified_time" content="2023-12-30T09:58:43.826Z">
 <meta property="article:author" content="GuardingDog">
 <meta property="article:tag" content="Go">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://guardingdog.github.io/2023/12/30/images/image-20231225172027695.png">
+<meta name="twitter:image" content="https://guardingdog.github.io/images/image-20231225172027695.png">
 
 <link rel="canonical" href="https://guardingdog.github.io/2023/12/30/Go-tool-pprof/">
 
@@ -531,18 +531,18 @@
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root v1]# go tool pprof -http=0.0.0.0:1234 ./cpu.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
 <p>上面指定监听<code>1234</code>端口, 由于本地机器<code>IP</code>为<code>10.131.197.202</code>. 所以可以通过浏览器访问<code>http://10.131.197.202:1234</code>查看交互页面;</p>
 <p>页面默认展示<code>Graph VIEW</code>, 默认通过<code>cpu time</code>作为衡量指标, 如下图:</p>
-<p><img src="../images/image-20231225172027695.png" alt="image-20231225172027695"></p>
+<p><img src="/../images/image-20231225172027695.png" alt="image-20231225172027695"></p>
 <p>接下来将简单的解释下交互界面元素, 并对每一种<code>VIEW</code>模式进行简单解读.</p>
 </li>
 <li><p>界面解释:</p>
 <ul>
 <li><p>操作栏: </p>
-<p><img src="../images/image-20231225173219408.png" alt="image-20231225173219408"></p>
+<p><img src="/../images/image-20231225173219408.png" alt="image-20231225173219408"></p>
 <p>分为4列选项, <code>VIEW</code> 查看模式, <code>SAMPLE</code> 样本标签选择, <code>REFINE</code> 样本过滤,聚焦等, <code>CONFIG</code>记录配置项;1列正则表达式搜索框;</p>
 <p>其中<code>VIEW</code>与<code>SAMPLE</code>就我而言,使用比较频繁, 下面会分别进行简单解释, 详细解释建议自行参考官方文档: <a target="_blank" rel="noopener" href="https://github.com/google/pprof/blob/main/doc/README.md">Google About Pprof README</a>.</p>
 </li>
 <li><p><code>VIEW: Top</code></p>
-<p><img src="../images/image-20231225174240035.png" alt="image-20231225174240035"></p>
+<p><img src="/../images/image-20231225174240035.png" alt="image-20231225174240035"></p>
 <p><code>Top</code>模式下默认支持查看<code>Function</code>级别的<code>CPU</code>占用情况, 默认按照<code>Flat</code>时间逆序排序,方便用来分析性能瓶颈;</p>
 <ul>
 <li><code>Flat</code>: 当前函数占用的<code>cpu</code>时间,  支持页面排序;</li>
@@ -557,7 +557,7 @@
 <p><code>runtime.mapaccess1_fast64</code>函数本身执行时间最长约<code>3.88s</code>, 占比约<code>11.14%</code>, 与其子函数共占有<code>4.42s</code>, 占比约<code>12,69%</code>, 并未通过<code>inline</code>优化;</p>
 </li>
 <li><p><code>VIEW: Graph</code></p>
-<p><img src="../images/image-20231225191747898.png" alt="image-20231225191747898"></p>
+<p><img src="/../images/image-20231225191747898.png" alt="image-20231225191747898"></p>
 <p><code>Graph VIEW</code>模式是<code>Web</code>默认模式, 其展示了<code>Function</code>级别的调用关系, 如上图中<code>runtime.mallocgc -&gt; runtime(*mcache).nextFree</code>表示前者调用了后者, 边权重显示为<code>1.27s</code>, 表示<code>runtime(*mcache).nextFree</code>本身及其后续调用花销为<code>1.27s</code>, 具体解释如下, 每一个方框称为<code>Node</code>, 表示一个<code>Function</code></p>
 <ul>
 <li><code>Node Color/Size</code>: Size 代表了<code>cum</code>数字绝对值<ul>
@@ -575,15 +575,15 @@
 </ul>
 </li>
 <li><p><code>VIEW: Flame Graph</code></p>
-<p><img src="../images/image-20231225194552548.png" alt="image-20231225194552548"></p>
+<p><img src="/../images/image-20231225194552548.png" alt="image-20231225194552548"></p>
 <p><code>Flame Graph</code> 因为其形状像是火焰, 俗称为火焰图; 其表示的是紧密型的函数调用(自上至下)关系;</p>
 <p>图中的<code>Box</code>关系与<code>profiling data</code>中的堆栈表示是一致的.</p>
 <p>每一个<code>Box</code>宽度表示<code>cum</code>时间. 其子函数位于下一层, 自左向右依次排列在一起, 如果有空余则表示<code>flat</code>时间;</p>
 <p>点击<code>Box</code>后会聚焦在此函数, 如下图:</p>
-<p><img src="../images/image-20231225195245151.png" alt="image-20231225195245151"></p>
+<p><img src="/../images/image-20231225195245151.png" alt="image-20231225195245151"></p>
 <p>可以看到<code>FindLoops</code>函数, 其<code>cum</code>开销为<code>21.20s</code>, 调用了诸多子函数, 下一层最右侧空白位置为<code>FindLoops</code>本身的时间开销:<code>flat</code>;</p>
 <p>PS: 我个人在使用时, 发现在1.21版本的<code>go tool pprof</code>下的火焰图有了新选项(<code>Flame Graph new</code>), 已经有了更多变化, 官方截图如下:</p>
-<p><img src="../images/image-20231225195624242.png" alt="image-20231225195624242"></p>
+<p><img src="/../images/image-20231225195624242.png" alt="image-20231225195624242"></p>
 <ul>
 <li>加入了颜色标识: 方便识别包;</li>
 <li>规范了子调用函数的图像展示, 自左至右开销时间依次降低;</li>
@@ -591,19 +591,19 @@
 </ul>
 </li>
 <li><p><code>VIEW: Peek</code></p>
-<p><img src="../images/image-20231225195826156.png" alt="image-20231225195826156"></p>
+<p><img src="/../images/image-20231225195826156.png" alt="image-20231225195826156"></p>
 <p>以文本格式展示函数的调用关系, 可读性一般, 可以使用<code>Graph</code>, <code>Flame Graph</code>替代;</p>
 </li>
 <li><p><code>VIEW: Source</code></p>
-<p><img src="../images/image-20231225200450042.png" alt="image-20231225200450042"></p>
+<p><img src="/../images/image-20231225200450042.png" alt="image-20231225200450042"></p>
 <p>展示了已标注的源码, 左侧有三列, 分别表示 代码行, <code>flat</code>开销, <code>cum</code>开销; 右侧为源码本身;</p>
 <p>那么图中表示, 存在<code>runtime/mgcmark.go</code>文件的1211行的<code>heapBitsForAddr</code>函数本身开销为<code>130ms</code>, 包括其子函数的开销为<code>160ms</code>;</p>
 <p>本模式一般用于行级别的<code>BUG</code>排查, 一般已经基本明确瓶颈函数后, 通过上面的正则搜索框进行下一步定位;</p>
 <p>点击源码可以看到对应的汇编码, 以方便进一步排查;</p>
-<p><img src="../images/image-20231225201034874.png" alt="image-20231225201034874"></p>
+<p><img src="/../images/image-20231225201034874.png" alt="image-20231225201034874"></p>
 </li>
 <li><p><code>VIEW: Disassemble</code></p>
-<p><img src="../images/image-20231225201103015.png" alt="image-20231225201103015"></p>
+<p><img src="/../images/image-20231225201103015.png" alt="image-20231225201103015"></p>
 <p>汇编模式查看, 我自己没用过;</p>
 </li>
 </ul>
@@ -611,17 +611,17 @@
 <li><p>分析</p>
 <ol>
 <li><p>首先通过<code>Top VIEW</code>确定下当前的瓶颈函数</p>
-<p><img src="../images/image-20231225202113461.png" alt="image-20231225202113461"></p>
+<p><img src="/../images/image-20231225202113461.png" alt="image-20231225202113461"></p>
 <p>发现<code>runtime.mapaccess1_fast64</code>函数其<code>flat</code>执行时间最长, 其功能为</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">runtime.mapaccess1_fast64 是 Go 语言中的一个内部函数，用于快速访问 map 结构中的元素。它是在编译器生成的代码中使用的，用于优化 map 的访问速度。这个函数的具体实现可以在 Go 语言的运行时源代码中找到。在一般的 Go 代码中，我们并不需要直接调用这个函数，而是通过 map[key] 的方式来访问 map 中的元素。</span><br></pre></td></tr></table></figure>
 <p>由于其是<code>runtime</code>包内的函数, 不是业务代码, 而我们需要优化的是业务代码, 可以通过<code>Graph VIEW</code>查看其调用路径;</p>
 </li>
 <li><p>其次通过<code>Graph VIEW</code>查看, 借助于正字表达式过滤, 可以排除无效的分支干扰:</p>
-<p><img src="../images/image-20231225202710714.png" alt="image-20231225202710714"></p>
+<p><img src="/../images/image-20231225202710714.png" alt="image-20231225202710714"></p>
 <p>发现其调用来源主要有两个<code>main.DFS 2.54s, main.FindLoop 1.88s</code>. 那么目前已经可以定位到函数级别了, 需要进一步定位到行级别(<code>Source VIEW</code>)的分析. 我选择查看<code>main.DFS</code>函数的<code>Source VIEW</code>;</p>
 </li>
 <li><p>通过<code>Source VIEW</code>, 借助于正字表达式过滤, 准确定位到<code>main.DFS</code>函数的源码标注:</p>
-<p><img src="../images/image-20231225203153527.png" alt="image-20231225203153527"></p>
+<p><img src="/../images/image-20231225203153527.png" alt="image-20231225203153527"></p>
 <p>从上图可以看出:<code>cum</code>维度上看: 时间开销较多的有,  <code>237行, 4.89s </code>, <code>236行, 2.07s</code>, <code>235行, 1.18s</code> …</p>
 <ul>
 <li><p>其中<code>237</code>行是递归, 235行是循环. 这种时间开销不可避免;</p>
@@ -666,7 +666,7 @@
 <p>再此获得<code>cpuprofile</code>文件查看:</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@sangfor v2]# .&#x2F;havlak -cpuprofile&#x3D;cpu.prof</span><br><span class="line"># of loops: 76000 (including 1 artificial root node)</span><br><span class="line">[root@sangfor v2]# ll</span><br><span class="line">total 2516</span><br><span class="line">-rw-r--r--. 1 root root   27387 Dec 25 21:07 cpu.prof</span><br><span class="line">-rwxr-xr-x. 1 root root 2525690 Dec 25 20:53 havlak</span><br><span class="line">-rw-r--r--. 1 root root   16723 Dec 25 20:53 havlak.go</span><br><span class="line">[root@sangfor v2]# go tool pprof -http&#x3D;0.0.0.0:1234 .&#x2F;cpu.prof</span><br><span class="line">warning: GOPATH set to GOROOT (&#x2F;usr&#x2F;local&#x2F;go&#x2F;) has no effect</span><br><span class="line">Serving web UI on http:&#x2F;&#x2F;0.0.0.0:1234</span><br></pre></td></tr></table></figure>
 <p>发现<code>runtime.mapaccess1_fast6</code>函数已经不再是瓶颈函数了;</p>
-<p><img src="../images/image-20231225211042259.png" alt="image-20231225211042259"></p>
+<p><img src="/../images/image-20231225211042259.png" alt="image-20231225211042259"></p>
 </li>
 <li><p>当前瓶颈函数: <code>runtime.scanobject</code>, <code>runtime.mallocgc</code>… 均为<code>GoGC</code>机制使用, 需要进行内存分析;</p>
 </li>
@@ -685,38 +685,38 @@
 <p>通过<code>go tool pprof -http=host:port source</code>命令, 可以在指定端口允许通过<code>Web</code>查看<code>Mem Profiling data</code>;</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root v3]# go tool pprof -http=0.0.0.0:1234 ./mem.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
 <p>同样的默认展示<code>Graph VIEW</code>:</p>
-<p><img src="../images/image-20231225214519100.png" alt="image-20231225214519100"></p>
+<p><img src="/../images/image-20231225214519100.png" alt="image-20231225214519100"></p>
 </li>
 <li><p>界面解释: 基本与<code>CPU</code>一致, 不解释;</p>
 </li>
 <li><p>分析:</p>
 <ol>
 <li><p>通过<code>Top VIEW</code> 查看瓶颈函数</p>
-<p><img src="../images/image-20231225214348200.png" alt="image-20231225214348200"></p>
+<p><img src="/../images/image-20231225214348200.png" alt="image-20231225214348200"></p>
 <p>前三列占据了8成的内存占用, 瓶颈函数分别为<code>main.NewBasicBlock, main.(*LSG).NewLoop, main.(*SimpleLoop).AddNode</code>;</p>
 </li>
 <li><p>通过<code>graph VIEW</code>模式查看其调用情况</p>
-<p><img src="../images/image-20231225215136960.png" alt="image-20231225215136960"></p>
+<p><img src="/../images/image-20231225215136960.png" alt="image-20231225215136960"></p>
 <p>发现上面的函数均进行了<code>inline</code>优化处理, 对于性能分析来说, <code>inline</code>优化会导致<code>Source VIEW</code>模式无法直接定位到<code>inline function</code>, 例如查看<code>main.(*LSG).NewLoop</code>, 显示找不到:</p>
-<p><img src="../images/image-20231226095721989.png" alt="image-20231226095721989"></p>
+<p><img src="/../images/image-20231226095721989.png" alt="image-20231226095721989"></p>
 <p>对于此, 我两种处理方案:</p>
 <ol>
 <li><p>继续使用当前<code>profiling data</code>方案: 可以通过<code>no-inline</code>的父调用函数进行<code>Source VIEW</code>查验, 例如其调用函数<code>main.FindLoops</code>函数未进行<code>inline</code>处理,如下图:</p>
-<p><img src="../images/image-20231226100103507.png" alt="image-20231226100103507"></p>
+<p><img src="/../images/image-20231226100103507.png" alt="image-20231226100103507"></p>
 <p>发现405行中, <code>lsgraph.NewLoop()</code>函数占用了<code>11.50MB</code>的内存, 其标注如下图:</p>
-<p><img src="../images/image-20231226100531255.png" alt="image-20231226100531255"></p>
+<p><img src="/../images/image-20231226100531255.png" alt="image-20231226100531255"></p>
 <p>个人再自行通过代码阅读的方式, 排查上述代码. 例如我们知道<code>566行, 567行的 make()</code>函数会进行内存分配操作, 也许这里是优化项.</p>
 </li>
 <li><p>使用<code>no-inline</code>版本的<code>profiling data</code>, 重新编译并指定不采用<code>inline</code>优化, 随后再次生成一份<code>profiling data</code>:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">[root v3]# go build -o havlak-without-inline -gcflags=-l ./havlak.go</span><br><span class="line">[root v3]# ll</span><br><span class="line">total 5092</span><br><span class="line">-rwxr-xr-x. 1 root root 2591320 Dec 25 21:18 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17170 Dec 25 21:13 havlak.go</span><br><span class="line">-rwxr-xr-x. 1 root root 2595129 Dec 26 09:44 havlak-without-inline</span><br><span class="line">-rw-r--r--. 1 root root    1891 Dec 25 21:18 mem.prof</span><br><span class="line">[root v3]# ./havlak-without-inline -memprofile=mem-without-inline.prof</span><br><span class="line"><span class="meta">#</span><span class="bash"> of loops: 76000 (including 1 artificial root node)</span></span><br><span class="line">[root v3]# ll</span><br><span class="line">total 5096</span><br><span class="line">-rwxr-xr-x. 1 root root 2591320 Dec 25 21:18 havlak</span><br><span class="line">-rw-r--r--. 1 root root   17170 Dec 25 21:13 havlak.go</span><br><span class="line">-rwxr-xr-x. 1 root root 2595129 Dec 26 09:44 havlak-without-inline</span><br><span class="line">-rw-r--r--. 1 root root    1891 Dec 25 21:18 mem.prof</span><br><span class="line">-rw-r--r--. 1 root root    2017 Dec 26 09:46 mem-without-inline.prof</span><br><span class="line">[root v3]# go tool pprof -http=0.0.0.0:1234 ./mem-without-inline.prof</span><br><span class="line">Serving web UI on http://0.0.0.0:1234</span><br><span class="line">http://0.0.0.0:1234</span><br></pre></td></tr></table></figure>
 <p>可以在Web上看到均无<code>inline</code>标识, 可以直接利用<code>Source VIEW</code>定位:</p>
-<p><img src="../images/image-20231226101357893.png" alt="image-20231226101357893"></p>
+<p><img src="/../images/image-20231226101357893.png" alt="image-20231226101357893"></p>
 <p>个人在使用时, 采用了此种方案.</p>
 </li>
 </ol>
 </li>
 <li><p>通过<code>Source VIEW</code>, 借助于正字表达式过滤, 准确定位到<code>main.(*LSG).NewLoop</code>函数的源码标注, 如下图:</p>
-<p><img src="../images/image-20231226101740684.png" alt="image-20231226101740684"></p>
+<p><img src="/../images/image-20231226101740684.png" alt="image-20231226101740684"></p>
 <p>发现<code>566行, 567行 make()</code> 函数占用了约<code>7MB</code>的内存开销, 并且进一步分析发现<code>basicBlocks, Children</code>可以通过切片的方式替换Map, 这会减少内存开销;</p>
 <p>在随后的分析中, 发现其他业务代码也有类似的问题, 并一并进行了优化处理, 这里就不一一赘述了, 具体文件差异如下:</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line">[root ~]# diff /home/learnGo-master/pkg/tools/pprof/runtime/v3/havlak.go /home/learnGo-master/pkg/tools/pprof/runtime/v4/havlak.go | sed &#x27;s/^/差异行： /&#x27;</span><br><span class="line">差异行： 244a245,253</span><br><span class="line">差异行： &gt; func appendUnique(a []int, x int) []int &#123;</span><br><span class="line">差异行： &gt;      for _, y := range a &#123;</span><br><span class="line">差异行： &gt;              if x == y &#123;</span><br><span class="line">差异行： &gt;                      return a</span><br><span class="line">差异行： &gt;              &#125;</span><br><span class="line">差异行： &gt;      &#125;</span><br><span class="line">差异行： &gt;      return append(a, x)</span><br><span class="line">差异行： &gt; &#125;</span><br><span class="line">差异行： &gt;</span><br><span class="line">差异行： 258c267</span><br><span class="line">差异行： &lt;      nonBackPreds := make([]map[int]bool, size)</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      nonBackPreds := make([][]int, size)</span><br><span class="line">差异行： 276c285</span><br><span class="line">差异行： &lt;      for i, bb := range cfgraph.Blocks &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, bb := range cfgraph.Blocks &#123;</span><br><span class="line">差异行： 278d286</span><br><span class="line">差异行： &lt;              nonBackPreds[i] = make(map[int]bool)</span><br><span class="line">差异行： 313c321</span><br><span class="line">差异行： &lt;                                      nonBackPreds[w][v] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;                                      nonBackPreds[w] = appendUnique(nonBackPreds[w], v)</span><br><span class="line">差异行： 389c397</span><br><span class="line">差异行： &lt;                                      nonBackPreds[w][ydash.dfsNumber] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;                                      nonBackPreds[w] = appendUnique(nonBackPreds[w], ydash.dfsNumber)</span><br><span class="line">差异行： 464,465c472,473</span><br><span class="line">差异行： &lt;      basicBlocks map[*BasicBlock]bool</span><br><span class="line">差异行： &lt;      Children    map[*SimpleLoop]bool</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      basicBlocks []*BasicBlock</span><br><span class="line">差异行： &gt;      Children    []*SimpleLoop</span><br><span class="line">差异行： 477c485</span><br><span class="line">差异行： &lt;      loop.basicBlocks[bb] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      loop.basicBlocks = append(loop.basicBlocks, bb)</span><br><span class="line">差异行： 481c489</span><br><span class="line">差异行： &lt;      loop.Children[child] = true</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      loop.Children = append(loop.Children, child)</span><br><span class="line">差异行： 499c507</span><br><span class="line">差异行： &lt;              for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              for _, ll := range loop.Children &#123;</span><br><span class="line">差异行： 505c513</span><br><span class="line">差异行： &lt;              for bb := range loop.basicBlocks &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;              for _, bb := range loop.basicBlocks &#123;</span><br><span class="line">差异行： 566,567d573</span><br><span class="line">差异行： &lt;      loop.basicBlocks = make(map[*BasicBlock]bool)</span><br><span class="line">差异行： &lt;      loop.Children = make(map[*SimpleLoop]bool)</span><br><span class="line">差异行： 587c593</span><br><span class="line">差异行： &lt;      for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, ll := range loop.Children &#123;</span><br><span class="line">差异行： 606c612</span><br><span class="line">差异行： &lt;      for ll := range loop.Children &#123;</span><br><span class="line">差异行： ---</span><br><span class="line">差异行： &gt;      for _, ll := range loop.Children &#123;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
@@ -929,7 +929,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">118</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
