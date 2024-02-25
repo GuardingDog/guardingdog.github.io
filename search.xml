@@ -10126,7 +10126,7 @@
 <h2 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a>数据结构</h2><p>源码: <code>go/src/runtime/slice.go</code>, 结构体: <code>slice</code>;</p>
 <figure class="highlight go"><table><tr><td class="code"><pre><span class="line"><span class="keyword">type</span> slice <span class="keyword">struct</span> &#123;</span><br><span class="line">	array unsafe.Pointer <span class="comment">// 指向底层数组的指针, 64位 8字节, 32位 4字节</span></span><br><span class="line">	<span class="built_in">len</span>   <span class="keyword">int</span> <span class="comment">// 切片中实际的元素数量, 64位 8字节, 32位 4字节</span></span><br><span class="line">	<span class="built_in">cap</span>   <span class="keyword">int</span> <span class="comment">// 切片的容量, 64位 8字节, 32位 4字节</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p><code>Go</code>中<code>Slice</code>是对<code>Array</code>的抽象与封装, 使得本不支持扩展的<code>Array</code>转换为了灵活<code>Slice</code>; <code>Slice</code>结构体本身只占有<code>24</code>字节或<code>12</code>字节.下面是<code>slice</code>初始化后的图示:</p>
-<img src="./initSlice.png" style="zoom:50%;" />
+<img src="./init.png" style="zoom:50%;" />
 
 <p>当执行<code>make([]int, 2, 4)</code>时，创建了一个元素类型为<code>int</code>的切片，其长度为2，容量为4。这意味着：</p>
 <ul>
@@ -10180,7 +10180,7 @@
 <p>它接受五个参数：目标切片的指针<code>toPtr</code>，目标切片的长度<code>toLen</code>，源切片的指针<code>fromPtr</code>，源切片的长度<code>fromLen</code>，以及每个元素的大小<code>width</code>。返回值是实际复制的元素数量。</p>
 </li>
 <li><p>流程:</p>
-<img src="./sliceCopy.png" style="zoom:33%;" />
+<img src="./sliceCopy 操作.png" style="zoom:33%;" />
 </li>
 <li><p>解读:</p>
 <ul>

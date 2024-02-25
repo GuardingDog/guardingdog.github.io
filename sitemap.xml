@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://guardingdog.github.io/2024/02/24/Go-Data-Structure-Source-Code-slice/</loc>
+    
+    <lastmod>2024-02-25</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://guardingdog.github.io/2024/02/25/Go-Data-Structure-Source-Code-iota/</loc>
     
     <lastmod>2024-02-25</lastmod>
@@ -12,15 +21,6 @@
   
   <url>
     <loc>https://guardingdog.github.io/2024/02/25/Go-Data-Structure-Source-Code-map/</loc>
-    
-    <lastmod>2024-02-24</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://guardingdog.github.io/2024/02/24/Go-Data-Structure-Source-Code-slice/</loc>
     
     <lastmod>2024-02-24</lastmod>
     
