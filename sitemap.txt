@@ -1,3 +1,4 @@
+https://guardingdog.github.io/2024/02/25/Go-Data-Structure-Source-Code-iota/
 https://guardingdog.github.io/2024/02/25/Go-Data-Structure-Source-Code-map/
 https://guardingdog.github.io/2024/02/24/Go-Data-Structure-Source-Code-slice/
 https://guardingdog.github.io/2024/02/22/Go-Data-Structure-Source-Code-chan/
